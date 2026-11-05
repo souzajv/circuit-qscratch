@@ -1,0 +1,9 @@
+node_modules
+coverage
+.taste-skill
+.git
+.env
+.env.*
+*.log
+tests/integration
+supabase

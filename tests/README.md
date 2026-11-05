@@ -1,0 +1,37 @@
+# Testes unitários e cobertura
+
+A suíte usa Jest, Testing Library e jsdom. Execute `npm test` ou `npm run test:coverage` na raiz. O relatório navegável fica em `coverage/index.html`; o resumo legível por ferramentas fica em `coverage/coverage-summary.json`. O comando de cobertura exige 100% de instruções, ramificações, funções e linhas para todo JavaScript, JSX e CJS em src/, inclusive a entrada. Não há exclusões de arquivos de aplicação nem comentários para ignorar cobertura.
+
+Em 05/11/2026, após os ajustes da landing page, 57 testes em treze suítes passaram com as quatro métricas em 100%. A compilação de produção também passou, com aviso de tamanho do pacote JavaScript, de aproximadamente 765 KiB antes da compressão HTTP. Os relatórios são gerados localmente e ignorados no Git.
+
+## Responsabilidades verificadas
+
+| Suíte | O que verifica |
+|---|---|
+| model.test.cjs | CNOT nas quatro entradas, H duas vezes, fase complexa, amplitudes e probabilidades de Bell, colapso e arredondamento |
+| learning.test.cjs | Pontuação, piso, melhor nota e ordem de portas |
+| practice.test.cjs | Encaixes e resultado único por preparação |
+| lesson.test.jsx | Falas, quiz, dica, erro, liberação da prática, cada missão, teclado/clique e eventos de arraste, conclusão e rolagem |
+| ui.test.jsx | Pontos, ícones, estados do circuito, mascotes, traçado, áudio e cortina |
+| app.test.jsx | Navegação, preferências, desbloqueio, soma de melhores notas e primeira conclusão; atividade substituída por um componente controlado |
+| entry.test.jsx | Conexão da aplicação ao elemento HTML de entrada |
+| public.test.jsx | Apresentação, conteúdo da prévia, respostas e navegação pública |
+| landing-motion.test.jsx | Troca automática, pausa, foco, aba oculta, movimento reduzido e limpeza dos contratos GSAP/Lenis |
+
+## Limites
+
+Cobertura mede execução de trechos, não prova ausência de defeitos. Os testes usam navegador simulado e substituem APIs de áudio, animação e geometria. Não baixam arquivos Lottie nem confirmam a execução deles em navegador real. CSS, layout responsivo, efeitos visuais, serviços externos, autenticação e Supabase exigem verificações próprias. Os arquivos Gherkin continuam especificações sem executor. Estes testes não comprovam aprendizagem.
+
+A suíte observa comportamentos, como bloquear a prática antes do acerto e impedir pontos extras por repetir uma medição. O teste da composição usa uma atividade controlada para isolar a navegação, enquanto Lesson é verificado separadamente. Isso não equivale a uma jornada E2E.
+
+GSAP, ScrollTrigger e Lenis são substituídos por implementações controladas no teste unitário. As expectativas verificam chamadas, sincronização, desmontagem e comportamento do carrossel; a cobertura não comprova fluidez ou animação real. A inspeção visual complementar fica em `../verificacoes/landing-2026-11-05/`.
+
+## Próximas mudanças com TDD
+
+Escolher o requisito e o cenário, escrever uma expectativa que falhe pelo comportamento ausente, observar a falha, implementar o mínimo e refatorar com a suíte verde. Manter os quatro limiares de cobertura. Não excluir código ou adicionar testes sem afirmações úteis para satisfazer a métrica. A implementação anterior foi consolidada com testes de regressão; não alegar que todo o histórico foi desenvolvido com teste antes do código.
+
+
+
+As suítes access.test.jsx e firebase.test.jsx verificam login, cadastro, confirmação, falhas, requisições duplicadas, recuperação de senha e o adaptador do SDK. O SDK Firebase é simulado nos testes unitários. Uma verificação separada com conta fictícia confirmou cadastro, updateProfile, signOut e novo login no projeto real; a conta foi removida ao final. O roteiro manual está em tests/integration/firebase-smoke.mjs e exige rede, cria uma conta fictícia e a apaga. Não envia e-mails nem testa o recebimento do link de recuperação.
+
+Persistência: account-trail.test.jsx cobre carga da conta, falhas, nova tentativa, troca de conta, salvamento serial e respostas tardias. progress-storage.test.jsx verifica fusão transacional de blocos, melhores notas e primeira conclusão. O roteiro manual versionado tests/integration/progress-smoke.mjs usa contas fictícias no Firebase real e remove registros/contas ao final. A inspeção visual progress-browser.mjs permanece local, pois depende de ferramentas instaladas nesta máquina. Esses roteiros não são executados por npm test.

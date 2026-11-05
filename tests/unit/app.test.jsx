@@ -1,0 +1,72 @@
+import React from 'react';
+import {render, screen, fireEvent, act, cleanup} from '@testing-library/react';
+import App from '../../src/app/App';
+// A composição é testada com uma atividade controlada; Lesson tem sua própria suíte.
+jest.mock('../../src/learning/Lesson',()=> props => <section><span>Atividade {props.index}</span><button onClick={()=>props.onCheckpoint?.({phase:'quiz',errors:2,hint:true})}>Registrar passo</button><button onClick={()=>props.onComplete(8)}>Concluir prática controlada</button><button onClick={()=>props.onComplete(4)}>Repetir sem melhora</button><button onClick={()=>props.transition(()=>{}, {countdown:true})}>Preparar teste controlado</button><button onClick={props.onBack}>Retornar ao mapa</button><button onClick={props.onCertificate}>Abrir conclusão</button></section>);
+const click=name=>fireEvent.click(screen.getByRole('button',{name}));
+const flush=()=>act(()=>jest.advanceTimersByTime(2000));
+beforeEach(()=>{jest.useFakeTimers();window.matchMedia.mockReturnValue({matches:false});});
+afterEach(()=>{cleanup();jest.useRealTimers();});
+test('preferências e ajuda mantêm navegação e estado ativo',()=>{
+ render(<App/>);click('Como funciona');flush();expect(screen.getByRole('button',{name:'Como funciona'})).toHaveAttribute('aria-current','page');
+ click('Ir para a trilha');flush();click('Preferências');flush();
+ fireEvent.change(screen.getByLabelText('Como posso te chamar?'),{target:{value:'Sol'}});
+ fireEvent.change(screen.getByLabelText('Escolaridade'),{target:{value:'Ensino Médio'}});
+ fireEvent.click(screen.getByLabelText('Sons de acerto'));fireEvent.click(screen.getByLabelText('Animações do mascote'));
+ click('Trilhas');expect(screen.getByText('Sol')).toBeVisible();
+ click('Como funciona');click('Ir para a trilha');
+ fireEvent.click(screen.getByRole('link',{name:/Circuit/}));
+ expect(screen.getByRole('button',{name:'Conheça os qubits: disponível'})).toBeEnabled();
+});
+test('avança cinco blocos, soma melhores notas e preserva primeira conclusão',()=>{
+ render(<App/>);click('Preferências');flush();fireEvent.click(screen.getByLabelText('Animações do mascote'));click('Trilhas');
+ for(let i=0;i<5;i++){
+   click(i===0?'Vamos começar':'Continuar a trilha');
+   expect(screen.getByText('Atividade '+i)).toBeVisible();
+   click('Concluir prática controlada');click('Repetir sem melhora');
+   if(i===4){click('Abrir conclusão');expect(screen.getByText(/você concluiu/)).toBeVisible();click('Revisar minha trilha');}
+   else click('Retornar ao mapa');
+   act(()=>jest.advanceTimersByTime(20));
+ }
+ expect(screen.getByText('40')).toBeVisible();expect(screen.getByText('Você concluiu a trilha!')).toBeVisible();
+ click('Revisar a trilha');click('Retornar ao mapa');
+ fireEvent.click(screen.getByRole('button',{name:'Descubra o estado de Bell: concluído, refazer'}));click('Concluir prática controlada');click('Abrir conclusão');
+ expect(screen.getByText(/Explorador, você concluiu/)).toBeVisible();
+});
+test('rolagem considera movimento reduzido e transição continua funcionando',()=>{
+ window.matchMedia.mockReturnValue({matches:true});render(<App/>);
+ click('Vamos começar');flush();click('Concluir prática controlada');click('Retornar ao mapa');flush();act(()=>jest.advanceTimersByTime(20));
+ expect(Element.prototype.scrollIntoView).toHaveBeenCalledWith(expect.objectContaining({behavior:'auto'}));
+});
+
+
+
+test('mapa acompanha o próximo bloco com movimento e tolera nó ausente',()=>{
+ render(<App/>);click('Vamos começar');flush();click('Concluir prática controlada');click('Retornar ao mapa');flush();act(()=>jest.advanceTimersByTime(30));
+ expect(Element.prototype.scrollIntoView).toHaveBeenCalledWith(expect.objectContaining({behavior:'smooth'}));
+ click('Continuar a trilha');flush();click('Concluir prática controlada');click('Retornar ao mapa');
+ // Simula a remoção do mapa entre a confirmação e o próximo frame.
+ const original=Element.prototype.querySelectorAll;
+ const spy=jest.spyOn(Element.prototype,'querySelectorAll').mockImplementation(function(selector){return selector==='li'?[]:original.call(this,selector);});
+ flush();act(()=>jest.advanceTimersByTime(30));spy.mockRestore();expect(screen.getByText('2 de 5 blocos')).toBeVisible();
+});
+
+
+test('composição apresenta a contagem sobre a cortina',()=>{
+ render(<App/>);click('Vamos começar');flush();click('Preparar teste controlado');
+ act(()=>jest.advanceTimersByTime(1100));expect(screen.getByText('5')).toBeVisible();
+ act(()=>jest.advanceTimersByTime(4000));expect(screen.queryByText('Hora de testar sua descoberta!')).toBeNull();
+ act(()=>jest.advanceTimersByTime(850));
+});
+
+test('estado carregado restaura conta e envia checkpoints sem duplicação',()=>{
+ const changed=jest.fn(),retry=jest.fn(),leave=jest.fn();
+ const initial={name:'Ana',level:'Ensino Médio',current:1,completed:[0],best:{0:8},first:{name:'Ana',level:'Ensino Médio',date:'ontem'},motion:false,sound:false,attempt:{1:{phase:'quiz'}}};
+ const view=render(<App initial={initial} onProgress={changed} saveStatus="Não foi possível salvar. Tentar novamente" onRetry={retry} onSignOut={leave}/>);
+ click('Tentar salvar novamente');expect(retry).toHaveBeenCalled();expect(screen.getByRole('button',{name:'Sair da conta'})).toBeDisabled();
+ view.rerender(<App initial={initial} onProgress={changed} saveStatus="Progresso salvo na conta" onRetry={retry} onSignOut={leave}/>);
+ click('Preferências');expect(screen.getByText(/As preferências são salvas/)).toBeVisible();click('Trilhas');
+ click('Sair da conta');expect(leave).toHaveBeenCalled();click('Continuar a trilha');click('Registrar passo');click('Registrar passo');
+ expect(changed).toHaveBeenLastCalledWith(expect.objectContaining({attempt:{1:{phase:'quiz',errors:2,hint:true}}}));
+ click('Retornar ao mapa');click('Conheça os qubits: concluído, refazer');
+});

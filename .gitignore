@@ -1,0 +1,21 @@
+node_modules/
+dist/
+coverage/
+*.log
+.npm-cache/
+.env
+.env.*
+!.env.example
+*.tsbuildinfo
+.DS_Store
+
+/coverage-run.txt
+
+.vercel/
+.taste-skill/
+*.pem
+*.key
+*service-account*.json
+*serviceAccount*.json
+# Roteiro visual local depende de uma skill instalada neste computador.
+/tests/integration/progress-browser.mjs

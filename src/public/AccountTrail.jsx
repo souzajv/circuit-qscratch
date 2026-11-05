@@ -1,0 +1,34 @@
+import React,{useState,useEffect,useCallback,useRef} from 'react';
+import App from '../app/App';
+import {PROGRESS_SAVE_DELAY_MS} from '../shared/config/experience.cjs';
+import {watchAccount,logout} from '../infrastructure/firebase/auth';
+import {loadProgress,saveProgress} from '../infrastructure/firebase/progress';
+
+export default function AccountTrail(){
+ const [account,setAccount]=useState(undefined);
+ const [initial,setInitial]=useState(null);
+ const [error,setError]=useState(false);
+ const [status,setStatus]=useState('Carregando progresso...');
+ const latest=useRef(null),queue=useRef(Promise.resolve()),revision=useRef(0),timer=useRef(null),active=useRef(null);
+ useEffect(()=>watchAccount(user=>{clearTimeout(timer.current);active.current=user?.uid;revision.current++;setInitial(null);latest.current=null;setAccount(user);}),[]);
+ const load=useCallback(async()=>{
+  setError(false);
+  try {const uid=account.uid;const state=await loadProgress(uid);if(active.current!==uid)return;setInitial({...state,name:state.name || account.displayName || 'Explorador'});setStatus('Progresso salvo na conta');}
+  catch {setError(true);}
+ },[account]);
+ useEffect(()=>{if(account) load();},[account,load]);
+ const persist=useCallback(state=>{
+  latest.current=state;const version=++revision.current;
+  setStatus('Salvando progresso...');
+  clearTimeout(timer.current);
+  timer.current=setTimeout(()=>{
+  queue.current=queue.current.catch(()=>{}).then(()=>saveProgress(account.uid,state));
+  queue.current.then(()=>{if(version===revision.current)setStatus('Progresso salvo na conta');},()=>{if(version===revision.current)setStatus('Não foi possível salvar. Tentar novamente');});
+  },PROGRESS_SAVE_DELAY_MS);
+ },[account]);
+ const leave=async()=>{await logout();window.location.hash='/entrar';};
+ if(account===undefined || (account && !initial && !error))return <main><p role="status">Carregando sua conta e progresso...</p></main>;
+ if(!account)return <main><h1>Entre para salvar sua trilha</h1><a href="#/entrar">Entrar</a><a href="#/demo">Conhecer a demonstração</a></main>;
+ if(error)return <main><p>Não foi possível carregar seu progresso. Seus dados não foram substituídos.</p><button onClick={load}>Tentar novamente</button></main>;
+ return <App key={account.uid} initial={initial} onProgress={persist} saveStatus={status} onRetry={()=>persist(latest.current)} onSignOut={leave}/>;
+}

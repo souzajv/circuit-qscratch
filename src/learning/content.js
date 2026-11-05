@@ -1,0 +1,61 @@
+export const blocks = [{
+  title: 'Conheça os qubits',
+  short: 'As peças da descoberta',
+  symbol: 'q',
+  basic: 'Um bit guarda 0 ou 1. Um qubit é diferente: sua preparação pode permitir os dois resultados. Nesta missão, usamos dois qubits, representados por duas linhas. Começamos com os dois preparados em 0.',
+  advanced: 'Um qubit pode ser preparado em uma superposição de estados. Ao medir na base computacional, obtemos 0 ou 1. Nosso circuito começa em |00⟩: dois qubits preparados em |0⟩. Lemos as operações da esquerda para a direita.',
+  question: 'Quantos qubits vamos usar?',
+  options: ['Um qubit', 'Dois qubits', 'Três qubits'],
+  answer: 1,
+  hint: 'Cada linha do circuito representa um qubit. Conte as duas linhas.',
+  feedback: 'Isso! Cada linha representa um dos dois qubits.',
+  action: 'Confirmar as duas linhas'
+}, {
+  title: 'Observe uma medição',
+  short: 'Uma rodada, um resultado',
+  symbol: 'M',
+  basic: 'Medir é obter um resultado. No treino, preparamos um qubit em 0. Se o medirmos agora, o resultado será 0. Outras preparações podem ter outros resultados. Este treino não muda o seu circuito.',
+  advanced: 'A medição na base computacional fornece um resultado clássico por qubit. Para a preparação |0⟩, o resultado ideal é 0 com certeza. Este treino é separado do circuito principal.',
+  question: 'Se o qubit está preparado em 0, o que aparece neste treino?',
+  options: ['0', '1', '0 e 1 ao mesmo tempo'],
+  answer: 0,
+  hint: 'Neste treino ainda não aplicamos nenhuma porta. A preparação em 0 dá resultado 0.',
+  feedback: 'Exatamente. A probabilidade depende da preparação, nem sempre é metade para cada resultado.',
+  action: 'Medir o qubit de treino'
+}, {
+  title: 'Experimente a porta H',
+  short: 'Novas possibilidades',
+  symbol: 'H',
+  basic: 'A porta Hadamard, ou H, muda a preparação do qubit. Quando ela atua em um qubit preparado em 0, medir pode dar 0 ou 1, com a mesma chance. Uma rodada mostra só um deles. Vamos colocar H na linha de cima.',
+  advanced: 'Hadamard transforma |0⟩ na superposição (|0⟩ + |1⟩)/√2. Na base computacional, cada resultado tem probabilidade de 50%. Poucas medições não precisam dar quantidades iguais. Aplicaremos H no primeiro qubit.',
+  question: 'Depois de H em um qubit preparado em 0, o que pode aparecer?',
+  options: ['Apenas 0', 'Apenas 1', '0 ou 1'],
+  answer: 2,
+  hint: 'Para essa preparação, H permite os dois resultados com a mesma chance.',
+  feedback: 'Isso! Cada medição dá um resultado, 0 ou 1.',
+  action: 'Colocar H no primeiro qubit'
+}, {
+  title: 'Conecte com CNOT',
+  short: 'Duas peças, um estado conjunto',
+  symbol: '⊕',
+  basic: 'A CNOT tem um controle e um alvo. No treino com valores 0 e 1, se o controle é 1, o alvo troca: 0 vira 1 e 1 vira 0. Se o controle é 0, o alvo fica igual. No circuito após H, a porta atua no estado dos dois qubits juntos.',
+  advanced: 'Para entradas da base computacional, CNOT mantém o controle e inverte o alvo quando o controle é 1: 00→00, 01→01, 10→11, 11→10. Após H, ela atua sobre a superposição conjunta, sem medir o controle ou copiar um estado desconhecido.',
+  question: 'No treino, controle 1 e alvo 0: qual é a saída?',
+  options: ['10', '11', '00'],
+  answer: 1,
+  hint: 'O controle continua 1. O alvo troca de 0 para 1.',
+  feedback: 'Correto! No nosso circuito, o controle fica em cima e o alvo embaixo.',
+  action: 'Colocar CNOT depois de H'
+}, {
+  title: 'Descubra o estado de Bell',
+  short: 'Seu circuito em ação',
+  symbol: 'B',
+  basic: 'Você montou H e depois CNOT! Na simulação ideal desta missão, medir os dois qubits dará 00 ou 11, com a mesma chance. Esse estado é chamado de estado de Bell. Os resultados são relacionados, mas não são mensagens entre os qubits.',
+  advanced: 'O circuito prepara |Φ+⟩ = (|00⟩ + |11⟩)/√2, um estado emaranhado. Medindo na base computacional, 00 e 11 têm 50% cada. Só observar resultados iguais nesta base não basta para provar emaranhamento: uma mistura clássica também pode produzir essa correlação.',
+  question: 'Quais pares podem aparecer nesta simulação ideal?',
+  options: ['00 e 11', '01 e 10', 'Sempre 00'],
+  answer: 0,
+  hint: 'Neste estado de Bell, os resultados dos dois qubits são iguais na base usada.',
+  feedback: 'Muito bem! Vamos preparar o circuito novamente antes de cada medição.',
+  action: 'Preparar e medir o circuito'
+}];
