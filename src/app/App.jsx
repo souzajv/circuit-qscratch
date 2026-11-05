@@ -87,7 +87,7 @@ export default function App({initial = {}, onProgress, saveStatus, onRetry, onSi
                 <button className={screen === 'help' ? 'nav-active' : ''} aria-current={screen === 'help' ? 'page' : undefined} onClick={() => transition(() => setScreen('help'))}>Como funciona <Icon name="help" /></button>
                 <button className={screen === 'settings' ? 'nav-active' : ''} aria-current={screen === 'settings' ? 'page' : undefined} onClick={() => transition(() => setScreen('settings'))}>Preferências <Icon name="settings" /></button>
             </nav>
-            <div className="side-bottom"><div className="avatar">{name.slice(0, 1).toUpperCase()}</div><div className="account-details"><strong>{name}</strong><small role="status" aria-live="polite">{saveStatus || 'Modo demonstração'}</small>{onSignOut && <button disabled={saveStatus !== 'Progresso salvo na conta'} onClick={onSignOut}>Sair da conta <Icon name="back" /></button>}{saveStatus?.startsWith('Não foi possível') && <button onClick={onRetry}>Tentar salvar novamente</button>}</div></div>
+            <div className="side-bottom"><div className="avatar">{name.slice(0, 1).toUpperCase()}</div><div className="account-details"><strong>{name}</strong><small role="status" aria-live="polite">{saveStatus || 'Modo demonstração'}</small></div>{onSignOut && <button disabled={saveStatus !== 'Progresso salvo na conta'} onClick={onSignOut}>Sair da conta <Icon name="back" /></button>}{saveStatus?.startsWith('Não foi possível') && <button onClick={onRetry}>Tentar salvar novamente</button>}</div>
         </aside>}
         <div className="workspace">
 

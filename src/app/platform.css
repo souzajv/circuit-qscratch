@@ -705,7 +705,7 @@ h1[tabindex="-1"]:focus {
     outline: none;
 }
 /* Ações da conta acompanham os controles da navegação. */
-.side-bottom button {display:flex;align-items:center;justify-content:space-between;gap:var(--space-8);width:100%;min-height:var(--space-44);margin-top:var(--space-12);padding:var(--space-8);border:var(--border);border-radius:var(--radius-8);background:var(--peach);box-shadow:0 var(--space-3) 0 var(--ink);font-size:var(--font-12);font-weight:700;transition:transform 120ms ease-out;}
+.side-bottom button {grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;gap:var(--space-8);width:100%;min-height:var(--space-44);margin-top:0;padding:var(--space-8);border:var(--border);border-radius:var(--radius-8);background:var(--peach);box-shadow:0 var(--space-3) 0 var(--ink);font-size:var(--font-12);font-weight:700;transition:transform 120ms ease-out;}
 .account-details {min-width:0;overflow-wrap:anywhere;}
 .account-details strong {display:block;margin-bottom:var(--space-4);}
 .side-bottom button svg {width:var(--space-16);height:var(--space-16);flex-shrink:0;}
