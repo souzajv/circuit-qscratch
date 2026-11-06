@@ -135,14 +135,14 @@ Importe este repositório usando a raiz como **Root Directory**. A configuraçã
 
 As rotas usam hash e dispensam rewrite genérico. A Vercel não publica as regras do Firestore. Depois de definir o domínio, confira os domínios autorizados do Firebase Authentication e teste cadastro, login, recuperação de senha e restauração do progresso no endereço publicado. O [guia de publicação](PUBLICACAO.md) detalha esses passos.
 
-## Origem, licença e créditos
+## Inspiração e créditos
 
 O projeto foi inspirado no [QScratch, de marcosrv-ULL](https://github.com/marcosrv-ULL/QScratch), apresentado no [artigo-base](https://doi.org/10.1140/epjqt/s40507-025-00314-9). A aplicação atual usa nossa interface React e o modelo de Bell desenvolvido neste projeto. O editor herdado foi arquivado no workspace acadêmico e não faz parte do código ativo deste repositório.
 
-A [licença AGPL-3.0](LICENSE), a [referência original](CITATION.cff) e o [aviso de marca](TRADEMARK) foram preservados. O código desta versão está disponível em [souzajv/circuit-qscratch](https://github.com/souzajv/circuit-qscratch).
+O Circuit QScratch é uma implementação própria, inspirada na proposta educacional do QScratch. Os arquivos de licença, citação e marca herdados foram removidos desta aplicação. Nenhuma licença aberta foi escolhida para o código próprio nesta etapa; as dependências e os assets mantêm suas respectivas licenças.
 
 Animações por [Christine Somkunwar](https://lottiefiles.com/user/a29ccdc8-ab0a-49fc-b263-32073008b985), sob [Lottie Simple License](https://lottiefiles.com/page/license), carregadas remotamente. Desenvolvimento por [João Campos](https://www.linkedin.com/in/joao-souza-campos/).
 
 ## Carregamento e entrada da trilha
 
-O login exibe uma tela de carregamento brutalista durante a autenticação e a restauração do progresso, com o mascote Cat loading animation (CZ5vmNGwmU). O indicador comunica atividade, sem simular porcentagem ou duração mínima. Após a leitura, GSAP apresenta a navegação, os blocos, o painel lateral e o rodapé. Preferência de animação desativada na conta e movimento reduzido do sistema impedem essa entrada animada. O link do código desta versão fica na tela Como funciona, junto à licença, em vez dos rodapés.
+O login exibe uma tela de carregamento brutalista durante a autenticação e a restauração do progresso, com o mascote Cat loading animation (CZ5vmNGwmU). O indicador comunica atividade, sem simular porcentagem ou duração mínima. Após a leitura, GSAP apresenta a navegação, os blocos, o painel lateral e o rodapé. Preferência de animação desativada na conta e movimento reduzido do sistema impedem essa entrada animada.

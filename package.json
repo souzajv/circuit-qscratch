@@ -4,7 +4,7 @@
   "private": true,
   "description": "Trilha web educacional para descobrir e montar o circuito de Bell",
   "author": "João Campos",
-  "license": "AGPL-3.0-only",
+  "license": "UNLICENSED",
   "engines": {
     "node": "22.x"
   },

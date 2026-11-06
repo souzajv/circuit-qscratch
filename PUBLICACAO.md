@@ -54,6 +54,6 @@ Após o deploy, testar cadastro, login, restauração, saída e recuperação de
 
 ## Fonte, créditos e limites atuais
 
-Preserve a licença AGPL-3.0 e os créditos do QScratch e dos assets. A plataforma inclui um link para o código-fonte desta versão, mantendo também os créditos originais. Não aponte somente para o repositório original como se ele contivesse nossas alterações.
+Preserve os créditos de inspiração no QScratch e as atribuições e licenças dos assets e das dependências utilizadas. A aplicação não exibe um link para seu próprio repositório. O código próprio ainda não recebeu uma licença aberta; os metadados npm indicam UNLICENSED.
 
 O progresso confirmado é privado por UID. Pontuação ainda é calculada pelo cliente, e dados ainda marcados como salvando não têm backup local durável. O build pode avisar sobre o tamanho do pacote; isso não impede a compilação, mas deve ser acompanhado após a publicação.
