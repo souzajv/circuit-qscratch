@@ -327,3 +327,7 @@
     outline: var(--space-3) solid var(--ink);
     outline-offset: var(--space-3);
 }
+
+.map-mode .trail {
+    padding-bottom: var(--space-32);
+}
