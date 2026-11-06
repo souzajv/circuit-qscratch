@@ -140,3 +140,7 @@ O projeto foi inspirado no [QScratch, de marcosrv-ULL](https://github.com/marcos
 A [licença AGPL-3.0](LICENSE), a [referência original](CITATION.cff) e o [aviso de marca](TRADEMARK) foram preservados. O código desta versão está disponível em [souzajv/circuit-qscratch](https://github.com/souzajv/circuit-qscratch).
 
 Animações por [Christine Somkunwar](https://lottiefiles.com/user/a29ccdc8-ab0a-49fc-b263-32073008b985), sob [Lottie Simple License](https://lottiefiles.com/page/license), carregadas remotamente. Desenvolvimento por [João Campos](https://www.linkedin.com/in/joao-souza-campos/).
+
+## Carregamento e entrada da trilha
+
+O login exibe uma tela de carregamento brutalista durante a autenticação e a restauração do progresso, com o mascote Cat loading animation (CZ5vmNGwmU). O indicador comunica atividade, sem simular porcentagem ou duração mínima. Após a leitura, GSAP apresenta a navegação, os blocos, o painel lateral e o rodapé. Preferência de animação desativada na conta e movimento reduzido do sistema impedem essa entrada animada. O link do código desta versão fica na tela Como funciona, junto à licença, em vez dos rodapés.

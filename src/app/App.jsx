@@ -97,7 +97,7 @@ export default function App({initial = {}, onProgress, saveStatus, onRetry, onSi
                 {screen === 'settings' && <SettingsScreen persistent={Boolean(onProgress)} heading={heading} name={name} setName={setName} level={level} setLevel={setLevel} sound={sound} setSound={setSound} motion={motion} setMotion={setMotion} />}
                 {screen === 'help' && <HelpScreen heading={heading} backToMap={backToMap} />}
                 {screen === 'certificate' && first && <CertificateScreen heading={heading} first={first} backToMap={backToMap} />}
-                <footer><span className="author-credit">Feito por <a href="https://www.linkedin.com/in/joao-souza-campos/" target="_blank" rel="noopener noreferrer">João Campos <Icon name="linkedin" /></a></span><span aria-hidden="true"> · </span>Uma experiência baseada no <a href="https://github.com/marcosrv-ULL/QScratch">QScratch</a> · Gato professor: <a href="https://lottiefiles.com/free-animation/professor-cat-OMSGkVND6g">Christine Somkunwar</a> · <a href="https://lottiefiles.com/page/license">Lottie Simple License</a><span> · <a href="https://github.com/souzajv/circuit-qscratch">Código-fonte</a></span></footer>
+                <footer><span className="author-credit">Feito por <a href="https://www.linkedin.com/in/joao-souza-campos/" target="_blank" rel="noopener noreferrer">João Campos <Icon name="linkedin" /></a></span><span aria-hidden="true"> · </span>Uma experiência baseada no <a href="https://github.com/marcosrv-ULL/QScratch">QScratch</a> · Gato professor: <a href="https://lottiefiles.com/free-animation/professor-cat-OMSGkVND6g">Christine Somkunwar</a> · <a href="https://lottiefiles.com/page/license">Lottie Simple License</a></footer>
             </main>
         </div>
     </div>;

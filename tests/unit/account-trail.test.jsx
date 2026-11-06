@@ -36,3 +36,13 @@ test('falha de gravação antiga não sobrescreve o estado de uma nova gravaçã
  fireEvent.click(screen.getByText('Avançar'));act(()=>jest.advanceTimersByTime(300));await act(async()=>{});
  fireEvent.click(screen.getByText('Avançar'));await act(async()=>fail(Error()));expect(screen.getByText('Salvando progresso...')).toBeVisible();act(()=>jest.advanceTimersByTime(300));await screen.findByText('Progresso salvo na conta');
 });
+
+test.each([{motion:false}, {motion:true}])('respeita preferências de movimento ao abrir a conta: %j',async state=>{
+ const {gsap}=require('gsap');gsap.fromTo.mockClear();
+ window.matchMedia.mockReturnValue({matches:state.motion});
+ watchAccount.mockImplementation(cb=>{cb({uid:'movement'});return jest.fn();});
+ loadProgress.mockResolvedValue({name:'Movimento',...state});
+ render(<AccountTrail/>);await screen.findByText('Movimento');
+ expect(gsap.fromTo).not.toHaveBeenCalled();
+ window.matchMedia.mockReturnValue({matches:false});
+});

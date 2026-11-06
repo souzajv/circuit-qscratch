@@ -1,10 +1,14 @@
 import React,{useState,useEffect,useCallback,useRef} from 'react';
 import App from '../app/App';
+import LoadingScreen from './LoadingScreen';
+import {gsap} from 'gsap';
+import {LANDING_MOTION as timing} from './motionConfig';
 import {PROGRESS_SAVE_DELAY_MS} from '../shared/config/experience.cjs';
 import {watchAccount,logout} from '../infrastructure/firebase/auth';
 import {loadProgress,saveProgress} from '../infrastructure/firebase/progress';
 
 export default function AccountTrail(){
+ const entrance=useRef(null);
  const [account,setAccount]=useState(undefined);
  const [initial,setInitial]=useState(null);
  const [error,setError]=useState(false);
@@ -26,9 +30,19 @@ export default function AccountTrail(){
   queue.current.then(()=>{if(version===revision.current)setStatus('Progresso salvo na conta');},()=>{if(version===revision.current)setStatus('Não foi possível salvar. Tentar novamente');});
   },PROGRESS_SAVE_DELAY_MS);
  },[account]);
+ // A animação começa somente depois da restauração; desmontar reverte os estilos.
+ useEffect(()=>{
+  if(!initial || !entrance.current || initial.motion===false || window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const context=gsap.context(()=>{
+   gsap.fromTo(entrance.current.querySelectorAll('.sidebar, .title-row, .path-intro, .trail > li, .discovery > *, footer'),
+    {autoAlpha:0,y:timing.revealDistance},
+    {autoAlpha:1,y:0,duration:timing.revealDuration,stagger:timing.stagger,ease:'power2.out',clearProps:'all'});
+  },entrance);
+  return ()=>context.revert();
+ },[initial]);
  const leave=async()=>{await logout();window.location.hash='/entrar';};
- if(account===undefined || (account && !initial && !error))return <main><p role="status">Carregando sua conta e progresso...</p></main>;
+ if(account===undefined || (account && !initial && !error))return <LoadingScreen/>;
  if(!account)return <main><h1>Entre para salvar sua trilha</h1><a href="#/entrar">Entrar</a><a href="#/demo">Conhecer a demonstração</a></main>;
  if(error)return <main><p>Não foi possível carregar seu progresso. Seus dados não foram substituídos.</p><button onClick={load}>Tentar novamente</button></main>;
- return <App key={account.uid} initial={initial} onProgress={persist} saveStatus={status} onRetry={()=>persist(latest.current)} onSignOut={leave}/>;
+ return <div ref={entrance}><App key={account.uid} initial={initial} onProgress={persist} saveStatus={status} onRetry={()=>persist(latest.current)} onSignOut={leave}/></div>;
 }

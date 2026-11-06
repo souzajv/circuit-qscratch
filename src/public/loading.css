@@ -1,0 +1,11 @@
+.account-loading {position:fixed;inset:0;z-index:80;display:grid;place-items:center;overflow-y:auto;padding:var(--space-24);background:var(--warm);color:var(--ink);}
+.account-loading-card {width:100%;max-width:var(--loading-card-width);padding:var(--space-32);text-align:center;border:var(--border);border-radius:var(--radius-12);background:var(--paper);box-shadow:var(--space-6) var(--space-6) 0 var(--ink);}
+.account-loading-brand {font-weight:700;font-size:var(--font-18);}
+.account-loading-card .mascot {height:var(--loading-mascot-height);}
+.account-loading-card .mascot-fallback {visibility:hidden;}
+.account-loading-card h1 {font-size:var(--font-30);line-height:1.15;margin:0 0 var(--space-16);}
+.account-loading-card p {font-size:var(--font-16);line-height:1.5;}
+.account-loading-track {overflow:hidden;height:var(--space-16);margin-top:var(--space-24);border:var(--border);border-radius:var(--radius-8);background:var(--peach);}
+.account-loading-track span {display:block;width:40%;height:100%;background:var(--accent);animation:loading-travel var(--loading-cycle) ease-in-out infinite alternate;}
+@keyframes loading-travel {from{transform:translateX(0)}to{transform:translateX(150%)}}
+@media(prefers-reduced-motion:reduce){.account-loading-track span{animation:none;width:100%;}}

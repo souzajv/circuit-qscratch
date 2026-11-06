@@ -2,6 +2,7 @@ import React, {useState, useRef, useLayoutEffect} from 'react';
 import {gsap} from 'gsap';
 import {LANDING_MOTION as timing} from './motionConfig';
 import Mascot from '../shared/ui/Mascot';
+import LoadingScreen from './LoadingScreen';
 import Icon from '../shared/ui/Icon';
 import {login, register, resetPassword, accessError} from '../infrastructure/firebase/auth';
 import './landing.css';
@@ -63,7 +64,7 @@ export default function AccessPage() {
         finally {setBusy(false);}
     };
     return <div className="public-site auth-page" ref={rootRef}>
-        <header className="auth-header"><a className="public-brand" href="#/"><span className="public-mark" aria-hidden="true">q<sup>+</sup></span><span>Circuit<br/>QScratch</span></a><a href="#/">Voltar ao início</a></header>
+        {busy && <LoadingScreen/>}<header className="auth-header"><a className="public-brand" href="#/"><span className="public-mark" aria-hidden="true">q<sup>+</sup></span><span>Circuit<br/>QScratch</span></a><a href="#/">Voltar ao início</a></header>
         <main className="auth-layout">
             <div className="auth-host"><Mascot access motion/><h1>Seu próximo passo começa aqui.</h1><p>Entre para começar suas descobertas com o Circuit QScratch.</p></div>
             <section className="auth-modal" ref={panelRef} role="dialog" aria-labelledby="access-title">
@@ -90,6 +91,6 @@ export default function AccessPage() {
         <footer className="public-footer auth-footer">
             <span>Feito por <a href="https://www.linkedin.com/in/joao-souza-campos/">João Campos <Icon name="linkedin"/></a></span>
             <span>Inspirado no <a href="https://github.com/marcosrv-ULL/QScratch">QScratch</a>. Mascote por <a href="https://lottiefiles.com/user/a29ccdc8-ab0a-49fc-b263-32073008b985">Christine Somkunwar</a>, sob <a href="https://lottiefiles.com/page/license">Lottie Simple License</a>.</span>
-        <span> · <a href="https://github.com/souzajv/circuit-qscratch">Código-fonte</a></span></footer>
+        </footer>
     </div>;
 }

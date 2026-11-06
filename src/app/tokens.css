@@ -63,3 +63,9 @@
     --border: 3px solid var(--ink);
     --trail-line: #c8c3b6;
 }
+
+:root {
+    --loading-card-width: 480px;
+    --loading-mascot-height: 220px;
+    --loading-cycle: 1.4s;
+}
