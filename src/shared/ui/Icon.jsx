@@ -6,6 +6,7 @@ export default function Icon({
   const drawings = {
     linkedin: <><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M7 10v7m4 0v-7m0 3c0-4 6-4 6 0v4" /><circle cx="7" cy="7" r=".8" fill="currentColor" stroke="none" /></>,
     arrow: <><path d="M4 12h15m-6-6 6 6-6 6" /></>,
+    close: <path d="M6 6l12 12M18 6 6 18" />,
     back: <path d="M20 12H5m6-6-6 6 6 6" />,
     help: <><circle cx="12" cy="12" r="9" fill="var(--peach)" /><path d="M9 9a3 3 0 0 1 6 0c0 2-3 2-3 4m0 3v.1" /></>,
     settings: <><path d="M4 6h16M4 12h16M4 18h16" /><circle cx="8" cy="6" r="2" fill="var(--peach)" /><circle cx="16" cy="12" r="2" fill="var(--peach)" /><circle cx="10" cy="18" r="2" fill="var(--peach)" /></>,

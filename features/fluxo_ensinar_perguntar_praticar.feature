@@ -76,19 +76,22 @@ Funcionalidade: Aprender antes de responder e experimentar
     E nenhum ponto já conquistado é retirado
 
   @RF36 @UC06
-  Cenário: Acertar libera a prática sem concluir o bloco
+  Cenário: Acertar a terceira pergunta libera a prática sem concluir o bloco
     Dado que o estudante selecionou a alternativa correta
     Quando escolhe Conferir resposta
     Então a alternativa recebe um check e destaque visual
     E o gato muda para Cool cat
     E o botão de conferência pula se as animações estão ligadas
-    E a confirmação e Experimentar no circuito aparecem fora do balão e centralizados na tela
+    E o próprio botão mostra Resposta correta! por 2 segundos
+    E depois muda para Experimentar no circuito sem avançar automaticamente
+    E a explicação do acerto ocupa o espaço reservado dentro do balão
+    E a posição e a altura do balão permanecem iguais
     E as alternativas ficam bloqueadas para novos envios
     E o total de pontos e o estado de conclusão ainda não mudam
 
   @RF32 @RF37 @UC08
   Cenário: Abrir a prática depois de acertar
-    Dado que o estudante acertou o quiz
+    Dado que o estudante acertou as três perguntas do quiz
     Quando escolhe Experimentar no circuito
     Então a plataforma mostra as instruções e a bancada prática
     E não mostra o quiz como atividade ativa
@@ -114,7 +117,7 @@ Funcionalidade: Aprender antes de responder e experimentar
     Dado que o estudante acertou o quiz e ainda não concluiu a ação prática
     Então o próximo bloco permanece bloqueado
     Quando conclui a ação prática obrigatória
-    Então vê Treasurebox no lugar do gato professor
+    Então vê Cat rating no modal de conclusão no lugar do gato professor
     E o balão apresenta parabéns com uma recapitulação da ação feita
     E Missão concluída e o botão de avanço ficam fora da bancada e centralizados na tela
     E os pontos da tentativa são incorporados à melhor nota do bloco

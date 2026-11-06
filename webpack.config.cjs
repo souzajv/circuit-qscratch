@@ -10,6 +10,6 @@ module.exports = {
         {test: /\.jsx?$/, exclude: /node_modules/, use: {loader: 'babel-loader', options: {presets: ['@babel/preset-env', '@babel/preset-react']}}},
         {test: /\.css$/, use: ['style-loader', 'css-loader']}
     ]},
-    plugins: [new HtmlWebpackPlugin({template: './src/app/index.html'})],
+    plugins: [new HtmlWebpackPlugin({template: './src/app/index.html', favicon: './src/shared/assets/favicon.svg'})],
     devServer: {port: 8610, host: '127.0.0.1'}
 };

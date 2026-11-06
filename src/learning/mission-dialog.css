@@ -1,0 +1,22 @@
+:root {--mission-dialog-width:600px;--mission-mascot-size:220px;--mission-backdrop:rgb(75 72 63 / 55%);}
+.mission-dialog {position:fixed;inset:0;width:calc(100% - var(--space-40));max-width:var(--mission-dialog-width);max-height:calc(100dvh - var(--space-40));margin:auto;overflow:auto;padding:var(--space-32);border:var(--border);border-radius:var(--radius-16);background:var(--paper);color:var(--ink);box-shadow:var(--space-6) var(--space-6) 0 var(--ink);text-align:center;}
+.mission-dialog::backdrop {background:var(--mission-backdrop);}
+.mission-dialog .mascot {width:var(--mission-mascot-size);max-width:100%;height:auto;aspect-ratio:1;margin:0 auto;}
+.mission-dialog .mascot-fallback {visibility:hidden;}
+.mission-dialog h2 {font-size:var(--font-28);margin:var(--space-12) 0;}
+.mission-dialog h2:focus {outline:none;}
+.mission-dialog p {font-size:var(--font-18);line-height:1.6;}
+.mission-actions {display:flex;flex-direction:column;gap:var(--space-14);align-items:center;margin-top:var(--space-24);}
+.mission-actions .primary,.mission-actions .secondary {width:max-content;max-width:100%;}
+.mission-close {position:absolute;top:var(--space-10);right:var(--space-10);width:var(--space-44);height:var(--space-44);border:var(--space-2) solid var(--ink);border-radius:var(--radius-8);background:var(--warm);color:var(--ink);font-size:var(--font-28);}
+.practice-exploration.exploration-locked {visibility:hidden;}
+@media(max-width:560px){.mission-dialog{padding:var(--space-24) var(--space-18)}.mission-dialog p{font-size:var(--font-16)}.mission-dialog h2{font-size:var(--font-24)}}
+/* O player transparente acompanha o fundo do modal sem formar um retângulo. */
+.mission-dialog .mascot dotlottie-wc {background:transparent;}
+.mission-close {display:grid;place-items:center;padding:0;box-shadow:0 var(--space-3) 0 var(--ink);transition:transform var(--lab-motion-duration) ease-out,background var(--lab-motion-duration) ease-out;}
+.mission-close svg {display:block;width:var(--space-20);height:var(--space-20);margin:0;transition:transform var(--lab-motion-duration) ease-out;}
+.mission-close:hover {background:var(--accent);transform:translateY(calc(-1 * var(--space-2)));}
+.mission-close:hover svg {transform:rotate(90deg);}
+.mission-close:active {transform:translateY(var(--space-2));box-shadow:none;}
+.mission-close:focus-visible {outline:var(--space-3) solid var(--ink);outline-offset:var(--space-4);}
+@media(prefers-reduced-motion:reduce){.mission-close,.mission-close svg{transition:none}.mission-close:hover,.mission-close:hover svg{transform:none}}

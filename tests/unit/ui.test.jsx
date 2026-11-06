@@ -29,9 +29,9 @@ test('mascote respeita pose e comando de pausa após carregar',()=>{
  const view=render(<Mascot motion/>);
  const player={play:jest.fn(),pause:jest.fn()};
  view.container.querySelector('dotlottie-wc').dotLottie=player;
- act(()=>jest.advanceTimersByTime(500));expect(player.play).toHaveBeenCalled();
- view.rerender(<Mascot motion={false}/>);expect(player.pause).toHaveBeenCalled();
- for(const pose of [{thinking:true},{exploring:true},{celebrating:true},{trophy:true},{treasure:true},{loading:true},{chess:true},{access:true}]){
+ act(()=>jest.advanceTimersByTime(500));expect(player.play).toHaveBeenCalled();expect(view.container.querySelector('dotlottie-wc').layout).toEqual({fit:'contain',align:[0.5,0.5]});
+ act(()=>jest.advanceTimersByTime(500));view.rerender(<Mascot motion={false}/>);expect(player.pause).toHaveBeenCalled();
+ for(const pose of [{rating:true},{thinking:true},{exploring:true},{celebrating:true},{trophy:true},{treasure:true},{loading:true},{chess:true},{access:true}]){
  view.rerender(<Mascot motion {...pose}/>);
  const el=view.container.querySelector('dotlottie-wc');el.dotLottie=player;fireEvent(el,new Event('load'));expect(el.getAttribute('src')).toContain('.lottie');
  }

@@ -1,6 +1,6 @@
 # Circuit QScratch
 
-Plataforma web educacional que apresenta computação quântica a quem está começando. O usuário aprende uma ideia, responde a uma pergunta e usa o que descobriu para montar, aos poucos, um circuito de Bell com as portas Hadamard e CNOT.
+Plataforma web educacional que apresenta computação quântica a quem está começando. O usuário aprende uma ideia, responde a perguntas e usa o que descobriu para montar, aos poucos, um circuito de Bell com as portas Hadamard e CNOT.
 
 O projeto foi criado para uma optativa de computação quântica, inspirado no [QScratch](https://github.com/marcosrv-ULL/QScratch). A proposta combina uma trilha gamificada, um mascote animado e atividades curtas para despertar curiosidade e interesse pela área. As explicações são adaptadas ao **Ensino Fundamental Anos Finais, do 6º ao 9º ano, e ao Ensino Médio**. O conteúdo está sujeito à revisão do professor e ainda não foi validado com estudantes.
 
@@ -9,7 +9,7 @@ O projeto foi criado para uma optativa de computação quântica, inspirado no [
 Cada bloco separa três momentos:
 
 1. **Ensinar:** o mascote apresenta o conceito em páginas curtas, com navegação para avançar ou reler.
-2. **Perguntar:** o usuário responde a um quiz, com dicas e tentativas ilimitadas. É preciso acertar para seguir.
+2. **Perguntar:** o usuário responde a três perguntas, com dicas e tentativas ilimitadas. É preciso acertar as três para seguir.
 3. **Praticar:** o usuário interage com o circuito, arrastando peças ou selecionando e clicando nos encaixes indicados.
 
 | Bloco | Tema |
@@ -27,7 +27,7 @@ A simulação é clássica e ideal. A plataforma não executa em um computador q
 - Cadastro individual com nome ou apelido, e-mail, senha e confirmação; login, saída e recuperação de senha por e-mail via Firebase Authentication.
 - Escolha de escolaridade e explicações correspondentes aos dois públicos definidos.
 - Mapa da trilha, desbloqueio de blocos, quizzes, dicas, feedback e montagem interativa.
-- Pontos por acerto: até 10 por atividade, desconto de 2 por erro e de 2 pelo uso de dica, com mínimo de 2. Uma repetição só acrescenta a diferença quando supera a melhor pontuação anterior.
+- Pontos por acerto: até 10 por bloco, desconto de 2 por erro e de 2 pelo uso de dicas, cobrado uma única vez por bloco, com mínimo de 2. Uma repetição só acrescenta a diferença quando supera a melhor pontuação anterior.
 - Preferências separadas de som e animação, ligados inicialmente.
 - Retomada do progresso da conta pelo Firestore, com indicação de salvamento e opção de tentar novamente em caso de falha.
 - Revisão e repetição de blocos e certificado de conclusão exibido na tela, preservando os dados da primeira conclusão.
@@ -110,6 +110,7 @@ Nunca coloque service accounts, chaves privadas ou tokens administrativos no fro
 
 ## Requisitos e especificações
 
+- [Conteúdo, comparações e fontes didáticas](CONTEUDO_E_EXPERIMENTOS.md)
 - [Requisitos funcionais, não funcionais e casos de uso](REQUISITOS-E-CASOS-DE-USO.md)
 - [Cenários de aceitação em Gherkin](features/README.md)
 - [Design system](DESIGN_SYSTEM.md)

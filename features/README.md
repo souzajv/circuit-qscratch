@@ -18,10 +18,8 @@ Tags novas estão próximas dos cenários a que se referem. Tags coletivas antig
 - @planejado: função ainda pendente, como autenticação, persistência, revisão sem refazer e treino ampliado. Cenários com servidor dependem de integração, mesmo quando a tag não estiver presente.
 - @validacao_institucional, @pendente_politica_exclusao, @pendente_politica_versao, @pendente_pesquisa e @proposta_recompensas: condições ou decisões ainda abertas.
 
-## Limites conhecidos
+## Estado e limites atuais
 
-A prévia guarda estado apenas na sessão. Reabrir um bloco reinicia o quiz, por isso NC11 e NC22 ainda não são atendidos. Cadastro, Supabase, políticas, concorrência e emissão confiável de certificado não foram implementados. O tutorial pulável dedicado, a revisão distinta de refazer e os treinos ampliados de H e CNOT permanecem planejados.
+A trilha autenticada salva checkpoints no Firestore; a demonstração usa memória. O conteúdo de 06/11/2026 oferece páginas com exemplos e três perguntas por bloco, detalhadas em [conteudo_e_experimentos.feature](conteudo_e_experimentos.feature). Treinos de H e das quatro entradas da CNOT estão implementados. As notas são calculadas no cliente e não têm validação antifraude por servidor.
 
-Sons e animações começam ligados por decisão do usuário; controles independentes existem. A rolagem considera movimento reduzido do dispositivo, mas a aplicação automática dessa preferência a todas as animações ainda é uma pendência de RNF11. Os cenários de acessibilidade especificam o resultado esperado, sem declarar conformidade validada.
-
-Os 36 testes Jest existentes cobrem regras, modelo matemático e componentes, mas não executam os arquivos feature. Use npm test ou npm run test:coverage; detalhes em ../tests/README.md. A próxima automação deve escolher cenários prioritários, implementar passos ou testes de interface, observar falha significativa e só então implementar e confirmar o resultado. Revisão docente e observação de estudantes são verificações separadas.
+Os arquivos feature são especificações, sem executor. Jest testa regras e componentes; o roteiro local de navegador percorreu os cinco blocos, mas não substitui uma suíte E2E versionada. Revisão pelo professor, acessibilidade com usuários e avaliação de aprendizagem continuam verificações separadas. Consulte [o guia de testes](../tests/README.md).

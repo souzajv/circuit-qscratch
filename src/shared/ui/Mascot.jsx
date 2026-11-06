@@ -1,4 +1,4 @@
-import { MASCOT_REFRESH_MS } from '../config/experience.cjs';
+import { MASCOT_REFRESH_MS, MASCOT_LAYOUT } from '../config/experience.cjs';
 import React, { useRef, useEffect } from 'react';
 const CAT = 'https://assets-v2.lottiefiles.com/a/6c0548ba-e4ee-46f4-9ff6-d21142e6cdfb/OMSGkVND6g.lottie';
 const THINKING = 'https://assets-v2.lottiefiles.com/a/12900a72-1ed5-4bbd-8d70-5a27e2fa2879/0aSrmcIdAc.lottie';
@@ -18,10 +18,12 @@ export default function Mascot({
   treasure = false,
   access = false,
   chess = false,
+  rating = false,
   loading = false
 }) {
-  const pose = access ? 'access' : chess ? 'chess' : loading ? 'loading' : treasure ? 'treasure' : trophy ? 'trophy' : celebrating ? 'celebrate' : exploring ? 'explore' : thinking ? 'thinking' : 'teaching';
+  const pose = rating ? 'rating' : access ? 'access' : chess ? 'chess' : loading ? 'loading' : treasure ? 'treasure' : trophy ? 'trophy' : celebrating ? 'celebrate' : exploring ? 'explore' : thinking ? 'thinking' : 'teaching';
   const src = {
+    rating:'https://assets-v2.lottiefiles.com/a/4cced8f7-fa9d-42b3-96ff-e0f53df23073/wApLF0JTol.lottie',
     access: ACCESS,
     chess: CHESS,
     loading: LOADING,
@@ -35,9 +37,13 @@ export default function Mascot({
   const ref = useRef();
   useEffect(() => {
     const el = ref.current;
+    let configured = false;
     const update = () => {
       const player = el?.dotLottie;
-      if (player) motion ? player.play() : player.pause();
+      if (player) {
+        if(!configured){el.layout=MASCOT_LAYOUT;configured=true;}
+        motion ? player.play() : player.pause();
+      }
     };
     update();
     el?.addEventListener('load', update);
@@ -47,5 +53,5 @@ export default function Mascot({
       el?.removeEventListener('load', update);
     };
   }, [motion, pose]);
-  return <div className={trophy ? 'mascot mascot-trophy' : 'mascot'}><span className="mascot-fallback">{trophy || treasure ? 'Trilha concluída!' : 'Seu gato professor'}</span><dotlottie-wc key={pose} ref={ref} src={src} autoplay={motion ? '' : undefined} loop="" aria-label={`${access ? 'Gato com prancheta' : chess ? 'Gato jogando xadrez' : loading ? 'Gato brincando' : treasure ? 'Gato com baú de tesouro' : trophy ? 'Gato celebrando a conclusão' : celebrating ? 'Gato comemorando' : exploring ? 'Gato com lupa' : thinking ? 'Gato pensando' : 'Gato professor'} de Christine Somkunwar`} /></div>;
+  return <div className={trophy ? 'mascot mascot-trophy' : 'mascot'}><span className="mascot-fallback">{trophy || treasure ? 'Trilha concluída!' : 'Seu gato professor'}</span><dotlottie-wc key={pose} ref={ref} src={src} autoplay={motion ? '' : undefined} loop="" aria-label={`${rating ? 'Gato celebrando sua conquista' : access ? 'Gato com prancheta' : chess ? 'Gato jogando xadrez' : loading ? 'Gato brincando' : treasure ? 'Gato com baú de tesouro' : trophy ? 'Gato celebrando a conclusão' : celebrating ? 'Gato comemorando' : exploring ? 'Gato com lupa' : thinking ? 'Gato pensando' : 'Gato professor'} de Christine Somkunwar`} /></div>;
 }

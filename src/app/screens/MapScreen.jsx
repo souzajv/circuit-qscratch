@@ -1,4 +1,5 @@
 import React from 'react';
+import useTrailScroll from '../hooks/useTrailScroll';
 import { blocks } from '../../learning/content';
 import Mascot from '../../shared/ui/Mascot';
 import Icon from '../../shared/ui/Icon';
@@ -14,6 +15,7 @@ export default function MapScreen({
   allDone,
   open
 }) {
+  useTrailScroll(trailRef, motion);
   return <>
                     <div className="title-row"><div><h1 tabIndex="-1" ref={heading}>Pequenas peças.<br />Grandes descobertas.</h1><p>Do primeiro qubit ao estado de Bell. Vamos montar juntos?</p></div><span className="trail-label">Trilha de Bell<br /><strong>{completed.length} de 5 blocos</strong><Points total={total} /></span></div>
                     <div className="map-layout"><section className="path-section" aria-label="Mapa da trilha"><div className="path-intro"><Icon name="flag" className="start-flag" /><div><strong>Sua jornada começa aqui</strong><span>Não precisa saber nada de computação quântica.</span></div></div><ol className="trail" ref={trailRef}><TrailPath containerRef={trailRef} />{blocks.map((item, i) => {

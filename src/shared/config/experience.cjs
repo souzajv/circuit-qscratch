@@ -12,6 +12,8 @@ module.exports = {
     countMs: 800,
     countFrom: 5
   },
+  QUIZ_SUCCESS_DELAY_MS: 2000,
+  MASCOT_LAYOUT: {fit:"contain",align:[0.5,0.5]},
   PROGRESS_SAVE_DELAY_MS: 300,
   MASCOT_REFRESH_MS: 500,
   SCHOOL_LEVELS: ['Fundamental Anos Finais', 'Ensino Médio']

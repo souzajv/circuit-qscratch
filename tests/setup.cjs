@@ -15,3 +15,7 @@ jest.mock('gsap/ScrollTrigger', () => ({ScrollTrigger: {update: jest.fn()}}));
 jest.mock('lenis', () => jest.fn().mockImplementation(() => ({
     on: jest.fn(), scrollTo: jest.fn(), raf: jest.fn(), destroy: jest.fn()
 })));
+
+// O diálogo nativo é simulado no JSDOM; foco/inércia são conferidos no navegador.
+HTMLDialogElement.prototype.showModal=function(){this.setAttribute("open","");};
+HTMLDialogElement.prototype.close=function(){this.removeAttribute("open");};

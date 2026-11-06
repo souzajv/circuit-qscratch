@@ -4,10 +4,10 @@ Funcionalidade: Pontuação e retomada do progresso
   Para continuar aprendendo sem perder o que já conquistei
   O estudante recebe retorno claro e pode refazer atividades
 
-  Esquema do Cenário: Calcular a pontuação de uma pergunta
-    Dado que o estudante inicia uma pergunta que vale 10 pontos
+  Esquema do Cenário: Calcular a pontuação única do bloco
+    Dado que o estudante inicia um bloco de três perguntas que vale até 10 pontos
     E comete <erros> erros e usa a dica <dica>
-    Quando responde corretamente
+    Quando responde corretamente às três perguntas
     Então a pontuação possível da tentativa fica em <pontos>
     E o total ainda não aumenta
     Quando conclui a prática do mesmo bloco
@@ -23,7 +23,7 @@ Funcionalidade: Pontuação e retomada do progresso
       | 9     | sim  | 2      |
 
   Cenário: Avisar sobre pontos antes de usar a dica
-    Dado que o estudante ainda não usou a dica da pergunta
+    Dado que o estudante ainda não usou nenhuma dica no bloco
     Quando consulta o botão de dica antes de ativá-lo
     Então vê o aviso de desconto de 2 pontos
     E pode decidir se ativa a dica

@@ -2,26 +2,37 @@
 
 Atualização de escopo: uma conta individual e duas opções de escolaridade, Fundamental Anos Finais e Ensino Médio. O objetivo é apresentar computação quântica a quem ainda não conhece a área. Não há conta de responsável, perfis de crianças vinculados ou senha de troca de perfil. Não foi definida idade mínima para a conta. Como os dois públicos podem incluir menores, as condições de cadastro, participação e tratamento de dados reais devem ser definidas com a instituição antes de uso real; nenhuma idade mínima ou consentimento foi presumido.
 
-Decisão de 05/11/2026: Firebase Authentication passa a cuidar de cadastro individual, login e recuperação de senha. O projeto `circuit-qscratch` foi criado no plano Spark e o provedor de e-mail/senha está habilitado. O rascunho Supabase permanece histórico, sem integração nem migração automática; o armazenamento remoto do progresso ainda não foi implementado. Os requisitos abaixo são comportamentos desejados, não funcionalidades prontas. A trilha usa Bell: |00⟩, H no primeiro qubit, CNOT com controle no primeiro e alvo no segundo, medição ideal com 00 ou 11 e 50% para cada. A experiência é simulação clássica. O usuário escolheu pontuação de 10 por acerto, menos 2 por erro e 2 pela primeira dica, piso 2; ao refazer uma atividade só se acrescenta a melhora da melhor pontuação. A explicação por nível não muda gabarito ou física.
+Decisão de 05/11/2026: Firebase Authentication passa a cuidar de cadastro individual, login e recuperação de senha. O projeto `circuit-qscratch` foi criado no plano Spark e o provedor de e-mail/senha está habilitado. O rascunho Supabase permanece histórico, sem integração nem migração automática; o progresso usa o Firestore conforme a atualização de integração registrada neste documento. Os requisitos abaixo são comportamentos desejados, não funcionalidades prontas. A trilha usa Bell: |00⟩, H no primeiro qubit, CNOT com controle no primeiro e alvo no segundo, medição ideal com 00 ou 11 e 50% para cada. A experiência é simulação clássica. O usuário escolheu pontuação de até 10 por bloco, menos 2 por erro e 2 pela primeira dica, piso 2; ao refazer uma atividade só se acrescenta a melhora da melhor pontuação. A explicação por nível não muda gabarito ou física.
 
 ## Fluxo de aprendizagem vigente
 
-Atualização de 05/11/2026: cada bloco segue **ensinar → perguntar → praticar → concluir**. O acerto libera a prática, e a prática concluída libera o próximo bloco. Na prévia, cada bloco tem uma pergunta e uma missão prática; ler as falas ou acertar sozinho não conclui o bloco. Pontos são calculados com base no quiz, mas só entram no total ao concluir a prática. Uma nova medição de treino ou de Bell não é uma nova tentativa pontuada.
+Atualização de 05/11/2026: cada bloco segue **ensinar → perguntar → praticar → concluir**. Os três acertos liberam a prática, e a prática concluída libera o próximo bloco. Na revisão de 06/11/2026, cada bloco tem três perguntas e uma missão prática; ler as falas ou acertar sozinho não conclui o bloco. Pontos são calculados com base no quiz, mas só entram no total ao concluir a prática. Uma nova medição de treino ou de Bell não é uma nova tentativa pontuada.
 
 | ID | Comportamento esperado |
 |---|---|
 | RF32 | Separar as fases de explicação, quiz e prática, sem apresentar as três como atividades simultâneas. |
 | RF33 | Ensinar com falas curtas em balão, nome do estudante e texto da escolaridade selecionada; Próximo e Anterior percorrem as falas, e Iniciar teste aparece ao final. |
 | RF34 | Com animações ligadas, fechar a cortina, contar 5 a 1 sobre ela e abri-la com a pergunta e o mascote já preparados. Sem animações, abrir diretamente a próxima fase. Não pontuar por velocidade. |
-| RF35 | Desabilitar conferência sem alternativa; aceitar tentativas ilimitadas e uma dica com custo anunciado. Erro orienta nova tentativa e não libera a prática. |
-| RF36 | No acerto, bloquear novos envios, marcar a alternativa com check, usar Cool cat e animar o botão conforme preferência. Exibir explicação e Experimentar no circuito fora do balão, centralizados na tela. |
+| RF35 | Desabilitar conferência sem alternativa; aceitar tentativas ilimitadas e dicas por pergunta, com desconto único de 2 pontos pelo uso de dicas no bloco, anunciado antes do uso. Erro orienta nova tentativa e não libera a prática. |
+| RF36 | No acerto, bloquear novos envios, marcar a alternativa com check, usar Cool cat e animar o botão conforme preferência. Manter o retorno no espaço reservado do balão, sem painel externo. O mesmo botão mostra Resposta correta! por 2 segundos e então Próxima pergunta nos dois primeiros acertos ou Experimentar no circuito no terceiro; o avanço depende de clique. |
 | RF37 | Oferecer encaixes por arraste e por seleção seguida de clique ou teclado; mostrar só destinos permitidos pela missão. Na prática de H, somente a primeira linha recebe encaixe. |
 | RF38 | Concluir o bloco somente após a ação prática obrigatória. Antes do primeiro bloco concluído, a prévia principal mostra apenas duas linhas, sem rótulos de qubits ou estados. |
-| RF39 | Ao concluir a prática, usar Treasurebox, recapitular a ação no balão e mostrar confirmação e avanço fora da bancada, centralizados. Conclusão de todos os blocos troca o card do mapa por mensagem de conquista, Treasurebox e Revisar a trilha. |
+| RF39 | Ao concluir a prática, abrir um modal brutalista com Cat rating, explicação da conquista e avanço. Manter a bancada e suas instruções no lugar. Permitir fechar, continuar explorando e reabrir sem pontuar outra vez. Conclusão de todos os blocos troca o card do mapa por mensagem de conquista, Treasurebox e Revisar a trilha. |
 | RF40 | Ocultar o menu lateral dentro dos blocos e acompanhar o avanço com rolagem que revele a confirmação ou o próximo bloco no mapa, sem encobrir a ação pelo rodapé. |
 | RF41 | No desktop, manter painel lateral da trilha parado e rolagem interna sem barra visual. Em tela estreita, usar uma coluna e rolagem vertical da página. Conectar os blocos com curva tracejada contínua. |
 | RF42 | Iniciar a sessão com sons e animações ligados, com controles separados. O conteúdo e as ações devem funcionar com ambos desligados. |
 | RF43 | Destacar o total de pontos com ícone e ajuda por hover, foco ou toque, explicando descontos, piso, melhor nota e crédito somente após a prática. |
+
+### Enriquecimento didático em 06/11/2026
+
+| ID | Comportamento esperado |
+|---|---|
+| RF44 | Oferecer 29 páginas por escolaridade, com ideia, explicação e exemplo ao lado do balão em telas a partir de 1200px e abaixo nas menores; referências de posição na fala acompanham o layout. Ensino Fundamental Anos Finais e Ensino Médio compartilham os conceitos e recebem textos distintos. |
+| RF45 | Permitir comparar preparo em 0/1, sem H/com H/H duas vezes, quatro entradas de CNOT, ordem das portas e circuito de Bell, usando o modelo matemático da aplicação. |
+| RF46 | Separar chance prevista de frequência observada; cada rodada deve preparar o estado novamente. Não exigir contagens iguais nem obtenção de todos os resultados. |
+| RF47 | Exigir três respostas corretas por bloco antes da prática. A soma dos erros das perguntas e o uso de dicas afetam a nota única do bloco, que permanece entre 2 e 10 pontos. |
+| RF48 | Permitir rever a explicação durante o quiz sem apagar pergunta, erros, dica ou acerto. Retomar o checkpoint da pergunta atual. |
+| RF49 | Após a prática, explicar a mudança no circuito e oferecer comparações opcionais, sem novas peças, pontos ou alterações no progresso. |
 
 | Bloco | Ação que conclui a prática |
 |---|---|
@@ -35,7 +46,7 @@ Hover, foco ou clique no medidor revelam uma única amostra por rodada. Repetir 
 
 ### Estado da prévia e pendências
 
-As fases, os encaixes, a pontuação em memória e os mascotes estão no código atual. Atualização posterior: autenticação e retomada do último checkpoint confirmado estão integradas ao Firebase Auth/Firestore. O rascunho Supabase não está integrado. Reabrir bloco em andamento preserva os erros e dicas salvos; dados ainda não confirmados podem ser perdidos ao fechar a página. A revisão sem refazer e a expansão dos treinos de H e das quatro entradas da CNOT também continuam planejadas. A tela de conclusão da sessão não equivale a certificado emitido pelo servidor.
+As fases, os encaixes, a pontuação em memória e os mascotes estão no código atual. Atualização posterior: autenticação e retomada do último checkpoint confirmado estão integradas ao Firebase Auth/Firestore. O rascunho Supabase não está integrado. Reabrir bloco em andamento preserva os erros e dicas salvos; dados ainda não confirmados podem ser perdidos ao fechar a página. A revisão das explicações durante o quiz preserva a tentativa. Os laboratórios ampliados de H e das quatro entradas da CNOT estão implementados. A tela de conclusão da sessão não equivale a certificado emitido pelo servidor.
 
 RNF11 permanece um critério alvo: a rolagem já considera movimento reduzido do dispositivo; a aplicação automática dessa preferência a todas as animações decorativas ainda deve ser ajustada e verificada. Os controles manuais existem. A documentação não declara acessibilidade validada ou aprendizagem comprovada.
 
@@ -97,7 +108,7 @@ Os antigos requisitos NC05, NC06, NC07, NC21 e NC28 sobre gestão de perfis infa
 | UC02 | Entrar e sair; senha inválida impede entrada e saída não deve expor progresso a outra conta. |
 | UC03 | Recuperar senha por e-mail; tratar link inválido, expirado e já usado. |
 | UC05 | Escolher uma das duas escolaridades, acessar tutorial e mapa; o usuário é iniciante, sem exigir conhecimento prévio. |
-| UC06 | Abrir bloco, percorrer falas, iniciar teste, responder e receber retorno; acerto libera a prática. Concluir a ação prática para registrar pontos e liberar o próximo bloco. |
+| UC06 | Abrir bloco, percorrer falas, iniciar teste, responder e receber retorno; os três acertos liberam a prática. Concluir a ação prática para registrar pontos e liberar o próximo bloco. |
 | UC07 | Interromper e retomar tentativa com os erros e dicas confirmados; explicar ações pendentes. |
 | UC08 | Treinar separadamente, montar H e CNOT, executar e medir. |
 | UC09 | Refazer atividade e receber apenas a diferença se superar sua melhor nota. |
@@ -114,7 +125,7 @@ Os antigos UC04, UC12, UC15, UC19, UC21 e UC22, específicos de gestão de perfi
 
 ## Relação com os cenários de aceitação
 
-O fluxo detalhado de UC05, UC06, UC08, UC11 e UC16 está em [ensinar, perguntar e praticar](features/fluxo_ensinar_perguntar_praticar.feature), com tags por cenário para RF32 a RF43. Os cenários de circuito, pontuação e conclusão complementam essa sequência. Tags e cenários são especificações; não equivalem a execução automatizada.
+O fluxo detalhado de UC05, UC06, UC08, UC11 e UC16 está em [ensinar, perguntar e praticar](features/fluxo_ensinar_perguntar_praticar.feature), com tags por cenário para RF32 a RF43. As comparações didáticas e os três quizzes são detalhados em [conteúdo e experimentos](features/conteudo_e_experimentos.feature), RF44 a RF49. Os cenários de circuito, pontuação e conclusão complementam essa sequência. Tags e cenários são especificações; não equivalem a execução automatizada.
 
 ## Fontes e documentos
 

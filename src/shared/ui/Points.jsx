@@ -11,7 +11,7 @@ export default function Points({
             <button className="points-help-button" aria-label="Como funciona a pontuação" aria-describedby={open ? id : undefined} aria-expanded={open} onFocus={() => setOpen(true)} onBlur={() => setOpen(false)} onClick={() => setOpen(true)} onKeyDown={e => {
         if (e.key === 'Escape') setOpen(false);
       }}>?</button>
-            {open && <span className="points-tooltip" id={id} role="tooltip"><strong>Cada descoberta vale pontos!</strong><span>Um acerto começa valendo 10 pontos. Cada erro reduz 2 pontos, e a primeira dica também reduz 2. O acerto vale no mínimo 2 pontos.</span><span>Você não perde pontos já conquistados. Ao refazer, só ganha a diferença se superar sua melhor nota. Os pontos entram ao concluir a prática do bloco.</span></span>}
+            {open && <span className="points-tooltip" id={id} role="tooltip"><strong>Cada descoberta vale pontos!</strong><span>Cada bloco começa valendo até 10 pontos. Cada erro nas perguntas reduz 2 pontos; o uso de dicas desconta 2 uma única vez por bloco. O bloco vale no mínimo 2 pontos.</span><span>Você não perde pontos já conquistados. Ao refazer, só ganha a diferença se superar sua melhor nota. Os pontos entram ao concluir a prática do bloco.</span></span>}
         </span>
     </span>;
 }
