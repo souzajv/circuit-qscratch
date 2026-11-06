@@ -1176,7 +1176,7 @@ button.primary,button.secondary {
     padding: var(--space-15) var(--space-24);
 }
 .platform main {
-    padding-bottom: 85px;
+    padding-bottom: 0;
 }
 .map-mode {
     height: 100dvh;
