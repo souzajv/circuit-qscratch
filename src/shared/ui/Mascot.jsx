@@ -18,11 +18,13 @@ export default function Mascot({
   treasure = false,
   access = false,
   chess = false,
+  failed = false,
   rating = false,
   loading = false
 }) {
-  const pose = rating ? 'rating' : access ? 'access' : chess ? 'chess' : loading ? 'loading' : treasure ? 'treasure' : trophy ? 'trophy' : celebrating ? 'celebrate' : exploring ? 'explore' : thinking ? 'thinking' : 'teaching';
+  const pose = failed ? 'failed' : rating ? 'rating' : access ? 'access' : chess ? 'chess' : loading ? 'loading' : treasure ? 'treasure' : trophy ? 'trophy' : celebrating ? 'celebrate' : exploring ? 'explore' : thinking ? 'thinking' : 'teaching';
   const src = {
+    failed:'https://assets-v2.lottiefiles.com/a/24b28f7d-ea84-47ca-9295-4902d6382677/n69xPj3Lgr.lottie',
     rating:'https://assets-v2.lottiefiles.com/a/4cced8f7-fa9d-42b3-96ff-e0f53df23073/wApLF0JTol.lottie',
     access: ACCESS,
     chess: CHESS,
@@ -53,5 +55,5 @@ export default function Mascot({
       el?.removeEventListener('load', update);
     };
   }, [motion, pose]);
-  return <div className={trophy ? 'mascot mascot-trophy' : 'mascot'}><span className="mascot-fallback">{trophy || treasure ? 'Trilha concluída!' : 'Seu gato professor'}</span><dotlottie-wc key={pose} ref={ref} src={src} autoplay={motion ? '' : undefined} loop="" aria-label={`${rating ? 'Gato celebrando sua conquista' : access ? 'Gato com prancheta' : chess ? 'Gato jogando xadrez' : loading ? 'Gato brincando' : treasure ? 'Gato com baú de tesouro' : trophy ? 'Gato celebrando a conclusão' : celebrating ? 'Gato comemorando' : exploring ? 'Gato com lupa' : thinking ? 'Gato pensando' : 'Gato professor'} de Christine Somkunwar`} /></div>;
+  return <div className={trophy ? 'mascot mascot-trophy' : 'mascot'}><span className="mascot-fallback">{trophy || treasure ? 'Trilha concluída!' : 'Seu gato professor'}</span><dotlottie-wc key={pose} ref={ref} src={src} autoplay={motion ? '' : undefined} loop="" aria-label={`${failed ? 'Gato reagindo ao erro' : rating ? 'Gato celebrando sua conquista' : access ? 'Gato com prancheta' : chess ? 'Gato jogando xadrez' : loading ? 'Gato brincando' : treasure ? 'Gato com baú de tesouro' : trophy ? 'Gato celebrando a conclusão' : celebrating ? 'Gato comemorando' : exploring ? 'Gato com lupa' : thinking ? 'Gato pensando' : 'Gato professor'} de Christine Somkunwar`} /></div>;
 }

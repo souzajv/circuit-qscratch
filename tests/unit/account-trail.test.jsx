@@ -5,7 +5,7 @@ import {watchAccount,logout} from '../../src/infrastructure/firebase/auth';
 import {loadProgress,saveProgress} from '../../src/infrastructure/firebase/progress';
 jest.mock('../../src/infrastructure/firebase/auth',()=>({watchAccount:jest.fn(),logout:jest.fn()}));
 jest.mock('../../src/infrastructure/firebase/progress',()=>({loadProgress:jest.fn(),saveProgress:jest.fn()}));
-jest.mock('../../src/app/App',()=>function Fake({initial,onProgress,saveStatus,onRetry,onSignOut}){return <><p>{initial.name}</p><p>{saveStatus}</p><button onClick={()=>onProgress({best:{0:8},completed:[0]})}>Avançar</button><button onClick={onRetry}>Repetir</button><button onClick={onSignOut}>Sair</button></>;});
+jest.mock('../../src/app/App',()=>function Fake({initial,onProgress,saveStatus,onRetry,onSignOut,onSurveySave}){return <><p>{initial.name}</p><p>{saveStatus}</p><button onClick={()=>onProgress({best:{0:8},completed:[0]})}>Avançar</button><button onClick={onRetry}>Repetir</button><button onClick={onSignOut}>Sair</button><button onClick={()=>onSurveySave("before",{status:"completed",answers:{interest:true}}).catch(()=>{})}>Salvar pesquisa</button></>;});
 afterEach(()=>{cleanup();jest.useRealTimers();});
 test('espera sessão, oferece login e carrega somente a conta atual',async()=>{
  let observer;watchAccount.mockImplementation(cb=>{observer=cb;return jest.fn();});
@@ -45,4 +45,21 @@ test.each([{motion:false}, {motion:true}])('respeita preferências de movimento 
  render(<AccountTrail/>);await screen.findByText('Movimento');
  expect(gsap.fromTo).not.toHaveBeenCalled();
  window.matchMedia.mockReturnValue({matches:false});
+});
+
+
+test.each([false,true])('salva pesquisa serialmente e informa falha: %s',async fail=>{
+ watchAccount.mockImplementation(cb=>{cb({uid:'survey'});return jest.fn();});loadProgress.mockResolvedValue({});
+ saveProgress.mockImplementation(()=>fail?Promise.reject(Error()):Promise.resolve());
+ render(<AccountTrail/>);await screen.findByText('Explorador');fireEvent.click(screen.getByText('Avançar'));fireEvent.click(screen.getByText('Salvar pesquisa'));
+ await screen.findByText(fail?'Não foi possível salvar. Tentar novamente':'Progresso salvo na conta');
+ await waitFor(()=>expect(saveProgress).toHaveBeenCalledWith('survey',expect.objectContaining({surveys:{before:{status:'completed',answers:{interest:true}}}})));
+ if(fail){saveProgress.mockResolvedValueOnce();fireEvent.click(screen.getByText('Salvar pesquisa'));await screen.findByText('Progresso salvo na conta');}
+});
+test.each([false,true])('resposta de pesquisa antiga não substitui status mais novo: %s',async fail=>{
+ jest.useFakeTimers();let resolve,reject;watchAccount.mockImplementation(cb=>{cb({uid:'survey'});return jest.fn();});loadProgress.mockResolvedValue({});
+ saveProgress.mockImplementationOnce(()=>new Promise((a,b)=>{resolve=a;reject=b;})).mockResolvedValue();
+ render(<AccountTrail/>);await screen.findByText('Explorador');fireEvent.click(screen.getByText('Avançar'));fireEvent.click(screen.getByText('Salvar pesquisa'));await act(async()=>{});
+ fireEvent.click(screen.getByText('Avançar'));await act(async()=>fail?reject(Error()):resolve());
+ expect(screen.getByText('Salvando progresso...')).toBeVisible();act(()=>jest.advanceTimersByTime(300));await screen.findByText('Progresso salvo na conta');
 });

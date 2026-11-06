@@ -5,6 +5,7 @@ import {SCHOOL_LEVELS} from '../shared/config/experience.cjs';
 import {OUTCOMES,truthRow} from './experiments.cjs';
 import ExperimentPanel from './ExperimentPanel';
 import MiniCircuit from './MiniCircuit';
+import ExplorationTabs from './ExplorationTabs';
 import './examples.css';
 
 function BitExample(){
@@ -15,11 +16,14 @@ function LinesExample({preparation}){
  const [selected,setSelected]=useState(0);
  return <div><div className="lab-choices" role="group" aria-label="Identificar um qubit">{['Linha de cima: q₁','Linha de baixo: q₂'].map((label,i)=><button key={label} aria-pressed={selected===i} onClick={()=>setSelected(i)}>{label}</button>)}</div><MiniCircuit experiment="zero" highlight={selected}/><p className="lab-result" role="status">{preparation?'|00⟩: primeiro 0 para q₁ e segundo 0 para q₂.':`A linha ${selected?'de baixo':'de cima'} acompanha o qubit q${selected?'₂':'₁'}.`} Cada linha começa preparada em |0⟩.</p></div>;
 }
-function CnotExample(){
+function CnotExample({motion}){
  const [input,setInput]=useState('00');
  const output=truthRow(input);
  const toggle=position=>setInput(value=>value.split('').map((bit,i)=>i===position?(bit==='0'?'1':'0'):bit).join(''));
- return <div><div className="lab-controls"><button onClick={()=>toggle(0)}>Controle: {input[0]} · trocar</button><button onClick={()=>toggle(1)}>Alvo: {input[1]} · trocar</button></div><MiniCircuit experiment="cnot" input={input}/><div className="cnot-transformation" aria-live="polite"><span>Entrada <b>{input}</b></span><span className="lab-operation">CNOT</span><span>Saída <b>{output}</b></span></div><p>{input[0]==='1'?'Controle 1: o alvo troca.':'Controle 0: o alvo fica igual.'} O controle permanece {input[0]}.</p><table className="lab-table"><caption>As quatro entradas da CNOT</caption><thead><tr><th>Entrada</th><th>Saída</th><th>O que acontece?</th></tr></thead><tbody>{OUTCOMES.map(value=><tr key={value} className={value===input?'lab-table-active':''}><td>{value}</td><td>{truthRow(value)}</td><td>{value[0]==='1'?'Alvo troca':'Alvo fica igual'}</td></tr>)}</tbody></table><p className="lab-note">Este treino usa entradas 0 e 1. Na superposição, a mesma porta atua no estado conjunto, sem medir o controle.</p></div>;
+ return <ExplorationTabs motion={motion} tabs={[
+  {id:'try',label:'Experimentar',content:<><div className="lab-controls"><button onClick={()=>toggle(0)}>Controle: {input[0]} · trocar</button><button onClick={()=>toggle(1)}>Alvo: {input[1]} · trocar</button></div><MiniCircuit experiment="cnot" input={input}/><div className="cnot-transformation" aria-live="polite"><span>Entrada <b>{input}</b></span><span className="lab-operation">CNOT</span><span>Saída <b>{output}</b></span></div><p>{input[0]==='1'?'Controle 1: o alvo troca.':'Controle 0: o alvo fica igual.'} O controle permanece {input[0]}.</p></>},
+  {id:'compare',label:'Comparar entradas',content:<><table className="lab-table"><caption>As quatro entradas da CNOT</caption><thead><tr><th>Entrada</th><th>Saída</th><th>O que acontece?</th></tr></thead><tbody>{OUTCOMES.map(value=><tr key={value} className={value===input?'lab-table-active':''}><td>{value}</td><td>{truthRow(value)}</td><td>{value[0]==='1'?'Alvo troca':'Alvo fica igual'}</td></tr>)}</tbody></table><p className="lab-note">Este treino usa entradas 0 e 1. Na superposição, a mesma porta atua no estado conjunto, sem medir o controle.</p></>}
+ ]}/>;
 }
 function BranchesExample({advanced}){
  const [after,setAfter]=useState(false);
@@ -49,10 +53,11 @@ export default function LearningExample({visual,title,motion,level}){
  if(visual==='bit')content=<BitExample/>;
  else if(visual==='lines'||visual==='preparation')content=<LinesExample preparation={visual==='preparation'}/>;
  else if(visual==='order'||visual==='recap')content=<SequenceExample advanced={advanced}/>;
- else if(visual==='cnot')content=<CnotExample/>;
+ else if(visual==='cnot')content=<CnotExample motion={motion}/>;
  else if(visual==='branches')content=<BranchesExample advanced={advanced}/>;
  else {
-  content=<><ExperimentPanel cases={variants[visual]} pairs={!['qubit','measurement'].includes(visual)} showCircuit={visual!=='qubit'}/>{visual==='correlation' && <div className="lab-classical"><strong>Compare com cartões comuns</strong><div className="lab-branches"><span>Par de cartões: 00</span><span>Par de cartões: 11</span></div><p>Podemos preparar cartões iguais antes de abri-los. Essa igualdade é clássica. O mesmo gráfico de resultados, sozinho, não distingue esses cartões de um estado emaranhado.</p></div>}</>;
+  const comparison=visual==='correlation'?<div className="lab-classical"><strong>Compare com cartões comuns</strong><div className="lab-branches"><span>Par de cartões: 00</span><span>Par de cartões: 11</span></div><p>Podemos preparar cartões iguais antes de abri-los. Essa igualdade é clássica. O mesmo gráfico de resultados, sozinho, não distingue esses cartões de um estado emaranhado.</p></div>:undefined;
+  content=<ExperimentPanel cases={variants[visual]} pairs={!['qubit','measurement'].includes(visual)} showCircuit={visual!=='qubit'} motion={motion} comparison={comparison}/>;
  }
  return <section ref={root} className="learning-example" aria-label={`Exemplo: ${title}`} data-example={visual}><header><span className="lab-eyebrow">Explore no seu ritmo</span><h2>{exampleTitles[visual]}</h2><p>Use os botões para comparar. Você pode repetir e revisar sem perder pontos.</p></header>{content}</section>;
 }

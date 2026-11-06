@@ -26,7 +26,8 @@ export default function Lesson({
   const [phase, setPhase] = useState(saved.phase ?? 'learn');
   const [page, setPage] = useState(saved.page ?? 0);
   const [choice, setChoice] = useState(saved.choice ?? null);
-  const [advanceReady,setAdvanceReady] = useState(Boolean(saved.correct));
+  const [answered,setAnswered] = useState(saved.answered ?? saved.correct ?? false);
+  const [advanceReady,setAdvanceReady] = useState(Boolean(saved.answered ?? saved.correct));
   const [correct, setCorrect] = useState(saved.correct ?? false);
   const [quizIndex,setQuizIndex] = useState(saved.quizIndex ?? 0);
   const [questionHint,setQuestionHint] = useState(saved.questionHint ?? false);
@@ -38,12 +39,12 @@ export default function Lesson({
   const [measured, setMeasured] = useState(saved.measured ?? null);
   const measuredRef = useRef(saved.measured ?? null);
   const [finished, setFinished] = useState(saved.finished ?? false);
-  useEffect(() => {onCheckpoint?.({phase,page,quizIndex,questionHint,contentRevision:CONTENT_REVISION,choice,correct,errors,hint,slots,measured,finished});},[phase,page,quizIndex,questionHint,choice,correct,errors,hint,slots,measured,finished]);
+  useEffect(() => {onCheckpoint?.({phase,page,quizIndex,questionHint,contentRevision:CONTENT_REVISION,choice,correct,answered,errors,hint,slots,measured,finished});},[phase,page,quizIndex,questionHint,choice,correct,answered,errors,hint,slots,measured,finished]);
   const title = useRef();
   const questionTitle = useRef();
   const lessonTitle = useRef();
   const [missionOpen,setMissionOpen]=useState(Boolean(saved.finished));
-  // Cada fala apresenta uma ideia e preserva o texto da escolaridade escolhida.
+  // Cada fala apresenta uma ideia; a plataforma usa a versão introdutória para todos.
   const pages = getLessons(block,level);
   const questions = getQuestions(block,level);
   // Um checkpoint antigo não deve apontar para fora da nova sequência.
@@ -60,13 +61,13 @@ export default function Lesson({
   }, [phase, questionIndex, pageIndex]);
 
   useEffect(()=>{
-    if(!correct || phase!=='quiz')return;
+    if(!answered || phase!=='quiz')return;
     const timer=setTimeout(()=>setAdvanceReady(true),QUIZ_SUCCESS_DELAY_MS);
     return ()=>clearTimeout(timer);
-  },[correct,phase,questionIndex]);
+  },[answered,phase,questionIndex]);
   const advance = () => {
     if(lastQuestion)transition(()=>{setPhase('practice');setMessage('');});
-    else {setQuizIndex(questionIndex+1);setCorrect(false);setAdvanceReady(false);setChoice(null);setQuestionHint(false);setMessage('');play('tick');}
+    else {setQuizIndex(questionIndex+1);setCorrect(false);setAnswered(false);setAdvanceReady(false);setChoice(null);setQuestionHint(false);setMessage('');play('tick');}
   };
   const complete = () => {
     if (finished) return;
@@ -110,7 +111,7 @@ export default function Lesson({
         <h1 className="stage-title" ref={title} tabIndex="-1">{block.title}</h1>
         <div className="activity-layout">
             <div className={`conversation ${phase === 'practice' ? 'compact' : ''}`}>
-                <div className="speaker"><Mascot motion={motion} thinking={phase === 'quiz'} celebrating={phase === 'quiz' && correct}  /></div>
+                <div className="speaker"><Mascot motion={motion} thinking={phase === 'quiz'} celebrating={phase === 'quiz' && correct} failed={phase === 'quiz' && answered && !correct}  /></div>
                 <section className="speech" aria-label={phase === 'learn' ? 'Explicação do professor' : phase === 'quiz' ? 'Pergunta do professor' : 'Missão prática'}>
                     {phase === 'learn' && <><p className="speech-greeting">Vamos juntos, {name || 'explorador'}.</p><h2 ref={lessonTitle} tabIndex="-1" className="speech-topic">{lesson.title}</h2><p className="speech-copy" key={pageIndex}><DirectionalText text={lesson.text}/></p><div className="speech-navigation"><button className="text-button" disabled={pageIndex === 0} onClick={() => {
                 setPage(pageIndex - 1);
@@ -123,21 +124,22 @@ export default function Lesson({
                   countdown: true
                 });
               }}>{pageIndex === pages.length - 1 ? 'Iniciar teste' : 'Próximo'} <Icon name="arrow" /></button></div></>}
-                    {phase === 'quiz' && <><p className="quiz-position">Pergunta {questionIndex+1} de {questions.length}</p><fieldset disabled={correct}><legend ref={questionTitle} tabIndex="-1">{question.question}</legend>{question.options.map((option, i) => <label className={'answer ' + (choice === i ? 'selected ' : '') + (correct && choice === i ? 'answer-correct' : '')} key={option}><input type="radio" name="answer" checked={choice === i} onChange={() => {
+                    {phase === 'quiz' && <><p className="quiz-position">Pergunta {questionIndex+1} de {questions.length}</p><fieldset disabled={answered}><legend ref={questionTitle} tabIndex="-1">{question.question}</legend>{question.options.map((option, i) => <label className={'answer ' + (choice === i ? 'selected ' : '') + (answered && i === question.answer ? 'answer-correct' : '') + (answered && !correct && choice === i ? ' answer-wrong' : '')} key={option}><input type="radio" name="answer" checked={choice === i} onChange={() => {
                   setChoice(i);
                   setMessage('');
-                }} />{option}{correct && choice === i && <span className="correct-mark" aria-label="Resposta correta"><Icon name="check" /></span>}</label>)}</fieldset><div className="lesson-actions"><button className="text-button" disabled={correct || questionHint} onClick={() => {setHint(true);setQuestionHint(true);}}>Ver dica {questionHint ? '' : hint ? '(sem novo desconto)' : '(−2 pontos no bloco)'}</button><button className={`primary quiz-confirm ${correct && !advanceReady ? 'answer-jump' : ''}`} disabled={choice === null || (correct && !advanceReady)} onClick={() => {
-                if(correct){advance();return;}
+                }} />{option}{answered && (choice===i || i===question.answer) && <span className="correct-mark" aria-label={i===question.answer?"Resposta correta":"Resposta incorreta"}><Icon name={i===question.answer?"check":"close"} /></span>}</label>)}</fieldset><div className="lesson-actions"><button className="text-button" disabled={answered || questionHint} onClick={() => {setHint(true);setQuestionHint(true);}}>Ver dica {questionHint ? '' : hint ? '(sem novo desconto)' : '(−2 pontos no bloco)'}</button><button className={`primary quiz-confirm ${answered && !advanceReady ? correct ? 'answer-jump' : 'answer-shake' : ''}`} disabled={choice === null || (answered && !advanceReady)} onClick={() => {
+                if(answered){advance();return;}
+                setAnswered(true);
                 if (choice === question.answer) {
                   setCorrect(true);
                   setMessage(question.feedback);
                   play('success');
                 } else {
                   setErrors(errors + 1);
-                  setMessage(`Ainda não. ${question.retry} Você pode tentar outra vez.`);
+                  setMessage(`A resposta correta é “${question.options[question.answer]}”. ${question.feedback}`);
                   play('tick');
                 }
-              }}>{correct ? advanceReady ? lastQuestion ? 'Experimentar no circuito' : 'Próxima pergunta' : 'Resposta correta!' : 'Conferir resposta'}{correct && advanceReady && <> <Icon name="arrow" /></>}</button></div>{questionHint && <p className="hint">{question.hint}</p>}<p className="feedback quiz-feedback" role="status">{correct ? question.feedback : message}</p><button className="text-button quiz-review" onClick={()=>{setPhase('learn');setPage(0);setMessage('');}}>Rever explicação sem apagar esta tentativa</button></>}
+              }}>{answered ? advanceReady ? lastQuestion ? 'Experimentar no circuito' : 'Próxima pergunta' : correct ? 'Resposta correta!' : 'Resposta incorreta' : 'Conferir resposta'}{answered && advanceReady && <> <Icon name="arrow" /></>}</button></div>{questionHint && <p className="hint">{question.hint}</p>}<p className="feedback quiz-feedback" role="status">{correct ? question.feedback : answered ? message || `A resposta correta é “${question.options[question.answer]}”. ${question.feedback}` : message}</p><button className="text-button quiz-review" onClick={()=>{setPhase('learn');setPage(0);setMessage('');}}>Rever explicação sem apagar esta tentativa</button></>}
                     {phase === 'practice' && <><p className="speech-copy">{index === 0 ? 'Vamos preparar as duas linhas. Leve um qubit para cada encaixe.' : index === 2 ? 'Leve a porta H para a primeira posição do qubit de cima.' : index === 3 ? 'Agora leve CNOT para depois de H. O controle fica em cima e o alvo embaixo.' : <>Passe o mouse sobre o medidor para medir. Você também pode clicar ou usar <kbd>Tab</kbd> para focar e <kbd>Enter</kbd> para medir.</>}</p><p className="practice-tip">{isMeasurement ? 'Uma rodada, um resultado. Uma nova preparação permite medir outra vez.' : 'Arraste a peça ou selecione e clique no encaixe. As duas formas funcionam.'}</p></>}
                 </section>
                 {phase === 'learn' && <LearningExample key={`${pageIndex}-${level}`} visual={lesson.visual} title={lesson.title} motion={motion} level={level}/>}
@@ -157,7 +159,7 @@ export default function Lesson({
                 <p className="practice-status" role="status">{measured !== null ? `Resultado: ${measured}. ${index === 4 ? 'Nesta preparação ideal, 00 e 11 têm 50% de chance cada. Poucas rodadas podem repetir o mesmo par.' : 'Um qubit preparado em 0 deu resultado 0.'}` : message || 'O circuito está pronto para a sua ação.'}</p>
                 <small>Simulação clássica de um circuito quântico ideal.</small>
             </section>}
-                {missionOpen && <MissionDialog motion={motion} conclusion={conclusion} last={index===4} onContinue={index===4?onCertificate:onBack} onDismiss={()=>setMissionOpen(false)} onRepeat={isMeasurement?()=>{setMissionOpen(false);measuredRef.current=null;setMeasured(null);setMessage('Nova preparação pronta. Passe o mouse ou foque o medidor para medir.');}:undefined}/>}
+                {missionOpen && <MissionDialog motion={motion} conclusion={conclusion} last={index===4} onContinue={()=>{setMissionOpen(false);if(index===4)onCertificate();else onBack();}} onDismiss={()=>setMissionOpen(false)} onRepeat={isMeasurement?()=>{setMissionOpen(false);measuredRef.current=null;setMeasured(null);setMessage('Nova preparação pronta. Passe o mouse ou foque o medidor para medir.');}:undefined}/>}
                 {phase === 'practice' && <details className={`practice-exploration ${finished?'':'exploration-locked'}`}><summary>Compare e experimente mais, sem alterar sua montagem</summary>{finished && <><LearningExample visual={explorationVisuals[index]} title="O que muda em outro preparo?" motion={motion} level={level}/><button className="secondary" onClick={()=>setMissionOpen(true)}>Ver missão concluída</button></>}</details>}
         </div>
     </div>;

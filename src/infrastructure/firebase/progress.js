@@ -13,6 +13,14 @@ export async function saveProgress(uid,state) {
   const best={...previous.best};
   Object.entries(state.best).forEach(([key,value])=>{best[key]=Math.max(best[key] || 0,value);});
   const completed=[...new Set([...(previous.completed || []),...state.completed])].sort();
-  transaction.set(ref,{version:1,state:{...state,best,completed,first:previous.first || state.first},updatedAt:serverTimestamp()});
+  const surveyArchive={...previous.surveyArchive};
+  const surveys={...previous.surveys,...state.surveys};
+  Object.entries(previous.surveys || {}).forEach(([kind,record])=>{
+   if(['completed','skipped'].includes(record.status)){
+    if((record.version || 1)>=(surveys[kind]?.version || 1))surveys[kind]=record;
+    else surveyArchive[`${kind}_v${record.version || 1}`]=record;
+   }
+  });
+  transaction.set(ref,{version:1,state:{...state,best,completed,surveys,surveyArchive,first:previous.first || state.first},updatedAt:serverTimestamp()});
  });
 }

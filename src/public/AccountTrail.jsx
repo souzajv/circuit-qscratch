@@ -40,9 +40,17 @@ export default function AccountTrail(){
   },entrance);
   return ()=>context.revert();
  },[initial]);
+ const commitSurvey=useCallback(async(kind,record)=>{
+  clearTimeout(timer.current);const version=++revision.current;
+  const state={...latest.current,surveys:{...latest.current.surveys,[kind]:record}};
+  latest.current=state;setStatus('Salvando progresso...');
+  const pending=queue.current.catch(()=>{}).then(()=>saveProgress(account.uid,state));queue.current=pending;
+  try{await pending;if(version===revision.current)setStatus('Progresso salvo na conta');}
+  catch(error){if(version===revision.current)setStatus('Não foi possível salvar. Tentar novamente');throw error;}
+ },[account]);
  const leave=async()=>{await logout();window.location.hash='/entrar';};
  if(account===undefined || (account && !initial && !error))return <LoadingScreen/>;
  if(!account)return <main><h1>Entre para salvar sua trilha</h1><a href="#/entrar">Entrar</a><a href="#/demo">Conhecer a demonstração</a></main>;
  if(error)return <main><p>Não foi possível carregar seu progresso. Seus dados não foram substituídos.</p><button onClick={load}>Tentar novamente</button></main>;
- return <div ref={entrance}><App key={account.uid} initial={initial} onProgress={persist} saveStatus={status} onRetry={()=>persist(latest.current)} onSignOut={leave}/></div>;
+ return <div ref={entrance}><App key={account.uid} initial={initial} onProgress={persist} saveStatus={status} onRetry={()=>persist(latest.current)} onSignOut={leave} onSurveySave={commitSurvey}/></div>;
 }

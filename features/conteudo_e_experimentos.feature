@@ -126,3 +126,29 @@ Funcionalidade: Compreender circuitos por explicações e comparações
       | 1199    | abaixo  | abaixo  |
       | 768     | abaixo  | abaixo  |
       | 390     | abaixo  | abaixo  |
+
+  @RF44 @RF49
+  Cenário: Explorar conteúdos extensos em abas na mesma explicação
+    Dado um laboratório de preparo e medição na explicação ou após a prática
+    Quando o estudante navega entre Preparar, Experimentar e Resultados
+    Então apenas o conteúdo da aba escolhida aparece
+    E o preparo, as contagens e o histórico permanecem intactos
+    E a troca não ocorre automaticamente nem altera pontos ou montagem
+    E trocar a preparação reinicia as medições como antes
+
+  @RF44 @RF49
+  Cenário: Consultar comparações sem acumular conteúdo na tela
+    Dado o exemplo da CNOT ou a comparação de Bell com cartões comuns
+    Quando o estudante abre a aba de comparação
+    Então consulta a tabela de entradas ou os cartões em um painel separado
+    E pode voltar ao experimento sem perder suas escolhas
+
+  @RF42 @RF44
+  Cenário: Navegar pelas abas com teclado e em telas pequenas
+    Dado um painel com abas
+    Quando usa as setas ou Home e End
+    Então o foco percorre as abas sem trocar o painel automaticamente
+    E Enter ou Espaço ativa a aba focada
+    E painéis ocultos não oferecem controles na navegação por Tab
+    E no celular as abas se reorganizam sem rolagem horizontal da página
+    E movimento reduzido mantém a troca disponível sem animação

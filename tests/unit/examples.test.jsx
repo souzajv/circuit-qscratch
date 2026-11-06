@@ -6,7 +6,12 @@ import ExperimentPanel from '../../src/learning/ExperimentPanel';
 import {runExperiment} from '../../src/learning/experiments.cjs';
 afterEach(()=>{cleanup();jest.restoreAllMocks();window.matchMedia.mockReturnValue({matches:false,addEventListener:jest.fn(),removeEventListener:jest.fn()});});
 const example=(visual,level='Fundamental Anos Finais',motion=false)=>render(<LearningExample visual={visual} title="Minha descoberta" motion={motion} level={level}/>);
-const click=name=>fireEvent.click(screen.getByRole('button',{name}));
+const tab=name=>fireEvent.click(screen.getByRole('tab',{name,exact:true}));
+const click=name=>{
+ if(['Preparar e medir uma vez','Fazer 20 rodadas','Limpar resultados'].includes(name))tab('Experimentar');
+ else if(['H uma vez','H e depois CNOT'].includes(name))tab('Preparar');
+ fireEvent.click(screen.getByRole('button',{name}));
+};
 test('interruptor liga e desliga com descrição textual',()=>{
  example('bit');click('Ligar interruptor');expect(screen.getByText('1')).toBeVisible();click('Desligar interruptor');expect(screen.getByText('0')).toBeVisible();
 });
@@ -18,7 +23,7 @@ test.each(['Fundamental Anos Finais','Ensino Médio'])('sequência e termos resp
  example('branches',level);click('Depois da CNOT');expect(screen.getByText('|10⟩ → |11⟩')).toBeVisible();click('Antes da CNOT');expect(screen.getByText('|10⟩ → |10⟩')).toBeVisible();
 });
 test('CNOT responde a controle e alvo e destaca sua tabela de verdade',()=>{
- example('cnot');click('Controle: 0 · trocar');expect(screen.getByText('Controle 1: o alvo troca. O controle permanece 1.')).toBeVisible();click('Alvo: 0 · trocar');expect(screen.getByText('11',{selector:'.cnot-transformation b'})).toBeVisible();click('Alvo: 1 · trocar');click('Controle: 1 · trocar');expect(screen.getByText('Controle 0: o alvo fica igual. O controle permanece 0.')).toBeVisible();expect(within(screen.getByRole('table')).getAllByRole('row')).toHaveLength(5);
+ example('cnot');click('Controle: 0 · trocar');expect(screen.getByText('Controle 1: o alvo troca. O controle permanece 1.')).toBeVisible();click('Alvo: 0 · trocar');expect(screen.getByText('11',{selector:'.cnot-transformation b'})).toBeVisible();click('Alvo: 1 · trocar');click('Controle: 1 · trocar');expect(screen.getByText('Controle 0: o alvo fica igual. O controle permanece 0.')).toBeVisible();tab('Comparar entradas');expect(within(screen.getByRole('table')).getAllByRole('row')).toHaveLength(5);
 });
 test.each(['qubit','measurement','hadamard','double-h','order-compare','bell','bell-compare','correlation','recap'])('exemplo %s apresenta representação acessível',visual=>{
  example(visual);expect(screen.getByRole('region',{name:'Exemplo: Minha descoberta'})).toBeVisible();expect(screen.getByRole('heading')).not.toBeEmptyDOMElement();
@@ -29,7 +34,7 @@ test.each([false,true])('laboratório %s conta amostras reais, troca preparo e l
  click('H uma vez');click('Preparar e medir uma vez');expect(screen.getByRole('status')).toHaveTextContent(pairs?'Último resultado: 10':'Último resultado: 1');
  click('Fazer 20 rodadas');expect(screen.getByRole('status')).toHaveTextContent('21 rodadas realizadas');
  expect(screen.getByLabelText('Últimos 20 resultados').children).toHaveLength(20);
- click('H e depois CNOT');expect(screen.getByRole('status')).toHaveTextContent('Antes de medir');click('Preparar e medir uma vez');expect(screen.getByRole('status')).toHaveTextContent(pairs?'Último resultado: 11':'Último resultado: 1');
+ click('H e depois CNOT');tab('Experimentar');expect(screen.getByRole('status')).toHaveTextContent('Antes de medir');click('Preparar e medir uma vez');expect(screen.getByRole('status')).toHaveTextContent(pairs?'Último resultado: 11':'Último resultado: 1');
  click('Limpar resultados');expect(screen.getByRole('button',{name:'Limpar resultados'})).toBeDisabled();
 });
 test('entrada GSAP é limpa e movimento reduzido mantém conteúdo visível',()=>{
@@ -48,3 +53,16 @@ test('valores padrão do laboratório e do diagrama continuam acessíveis',()=>{
  const view=render(<MiniCircuit/>);expect(screen.getByRole('img')).toHaveAccessibleName(/H → CNOT/);view.unmount();
  render(<ExperimentPanel cases={['bell']}/>);click('Preparar e medir uma vez');expect(screen.getByRole('status')).toHaveTextContent('1 rodada realizada');
 });
+
+ test('abas preservam medições e preparo, e comparação clássica tem seu próprio painel',()=>{
+ example('correlation');tab('Experimentar');click('Fazer 20 rodadas');tab('Resultados');expect(screen.getAllByText('Observado: 0 de 20 rodadas')[0]).toBeVisible();tab('Comparar');expect(screen.getByText('Compare com cartões comuns')).toBeVisible();tab('Experimentar');expect(screen.getByRole('status')).toHaveTextContent('20 rodadas realizadas');
+ });
+ test('navegação por setas move foco sem ativar a aba automaticamente',()=>{
+ example('hadamard');const prepare=screen.getByRole('tab',{name:'Preparar'});prepare.focus();fireEvent.keyDown(prepare,{key:'ArrowRight'});expect(screen.getByRole('tab',{name:'Experimentar'})).toHaveFocus();expect(prepare).toHaveAttribute('aria-selected','true');fireEvent.keyDown(prepare,{key:'End'});expect(screen.getByRole('tab',{name:'Resultados'})).toHaveFocus();fireEvent.keyDown(prepare,{key:'ArrowLeft'});expect(screen.getByRole('tab',{name:'Resultados'})).toHaveFocus();fireEvent.keyDown(screen.getByRole('tab',{name:'Resultados'}),{key:'Home'});expect(prepare).toHaveFocus();fireEvent.keyDown(prepare,{key:'Tab'});tab('Resultados');expect(screen.getByText('Ainda não há medições. Abra Experimentar para começar.')).toBeVisible();
+ });
+ test('trocas de aba animam com GSAP e respeitam movimento reduzido',()=>{
+ const view=example('cnot','Fundamental Anos Finais',true);tab('Comparar entradas');expect(gsap.fromTo).toHaveBeenCalled();view.unmount();gsap.fromTo.mockClear();window.matchMedia.mockReturnValue({matches:true});example('hadamard','Fundamental Anos Finais',true);tab('Resultados');expect(gsap.fromTo).not.toHaveBeenCalled();
+ });
+
+
+test('abas sem animação configurada mantêm o conteúdo visível',()=>{const Tabs=require('../../src/learning/ExplorationTabs').default;render(<Tabs tabs={[{id:'only',label:'Explorar',content:<p>Experimento disponível</p>}]}/>);expect(screen.getByRole('tabpanel')).toHaveTextContent('Experimento disponível');});

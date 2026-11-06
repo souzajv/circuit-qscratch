@@ -2,14 +2,14 @@
 
 Plataforma web educacional que apresenta computação quântica a quem está começando. O usuário aprende uma ideia, responde a perguntas e usa o que descobriu para montar, aos poucos, um circuito de Bell com as portas Hadamard e CNOT.
 
-O projeto foi criado para uma optativa de computação quântica, inspirado no [QScratch](https://github.com/marcosrv-ULL/QScratch). A proposta combina uma trilha gamificada, um mascote animado e atividades curtas para despertar curiosidade e interesse pela área. As explicações são adaptadas ao **Ensino Fundamental Anos Finais, do 6º ao 9º ano, e ao Ensino Médio**. O conteúdo está sujeito à revisão do professor e ainda não foi validado com estudantes.
+O projeto foi criado para uma optativa de computação quântica, inspirado no [QScratch](https://github.com/marcosrv-ULL/QScratch). A proposta combina uma trilha gamificada, um mascote animado e atividades curtas para despertar curiosidade e interesse pela área. A experiência atual oferece uma única versão introdutória para quem está começando, sem seleção de escolaridade.
 
 ## Experiência de aprendizagem
 
 Cada bloco separa três momentos:
 
 1. **Ensinar:** o mascote apresenta o conceito em páginas curtas, com navegação para avançar ou reler.
-2. **Perguntar:** o usuário responde a três perguntas, com dicas e tentativas ilimitadas. É preciso acertar as três para seguir.
+2. **Perguntar:** o usuário responde a três perguntas, com dicas e uma confirmação por pergunta. Depois de responder às três, o usuário segue para a prática, com retorno para acertos e erros.
 3. **Praticar:** o usuário interage com o circuito, arrastando peças ou selecionando e clicando nos encaixes indicados.
 
 | Bloco | Tema |
@@ -25,7 +25,7 @@ A simulação é clássica e ideal. A plataforma não executa em um computador q
 ## Funcionalidades implementadas
 
 - Cadastro individual com nome ou apelido, e-mail, senha e confirmação; login, saída e recuperação de senha por e-mail via Firebase Authentication.
-- Escolha de escolaridade e explicações correspondentes aos dois públicos definidos.
+- Versão introdutória comum a todos e questionário inicial obrigatório com escolaridade e questionário final opcional de percepção.
 - Mapa da trilha, desbloqueio de blocos, quizzes, dicas, feedback e montagem interativa.
 - Pontos por acerto: até 10 por bloco, desconto de 2 por erro e de 2 pelo uso de dicas, cobrado uma única vez por bloco, com mínimo de 2. Uma repetição só acrescenta a diferença quando supera a melhor pontuação anterior.
 - Preferências separadas de som e animação, ligados inicialmente.
@@ -95,7 +95,7 @@ Os diretórios `account`, `completion` e `settings` marcam fronteiras planejadas
 
 A configuração pública do SDK web fica em `src/infrastructure/firebase/config.js` e aponta para o projeto Firebase `circuit-qscratch`. Ela não contém credenciais administrativas. Para usar outro ambiente, substitua essa configuração, habilite o provedor E-mail/Senha, crie o Firestore e publique as regras de `firebase/firestore.rules` no seu projeto.
 
-Cada conta acessa somente `progress/{seu UID}`. São persistidos nome ou apelido, escolaridade, preferências, bloco atual, blocos concluídos, melhores pontuações, dados da primeira conclusão e checkpoint de cada atividade.
+Cada conta acessa somente `progress/{seu UID}`. São persistidos nome ou apelido, preferências, bloco atual, blocos concluídos, melhores pontuações, dados da primeira conclusão e checkpoint de cada atividade.
 
 O salvamento agrupa mudanças próximas por 300 ms e confirma o sucesso após resposta do servidor. Aguarde **“Progresso salvo na conta”** antes de fechar a página. A saída pela interface fica indisponível quando há salvamento ou falha pendente.
 
@@ -110,6 +110,7 @@ Nunca coloque service accounts, chaves privadas ou tokens administrativos no fro
 
 ## Requisitos e especificações
 
+- [Questionários de percepção e limites da análise](QUESTIONARIOS_PESQUISA.md)
 - [Conteúdo, comparações e fontes didáticas](CONTEUDO_E_EXPERIMENTOS.md)
 - [Requisitos funcionais, não funcionais e casos de uso](REQUISITOS-E-CASOS-DE-USO.md)
 - [Cenários de aceitação em Gherkin](features/README.md)

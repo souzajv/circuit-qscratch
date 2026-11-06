@@ -1,3 +1,7 @@
+> Decisões mais recentes: formulário inicial obrigatório com escolaridade autodeclarada em quatro categorias; pós-formulário opcional. Cada pergunta do quiz aceita uma confirmação por tentativa do bloco. Erros mostram X, a resposta correta e retorno pedagógico, e permitem seguir após a animação de erro. A prática exige três respostas confirmadas, não três acertos. A pontuação mantém descontos e piso anteriores. Estas decisões substituem requisitos anteriores de tentativas ilimitadas, acerto obrigatório e pré-formulário opcional.
+
+> Decisão mais recente: versão introdutória única, sem seleção de escolaridade, com questionários opcionais pré/pós vinculados à conta. As referências anteriores à adaptação por nível são históricas. Fluxos e dados atuais: [Questionários](QUESTIONARIOS_PESQUISA.md). RF50: oferecer pré antes da primeira explicação para contas sem progresso; RF51: oferecer pós após Bell antes de concluir/sair; RF52: salvar por UID, separar rascunho/envio/recusa, aguardar confirmação e permitir reenvio após falha; RF53: mostrar uma pergunta por etapa com Sim/Não, progresso, revisão e participação opcional, sem efeito nos pontos.
+
 # Requisitos e casos de uso da plataforma
 
 Atualização de escopo: uma conta individual e duas opções de escolaridade, Fundamental Anos Finais e Ensino Médio. O objetivo é apresentar computação quântica a quem ainda não conhece a área. Não há conta de responsável, perfis de crianças vinculados ou senha de troca de perfil. Não foi definida idade mínima para a conta. Como os dois públicos podem incluir menores, as condições de cadastro, participação e tratamento de dados reais devem ser definidas com a instituição antes de uso real; nenhuma idade mínima ou consentimento foi presumido.
@@ -32,7 +36,7 @@ Atualização de 05/11/2026: cada bloco segue **ensinar → perguntar → pratic
 | RF46 | Separar chance prevista de frequência observada; cada rodada deve preparar o estado novamente. Não exigir contagens iguais nem obtenção de todos os resultados. |
 | RF47 | Exigir três respostas corretas por bloco antes da prática. A soma dos erros das perguntas e o uso de dicas afetam a nota única do bloco, que permanece entre 2 e 10 pontos. |
 | RF48 | Permitir rever a explicação durante o quiz sem apagar pergunta, erros, dica ou acerto. Retomar o checkpoint da pergunta atual. |
-| RF49 | Após a prática, explicar a mudança no circuito e oferecer comparações opcionais, sem novas peças, pontos ou alterações no progresso. |
+| RF49 | Após a prática, explicar a mudança no circuito e oferecer comparações opcionais, sem novas peças, pontos ou alterações no progresso. Painéis extensos, tanto nas explicações quanto após a prática, separam o conteúdo em abas manuais por objetivo, mantendo preparo, contagens e histórico ao navegar. CNOT separa experimento e tabela; correlação separa a comparação clássica. Exemplos curtos permanecem diretos. |
 
 | Bloco | Ação que conclui a prática |
 |---|---|

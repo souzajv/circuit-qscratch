@@ -25,11 +25,11 @@ test.each([0,1,2,3,4])('bloco %s exige quiz e sua própria ação prática',inde
  expect(p.onComplete).toHaveBeenCalledTimes(1);expect(screen.getByText('Missão concluída!')).toBeVisible();
  fireEvent.click(screen.getAllByRole('button',{name:index===4?/Ver minha conclusão/:/^Voltar à trilha$/}).at(-1));expect(index===4?p.onCertificate:p.onBack).toHaveBeenCalled();
 });
-test('falas, retorno, dica e erro afetam a nota sem bloquear nova tentativa',()=>{
+test('erro encerra a pergunta, preserva descontos e permite continuar',()=>{
  const p=props(0);render(<Lesson {...p} name=""/>);click(/Próximo/);click(/Anterior/);click(/Voltar à trilha/);expect(p.onBack).toHaveBeenCalled();
  while(screen.queryByRole('button',{name:/Próximo/}))click(/Próximo/);click(/Iniciar teste/);
- expect(screen.getByRole('button',{name:'Conferir resposta'})).toBeDisabled();click(/Ver dica/);fireEvent.click(screen.getByRole('radio',{name:'Um qubit',exact:true}));click('Conferir resposta');expect(screen.getByText(/Ainda não/)).toBeVisible();
- fireEvent.click(screen.getByRole('radio',{name:'Dois qubits',exact:true}));click('Conferir resposta');finishQuestions(0,true);click(/Experimentar no circuito/);
+ expect(screen.getByRole('button',{name:'Conferir resposta'})).toBeDisabled();click(/Ver dica/);fireEvent.click(screen.getByRole('radio',{name:'Um qubit',exact:true}));click('Conferir resposta');expect(screen.getByLabelText('Resposta incorreta')).toBeVisible();
+ expect(screen.getByRole('radio',{name:/^Dois qubits/})).toBeDisabled();finishQuestions(0,true);click(/Experimentar no circuito/);
  click('Encaixe do primeiro qubit');expect(screen.getByText(/Selecione uma peça/)).toBeVisible();
  const piece=screen.getByRole('button',{name:/Qubit/});const setData=jest.fn();fireEvent.dragStart(piece,{dataTransfer:{setData}});expect(setData).toHaveBeenCalledWith('text/plain','qubit');
  const target=screen.getByRole('button',{name:'Encaixe do primeiro qubit'});fireEvent.drop(target,{dataTransfer:{getData:()=> 'qubit'}});fireEvent.drop(target,{dataTransfer:{getData:()=> 'qubit'}});
@@ -61,7 +61,7 @@ test('retoma fase, descontos e montagem sem repetir a medição concluída',()=>
  const onCheckpoint=jest.fn();
  const saved={phase:'practice',page:1,choice:0,correct:true,errors:2,hint:true,slots:[],measured:'00',finished:true};
  render(<Lesson {...props(4)} saved={saved} onCheckpoint={onCheckpoint}/>);
- expect(onCheckpoint).toHaveBeenCalledWith({...saved,quizIndex:0,questionHint:false,contentRevision:CONTENT_REVISION});
+ expect(onCheckpoint).toHaveBeenCalledWith({...saved,quizIndex:0,questionHint:false,answered:true,contentRevision:CONTENT_REVISION});
 });
 
 test('revisão mantém erros, dica e pergunta atual; prática só aparece após três acertos',()=>{
@@ -97,4 +97,19 @@ test('fecha e reabre a conquista sem creditar a prática outra vez',()=>{
  const p=props(0);render(<Lesson {...p} saved={{phase:'practice',finished:true}}/>);
  expect(screen.getByRole('dialog')).toBeVisible();click('Continuar explorando');expect(screen.queryByRole('dialog')).toBeNull();
  click('Ver missão concluída');expect(screen.getByRole('dialog')).toBeVisible();expect(p.onComplete).not.toHaveBeenCalled();
+});
+
+test('três erros encerram suas perguntas e permitem a prática com nota reduzida',()=>{
+ const p=props(0);render(<Lesson {...p} saved={{phase:'quiz'}}/>);
+ getQuestions(blocks[0],'Fundamental Anos Finais').forEach((q,i)=>{
+  fireEvent.click(screen.getByRole('radio',{name:q.options[(q.answer+1)%3],exact:true}));click('Conferir resposta');
+  expect(screen.getByRole('button',{name:'Resposta incorreta'})).toBeDisabled();expect(screen.getByLabelText('Resposta incorreta')).toBeVisible();
+  if(i<2)click('Próxima pergunta');
+ });
+ click(/Experimentar no circuito/);click(/Qubit/);click('Encaixe do primeiro qubit');click(/Qubit/);click('Encaixe do segundo qubit');expect(p.onComplete).toHaveBeenCalledWith(4);
+});
+test('erro confirmado permanece encerrado ao retomar a conta',()=>{
+ render(<Lesson {...props(0)} saved={{phase:'quiz',choice:0,answered:true,correct:false,errors:1}}/>);
+ expect(screen.getByRole('button',{name:'Próxima pergunta'})).toBeEnabled();expect(screen.getByText(/A resposta correta é/)).toBeVisible();
+ expect(screen.getByRole('radio',{name:/^Dois qubits/})).toBeDisabled();
 });
