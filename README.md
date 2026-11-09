@@ -1,3 +1,5 @@
+> Atualização do instrumento: versão 3, com oito perguntas no pré obrigatório e sete etapas no pós opcional. Interesse e confiança usam escalas pareadas; clareza e uso são separados; duas questões de conteúdo sem pontos nem correção e comentário final opcional. Ver QUESTIONARIOS_PESQUISA.md. Descrições anteriores de Sim/Não referem-se às versões antigas.
+
 # Circuit QScratch
 
 Plataforma web educacional que apresenta computação quântica a quem está começando. O usuário aprende uma ideia, responde a perguntas e usa o que descobriu para montar, aos poucos, um circuito de Bell com as portas Hadamard e CNOT.

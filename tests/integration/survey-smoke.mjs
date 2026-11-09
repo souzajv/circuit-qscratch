@@ -2,6 +2,7 @@ import {initializeApp,deleteApp} from 'firebase/app';
 import {getAuth,createUserWithEmailAndPassword,deleteUser} from 'firebase/auth';
 import {getFirestore,doc,setDoc,getDocFromServer,deleteDoc,serverTimestamp,terminate} from 'firebase/firestore';
 import {firebaseConfig} from '../../src/infrastructure/firebase/config.js';
+import {surveyQuestions,SURVEY_VERSION} from '../../src/learning/surveys.js';
 import {randomBytes} from 'node:crypto';
 import assert from 'node:assert/strict';
 const app=initializeApp(firebaseConfig,'survey-qa'),other=initializeApp(firebaseConfig,'survey-other-qa');
@@ -10,7 +11,8 @@ let ref;
 try {
  const a=await createUserWithEmailAndPassword(auth,`qa-progress-${Date.now()}@example.invalid`,randomBytes(20).toString('hex'));
  ref=doc(db,'progress',a.user.uid);
- const state={name:'Teste',level:'Ensino Médio',current:1,completed:[0],best:{0:8},attempt:{1:{phase:'quiz',errors:2,hint:true}},first:null,motion:true,sound:true,surveys:{before:{version:1,status:"completed",answers:{heardBefore:false,firstStudy:true,priorCircuit:false,interest:true},submittedAtClient:"2026-11-06T12:00:00.000Z"},after:{version:1,status:"completed",answers:{understanding:true,interest:true,difficulty:false,intuitive:true,confidence:true},submittedAtClient:"2026-11-06T12:30:00.000Z"}}};
+ const state={name:'Teste',level:'Ensino Médio',current:1,completed:[0],best:{0:8},attempt:{1:{phase:'quiz',errors:2,hint:true}},first:null,motion:true,sound:true};
+ state.surveys=Object.fromEntries(['before','after'].map(kind=>[kind,{version:SURVEY_VERSION,status:'completed',answers:Object.fromEntries(surveyQuestions[kind].map(q=>[q.id,q.type==='text'?'Mais exemplos':q.options?q.options[0]:false])),submittedAtClient:new Date().toISOString()}]));
  await setDoc(ref,{version:1,state,updatedAt:serverTimestamp()});
  assert.deepEqual((await getDocFromServer(ref)).data().state,state);
  await assert.rejects(()=>getDocFromServer(doc(db2,'progress',a.user.uid)),e=>e.code==='permission-denied');

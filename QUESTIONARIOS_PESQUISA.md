@@ -1,81 +1,60 @@
-> Atualização mais recente: o questionário inicial é obrigatório antes do primeiro bloco. A versão 2 acrescenta a pergunta education, com Ensino Fundamental, Ensino Médio, Ensino Superior incompleto e Ensino Superior completo. Essas categorias são autodeclaradas e não alteram o conteúdo. Só o formulário final continua podendo ser pulado. Contas sem blocos concluídos com pré-formulário antigo/incompleto precisam responder à nova versão. Registros de versões anteriores são preservados em state.surveyArchive ao serem substituídos por versão mais nova.
+# Questionários da trilha de Bell
 
-# Questionários de percepção da trilha de Bell
+## Instrumento atual, versão 3
 
-## Decisão de 06/11/2026
+Objetivo: investigar se o Circuit QScratch oferece uma entrada acessível em computação quântica e desperta interesse por continuar estudando. Instrumento exploratório criado para o projeto, ainda sujeito à revisão do professor, sem validação psicométrica. A plataforma oferece conteúdo introdutório único; escolaridade caracteriza a amostra e não adapta os textos.
 
-Após conversa do usuário com o orientador, a plataforma passa a oferecer uma única versão introdutória. A escolaridade deixa de ser uma escolha nas Preferências e não determina explicações ou perguntas. Os textos mais formais permanecem no código como material histórico, mas a navegação ativa usa a versão acessível de introdução.
+O pré tem oito perguntas obrigatórias antes da primeira explicação; o pós tem sete etapas e pode ser pulado. O comentário final é opcional mesmo para quem responde ao pós. Uma pergunta por etapa, com mascote, marcador e transições. Nenhum item pontua, desbloqueia peças ou altera certificado. As questões de conteúdo não mostram gabarito nem retorno de acerto no formulário.
 
-Os questionários são exploratórios, criados para este projeto. Não são instrumentos validados nem provas de aprendizagem. As perguntas usam Sim/Não, uma por etapa, com participação opcional e sem efeito em pontos, desbloqueios ou certificado.
+## Perguntas antes
 
-## Antes da primeira explicação
+1. Qual é a sua escolaridade? Ensino Fundamental; Ensino Médio; Ensino Superior incompleto; Ensino Superior completo.
+2. Antes desta trilha, você já tinha ouvido falar em computação quântica? Sim/Não.
+3. Esta é sua primeira tentativa de aprender computação quântica? Sim/Não.
+4. Antes desta trilha, você já conhecia a ideia de circuito quântico? Sim/Não.
+5. Quanto você tem vontade de aprender mais sobre computação quântica?
+6. Quanto você se sente capaz de começar a estudar computação quântica?
+7. Ao medir um qubit, qual resultado aparece em uma única medição?
+8. Neste circuito, o que a porta H faz quando é aplicada uma vez a um qubit preparado em 0?
 
-O formulário abre quando o usuário inicia o primeiro bloco e ainda não concluiu nenhum bloco. Contas com progresso anterior não recebem uma coleta retrospectiva apresentada como se tivesse acontecido antes do contato com o conteúdo.
+## Perguntas depois
 
-| Identificador | Pergunta | Uso na análise |
-|---|---|---|
-| heardBefore | Antes desta trilha, você já tinha ouvido falar em computação quântica? | Familiaridade declarada |
-| firstStudy | Esta é sua primeira tentativa de aprender computação quântica? | Experiência anterior declarada |
-| priorCircuit | Antes desta trilha, você já conhecia a ideia de circuito quântico? | Familiaridade com o tema específico |
-| interest | Você tem interesse em aprender mais sobre computação quântica? | Interesse inicial |
+1. Quanto você tem vontade de aprender mais sobre computação quântica?
+2. Quanto você se sente capaz de começar a estudar computação quântica?
+3. Foi fácil entender as explicações?
+4. Foi fácil descobrir o que fazer em cada etapa?
+5. Ao medir um qubit, qual resultado aparece em uma única medição?
+6. Neste circuito, o que a porta H faz quando é aplicada uma vez a um qubit preparado em 0?
+7. O que poderíamos explicar melhor? Comentário opcional de até 600 caracteres, com orientação para não incluir dados pessoais.
 
-## Após a missão de Bell
+Interesse, confiança, clareza e uso têm cinco opções ordenadas: Nada, Pouco, Mais ou menos, Bastante e Muito. Interesse e confiança usam redação e opções idênticas no pré e pós. Os identificadores são interest, confidence, clarity e usability.
 
-No fluxo normal, depois da conquista da última prática, o botão Ver minha conclusão abre o formulário antes do certificado. Se o usuário optar por explorar mais e voltar ao mapa, o formulário final é oferecido ao sair da missão. Não são abertos dois modais ao mesmo tempo.
+## Questões de compreensão
 
-| Identificador | Pergunta | Uso na análise |
-|---|---|---|
-| understanding | Depois da trilha, você sente que entende melhor o que é um circuito quântico? | Compreensão percebida |
-| interest | Você tem interesse em aprender mais sobre computação quântica? | Interesse final, com redação igual à inicial |
-| difficulty | Você achou difícil acompanhar as explicações dos conceitos? | Dificuldade percebida; Sim representa dificuldade |
-| intuitive | Você achou fácil descobrir como usar os botões e montar o circuito? | Facilidade de uso percebida |
-| confidence | Você se sente capaz de explicar com suas palavras o papel de pelo menos uma porta do circuito? | Confiança declarada |
+measurementResult: Um resultado: 0 ou 1 (resposta esperada); Os resultados 0 e 1 juntos; Sempre o resultado 1; Não sei ainda.
 
-A pergunta de interesse é repetida para permitir comparação pareada. Os itens de compreensão, dificuldade, uso e confiança medem dimensões diferentes e não devem ser somados como uma única nota.
+hadamardRole: Prepara chances iguais de medir 0 ou 1 (resposta esperada); Garante que toda medição dará 1; Mede o qubit imediatamente; Não sei ainda.
 
-## Fluxo e participação
+Os itens tratam de medição na base computacional e H aplicada uma vez em |0⟩, conforme a trilha. Não são um teste completo da área. Preservar separadamente Não sei ainda, respostas incorretas e ausência de resposta. O gabarito é apenas para análise posterior, não para exibir durante o pré. Repetir os mesmos itens pode produzir familiaridade e não demonstra retenção duradoura ou transferência.
 
-O modal explica o propósito, a vinculação à conta e o caráter opcional. Quero responder inicia as etapas. Nenhuma resposta vem selecionada. Sim e Não são igualmente válidos; é preciso escolher uma alternativa para avançar, mas Pular questionário e continuar permanece disponível. Anterior permite revisar antes de enviar. O botão final envia as respostas e só continua após confirmação da gravação.
+## Persistência e versões
 
-Em caso de erro, o formulário mantém as respostas e oferece nova tentativa. Os rascunhos de perguntas já respondidas acompanham o salvamento do progresso. Uma falha de rede não deve ser apresentada como envio confirmado. Pular registra status separado e respostas vazias, sem converter ausência de participação em Não. No modo demonstração, a interface informa que as respostas ficam somente na sessão.
+Registros vinculados à conta em progress/{UID}/state.surveys.before e after, com version, status, answers e submittedAtClient (horário do dispositivo, não carimbo confiável do servidor). Rascunhos são in_progress, envio é completed e recusa do pós é skipped com answers vazio. A confirmação aguarda salvamento; falhas permitem reenvio sem apagar respostas.
 
-Depois de um envio ou de uma recusa, o modal não se repete ao refazer a trilha. O adaptador preserva o primeiro registro final de cada fase nas transações normais da aplicação. Isso evita sobrescrita por estados de abas antigas. Não é uma garantia antifraude contra manipulação direta da API pelo titular da conta.
+Versões 1 e 2 usavam itens diferentes e respostas booleanas para interesse. Não converter booleanos antigos em categorias da escala. Rascunhos de outra versão reiniciam; o adaptador já arquiva registros finais anteriores em state.surveyArchive ao receber versão maior. Contas com blocos concluídos não recebem um falso pré retrospectivo. Não combinar pré de uma versão com pós de outra na análise pareada. O código não força usuários que já concluíram a refazer o estudo.
 
-## Dados e armazenamento
+## Plano de análise e limites
 
-Local: `progress/{UID}/state.surveys`, com chaves `before` e `after`. É um mapa no documento de progresso, não uma coleção pública nem uma subcoleção. Cada registro contém:
+Apresentar escolaridade e contato anterior com contagens e denominadores. Comparar interesse, confiança e compreensão por usuário com pré/pós completos da versão 3. Mostrar distribuições das escalas, transições individuais e quantos aumentaram, mantiveram ou reduziram suas respostas. Não tratar a escala ordinal automaticamente como uma medida contínua nem prometer significância estatística.
 
-- version: versão do instrumento, atualmente 2;
-- status: in_progress, completed ou skipped;
-- answers: mapa de identificadores estáveis: education é uma das quatro categorias textuais; os demais itens são booleanos;
-- index: posição do rascunho, quando aplicável;
-- submittedAtClient: data/hora do dispositivo ao finalizar, não um horário certificado pelo servidor.
+Relatar separadamente respostas esperadas, incorretas e Não sei ainda nos dois itens. Clareza e uso descrevem percepção, não aprendizagem. Analisar comentários sem publicar nomes, e-mails ou conteúdo identificável. Relatar tamanho e recrutamento da amostra, acompanhamento presencial, respostas ausentes e desistências. Quem pula o pós não equivale a alguém insatisfeito e não deve receber resposta imputada.
 
-O documento de progresso também recebe updatedAt do servidor, que representa sua última gravação geral. Não usar esse campo como se fosse o horário exato de envio do questionário.
+A extração administrativa ainda não está implementada. Para o artigo, explicitar quantos iniciaram, concluíram e responderam ao pós com base em registros verificáveis; hoje não há evento específico de início para estabelecer com precisão todas as desistências. Não apresentar essa métrica como pronta. Pontos e quizzes orientados são parte do ensino, não uma avaliação independente.
 
-As regras de acesso já publicadas permitem apenas leitura e escrita pelo próprio UID. Os novos campos usam o mapa de estado existente, aceito pelas regras atuais, sem exigir implantação de uma nova coleção. Não há listagem pública de respostas nem acesso de uma conta aos dados de outra. Os testes reais usaram contas fictícias e removeram seus dados ao final.
+Sem grupo de comparação, não atribuir mudanças à gamificação nem demonstrar causalidade. Formular conclusões como indícios de acessibilidade, interesse e compreensão imediata na amostra observada. A presença do desenvolvedor durante o uso pode influenciar as respostas. Recomenda-se revisão do professor e pequena verificação de compreensão das perguntas antes da coleta principal.
 
-Por compatibilidade com as regras e os documentos existentes, state.level continua preenchido internamente com a chave do texto introdutório. Esse campo legado não é escolaridade declarada, não foi perguntado e não pode ser usado para inferir o nível acadêmico dos participantes. Certificados novos identificam o percurso introdutório; snapshots de certificados anteriores permanecem históricos.
+## Fontes para o desenho
 
-Os dados ficam ligados à conta e não são anônimos na origem. A apresentação no artigo deve usar resultados agregados, sem nomes, e-mails ou UIDs. A extração administrativa e a produção de tabelas do artigo não foram implementadas nesta etapa. Não inserir credenciais administrativas no frontend.
-
-## Como usar no artigo
-
-1. Informar quantos usuários iniciaram a trilha, quantos responderam cada formulário e quantos têm um par completo.
-2. Apresentar contagens e proporções com denominadores explícitos por pergunta. Não contar rascunhos ou formulários pulados como respostas negativas.
-3. Comparar interesse antes/depois somente nos pares completos da mesma conta e versão do instrumento. Relatar separadamente Sim→Sim, Sim→Não, Não→Sim e Não→Não.
-4. Apresentar compreensão e confiança como autorrelato. Os quizzes da trilha, com dicas e tentativas ilimitadas, são atividades formativas e não um pós-teste independente.
-5. Não atribuir uma mudança de interesse especificamente à gamificação: não há grupo de comparação, alocação aleatória ou controle de experiências externas.
-6. Relatar limitações: amostra de conveniência, participação opcional, respostas binárias sem intensidade ou opção neutra, possível influência do pesquisador presente, contato prévio com a landing page e ausência de validação do instrumento.
-
-O aviso de participação da interface não substitui a definição com o orientador/instituição sobre o uso dos dados na pesquisa, especialmente se houver menores. A redação e o protocolo ainda devem ser revisados antes de apresentar resultados como pesquisa concluída. Esta implementação não altera a Sprint 1 nem produz resultados experimentais fictícios.
-
-## Implementação e verificação
-
-surveys.js mantém identificadores e redação. SurveyDialog controla etapas, retorno e envio. App posiciona os formulários no percurso. AccountTrail aguarda a gravação em fila e apresenta falhas. O adaptador progress.js preserva registros finais anteriores na transação. Aumentar a versão do instrumento ao alterar perguntas ou interpretação.
-
-Testes unitários cobrem seleção de Não, retorno, rascunhos, recusas, falha/reenvio, encaixe no fluxo e preservação de registros. O roteiro manual tests/integration/survey-smoke.mjs valida no Firebase real a gravação e leitura por UID e a rejeição de acesso anônimo ou por segunda conta. A demonstração sem conta não constitui coleta persistida para o artigo.
-
-## Obrigatoriedade e análise
-
-O aviso inicial informa que é necessário responder para começar; ele não afirma que esse formulário é opcional. A ausência de resposta impede a entrada no primeiro bloco, sem inventar dados nem preencher uma escolaridade padrão. O envio precisa ser confirmado na conta. A escolaridade não é inferida pelo campo técnico legado state.level; usar exclusivamente surveys.before.answers.education. A vinculação obrigatória pode influenciar quem participa e como responde: descrever isso como limitação e revisar com o orientador as condições de uso dos dados na pesquisa. As descrições anteriores de pré-coleta opcional são históricas. O pós permanece opcional.
+- CDC, avaliação de perguntas: https://www.cdc.gov/nchs/ccqder/question-evaluation/index.html
+- U.S. Census Bureau, teste de questionários: https://www.census.gov/about/policies/quality/standards/appendixa2.html
+- CDC, alinhamento entre objetivos, medidas e evidências: https://www.cdc.gov/mmwr/volumes/73/rr/rr7306a1.htm

@@ -1,7 +1,7 @@
 import React from 'react';
 import {render, screen, fireEvent, act, cleanup} from '@testing-library/react';
 import AppComponent from '../../src/app/App';
-const settled={before:{status:'completed',version:2,answers:{education:'Ensino Médio'}},after:{status:'skipped'}};
+const settled={before:{status:'completed',version:3,answers:{education:'Ensino Médio'}},after:{status:'skipped'}};
 const App=props=><AppComponent {...props} initial={{...props.initial,surveys:settled}}/>;
 // A composição é testada com uma atividade controlada; Lesson tem sua própria suíte.
 jest.mock('../../src/learning/Lesson',()=> props => <section><span>Atividade {props.index}</span><button onClick={()=>props.onCheckpoint?.({phase:'quiz',errors:2,hint:true})}>Registrar passo</button><button onClick={()=>props.onComplete(8)}>Concluir prática controlada</button><button onClick={()=>props.onComplete(4)}>Repetir sem melhora</button><button onClick={()=>props.transition(()=>{}, {countdown:true})}>Preparar teste controlado</button><button onClick={props.onBack}>Retornar ao mapa</button><button onClick={props.onCertificate}>Abrir conclusão</button></section>);

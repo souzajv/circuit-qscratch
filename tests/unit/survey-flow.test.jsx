@@ -1,13 +1,14 @@
 import React from 'react';
 import {render,screen,fireEvent,waitFor,cleanup} from '@testing-library/react';
 import App from '../../src/app/App';
+import {surveyQuestions} from '../../src/learning/surveys';
 jest.mock('../../src/learning/Lesson',()=>p=><><span>Bloco {p.index}</span><button onClick={()=>p.onComplete(10)}>Concluir</button><button onClick={p.onCertificate}>Certificado</button><button onClick={p.onBack}>Mapa</button></>);
 afterEach(cleanup);const click=n=>fireEvent.click(screen.getByRole('button',{name:n}));
 test('questionário inicial precede explicação, salva vinculado e não se repete',async()=>{
  const save=jest.fn().mockResolvedValue(),progress=jest.fn();render(<App initial={{motion:false}} onProgress={progress} onSurveySave={save}/>);
  click('Vamos começar');expect(screen.queryByText('Bloco 0')).toBeNull();click(/Quero responder/);
- for(let i=0;i<5;i++){click(i===0?'Ensino Médio':i===1?'Sim':'Não');click(i===4?/Enviar respostas/:/Próxima/);}
- await screen.findByText('Bloco 0');expect(save).toHaveBeenCalledWith('before',expect.objectContaining({status:'completed',answers:{education:'Ensino Médio',heardBefore:true,firstStudy:false,priorCircuit:false,interest:false}}));
+ const answers={};for(let i=0;i<surveyQuestions.before.length;i++){const q=surveyQuestions.before[i],value=q.options?q.options[0]:false;answers[q.id]=value;click(q.options?value:'Não');click(i===surveyQuestions.before.length-1?/Enviar respostas/:/Próxima/);}
+ await screen.findByText('Bloco 0');expect(save).toHaveBeenCalledWith('before',expect.objectContaining({status:'completed',answers}));
  click('Mapa');click('Vamos começar');expect(screen.getByText('Bloco 0')).toBeVisible();
 });
 test.each(['Certificado','Mapa'])('questionário final aparece ao sair da missão via %s, sem bloquear conquista',async action=>{
