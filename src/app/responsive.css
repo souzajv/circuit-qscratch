@@ -76,7 +76,9 @@
     }
     .map-mode .discovery {
         overflow: visible;
-        display: block;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-24);
         width: 100%;
         max-width: 520px;
         align-self: center;
@@ -337,10 +339,12 @@
 .map-mode .trail-progress {flex-shrink:0;}
 .map-mode .trail-label .points-group {margin-top:0;}
 @media(max-width:800px){
- .platform footer,.platform.lesson-mode footer {position:static;width:100%;box-sizing:border-box;}
+ .platform footer,.platform.lesson-mode footer {position:static;width:100%;box-sizing:border-box;padding-block:var(--space-16);}
  .platform,.platform.lesson-mode {height:auto;min-height:100dvh;overflow:visible;}
  .platform .workspace {height:auto;overflow:visible;}
  .map-mode main {padding-bottom:var(--space-24);}
+ /* Separa o aviso do circuito; o espaço até o rodapé vem do conteúdo principal. */
+ .map-mode .discovery .session-note {margin:0;line-height:1.6;}
  .map-mode .trail-label {display:flex;gap:var(--space-12);}
  .map-mode .points-group {position:relative;gap:var(--space-4);}
  .map-mode .points-help {position:static;}
