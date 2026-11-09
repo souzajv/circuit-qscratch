@@ -22,16 +22,11 @@ Funcionalidade: Aprender antes de responder e experimentar
     E Iniciar teste só é oferecido no último trecho
 
   @RF10 @RF33 @NC08 @UC06
-  Esquema do Cenário: Adaptar as falas sem mudar a missão
-    Dado que a escolaridade selecionada é "<escolaridade>"
-    Quando o estudante percorre as falas do bloco de Hadamard
-    Então recebe as explicações previstas para "<escolaridade>"
-    E o gabarito e o encaixe correto continuam iguais
-
-    Exemplos:
-      | escolaridade             |
-      | Fundamental Anos Finais  |
-      | Ensino Médio             |
+  Cenário: Oferecer uma introdução comum
+    Dado que a escolaridade foi informada no questionário inicial
+    Quando o estudante percorre as falas de Hadamard
+    Então recebe a versão introdutória comum
+    E a escolaridade não altera explicações, gabarito ou missão
 
   @RF34 @UC06
   Cenário: Revelar o teste depois da contagem
@@ -66,18 +61,19 @@ Funcionalidade: Aprender antes de responder e experimentar
     E a dica continua visível sem novos descontos
 
   @RF35 @UC06
-  Cenário: Errar e tentar novamente
+  Cenário: Errar encerra a pergunta e oferece correção
     Dado que o estudante selecionou uma alternativa incorreta
     Quando escolhe Conferir resposta
     Então recebe orientação textual sem repreensão
-    E pode escolher outra alternativa sem limite de tentativas
-    E a prática permanece indisponível
-    E cada envio incorreto reduz os pontos possíveis até o piso de 2
+    E vê X na escolha e check na alternativa correta
+    E não pode confirmar outra alternativa nessa pergunta
+    E pode avançar após o retorno
+    E o erro reduz em 2 os pontos possíveis até o piso de 2
     E nenhum ponto já conquistado é retirado
 
   @RF36 @UC06
-  Cenário: Acertar a terceira pergunta libera a prática sem concluir o bloco
-    Dado que o estudante selecionou a alternativa correta
+  Cenário: Confirmar a terceira resposta libera a previsão prática
+    Dado que o estudante está na terceira pergunta e selecionou a alternativa correta
     Quando escolhe Conferir resposta
     Então a alternativa recebe um check e destaque visual
     E o gato muda para Cool cat
@@ -90,17 +86,19 @@ Funcionalidade: Aprender antes de responder e experimentar
     E o total de pontos e o estado de conclusão ainda não mudam
 
   @RF32 @RF37 @UC08
-  Cenário: Abrir a prática depois de acertar
-    Dado que o estudante acertou as três perguntas do quiz
+  Cenário: Abrir a prática depois de três respostas
+    Dado que o estudante confirmou as três perguntas do quiz, com acertos ou erros
     Quando escolhe Experimentar no circuito
     Então a plataforma mostra as instruções e a bancada prática
     E não mostra o quiz como atividade ativa
     E no desktop o mascote e o balão ficam ao lado do circuito
+    E uma previsão sem pontos precede a montagem ou medição
 
   @RF37 @RF38 @UC08
   Esquema do Cenário: Concluir a ação exigida pelo bloco
-    Dado que o estudante acertou o quiz de "<bloco>"
+    Dado que o estudante confirmou as três respostas de "<bloco>"
     E abriu a prática correspondente
+    E conferiu corretamente a previsão sem pontos
     Quando realiza "<acao>"
     Então o bloco pode ser marcado como concluído
 
@@ -114,12 +112,12 @@ Funcionalidade: Aprender antes de responder e experimentar
 
   @RF38 @RF39 @UC06 @UC08
   Cenário: Celebrar apenas após concluir a prática
-    Dado que o estudante acertou o quiz e ainda não concluiu a ação prática
+    Dado que o estudante respondeu ao quiz e ainda não concluiu a previsão e a ação prática
     Então o próximo bloco permanece bloqueado
     Quando conclui a ação prática obrigatória
     Então vê Cat rating no modal de conclusão no lugar do gato professor
-    E o balão apresenta parabéns com uma recapitulação da ação feita
-    E Missão concluída e o botão de avanço ficam fora da bancada e centralizados na tela
+    E o modal apresenta a recapitulação da ação feita
+    E Missão concluída e o botão de avanço ficam no modal centralizado
     E os pontos da tentativa são incorporados à melhor nota do bloco
     E repetir a mesma confirmação não soma pontos novamente
 

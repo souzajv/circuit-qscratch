@@ -9,7 +9,7 @@ Funcionalidade: Conta individual do estudante
     Dado que o estudante está criando uma conta individual
     Quando informa nome, e-mail válido e senhas iguais
     Então a plataforma apresenta as próximas orientações de acesso
-    E permite escolher sua escolaridade conforme o fluxo de confirmação configurado
+    E pede escolaridade somente no questionário obrigatório antes da trilha
 
   @NC01 @UC01
   Cenário: Corrigir senhas diferentes
@@ -78,11 +78,12 @@ Funcionalidade: Conta individual do estudante
     Então pode entrar com a nova senha
 
   @RF02 @UC10
-  Cenário: Alterar escolaridade sem perder progresso
-    Dado que o estudante concluiu o primeiro bloco em "anos finais"
-    Quando altera sua escolaridade para "ensino médio"
-    Então o progresso e as peças confirmadas permanecem
-    E o texto do passo atual é atualizado para "ensino médio"
+  Cenário: Preferências não alteram a escolaridade da pesquisa
+    Dado que o estudante informou escolaridade no questionário inicial
+    Quando abre Preferências
+    Então pode alterar nome, som e animações
+    E não encontra seletor de escolaridade
+    E o conteúdo comum e o progresso permanecem
 
   @NC09
   Cenário: Consultar informações de privacidade

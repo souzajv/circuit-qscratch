@@ -3,7 +3,7 @@
 Funcionalidade: Perfil inicial obrigatório e uma resposta por pergunta
   Cenário: Identificar escolaridade antes de começar
     Dado que a conta ainda não concluiu blocos
-    Quando inicia Conheça os qubits sem formulário inicial versão 2 completo
+    Quando inicia Conheça os qubits sem formulário inicial versão 3 completo
     Então deve responder escolaridade e todas as perguntas iniciais
     E escolaridade tem Ensino Fundamental, Ensino Médio, Ensino Superior incompleto e Ensino Superior completo
     E o formulário inicial não oferece Pular
@@ -20,9 +20,10 @@ Funcionalidade: Perfil inicial obrigatório e uma resposta por pergunta
 
   Cenário: Três erros permitem continuar com nota reduzida
     Dado que errou as três perguntas sem usar dicas
+    E conferiu a previsão prática sem pontos, usando explicações e novas tentativas se necessário
     Quando termina a prática
     Então recebe 4 pontos segundo a regra de 10 menos 2 por erro
-    E não precisa acertar novamente para seguir
+    E não precisa refazer as perguntas pontuadas para seguir
 
   Cenário: Versão nova não apaga respostas históricas
     Dado um formulário finalizado na versão 1

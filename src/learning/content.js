@@ -1,4 +1,5 @@
 import {learningUnits} from './lessonContent';
+import {revisedOptions} from './quizRevision';
 import {SCHOOL_LEVELS} from '../shared/config/experience.cjs';
 const baseBlocks = [{
   title: 'Conheça os qubits',
@@ -62,14 +63,16 @@ const baseBlocks = [{
   action: 'Preparar e medir o circuito'
 }];
 
-export const CONTENT_REVISION = 2;
-export const blocks = baseBlocks.map((block,index)=>({...block,...learningUnits[index]}));
+export const CONTENT_REVISION = 3;
+export const blocks = baseBlocks.map((block,index)=>({...block,...learningUnits[index],id:index}));
 export function getLessons(block,level){
  const field=level===SCHOOL_LEVELS[1]?'advanced':'basic';
  return block.pages.map(page=>({title:page.title,visual:page.visual,text:page[field]}));
 }
-export function getQuestions(block,level){
+export function getQuestions(block,level,revision=CONTENT_REVISION){
  const first={question:block.question,options:block.options,answer:block.answer,hint:block.hint,feedback:block.feedback,
   retry:block.hint};
- return [first,...block.checks].map(question=>({...question,question:level===SCHOOL_LEVELS[1] && question.medium ? question.medium : question.question}));
+ return [first,...block.checks].map((question,index)=>({...question,
+  ...(revision===2 ? {} : revisedOptions[block.id][index]),
+  question:level===SCHOOL_LEVELS[1] && question.medium ? question.medium : question.question}));
 }

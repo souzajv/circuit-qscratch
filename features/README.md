@@ -1,6 +1,6 @@
 # Cenários de aceitação em Gherkin
 
-Atualizados em 05/11/2026. O fluxo de cada bloco é ensinar, perguntar, praticar e concluir. Acertar libera a prática; terminar a prática registra a melhor nota e libera o próximo bloco. Os arquivos descrevem aceitação e orientam BDD/TDD, mas não têm executor ou definições de passos. Nenhum cenário foi executado como teste automatizado nesta atualização.
+Atualizados em 09/11/2026. O fluxo é ensinar, confirmar três respostas, conferir uma previsão sem pontos, montar ou medir e concluir. O quiz aceita uma confirmação por pergunta; o reforço prático aceita novas tentativas guiadas até o acerto sem alterar a nota. Terminar a ação prática registra a melhor nota e libera o próximo bloco. Os arquivos orientam BDD/TDD, mas não têm executor ou definições de passos. Jest verifica os comportamentos em suítes próprias; os cenários não foram executados como Gherkin.
 
 | Arquivo | Responsabilidade | Referências principais |
 |---|---|---|
@@ -10,6 +10,7 @@ Atualizados em 05/11/2026. O fluxo de cada bloco é ensinar, perguntar, praticar
 | pontos_e_progresso.feature | Cálculo, crédito após prática, melhor nota e retomada desejada | RF30; NC10 a NC16, NC22 a NC25, NC27, NC29, NC30 |
 | conclusao_e_acessibilidade.feature | Conclusão, certificado desejado e acesso por teclado | RF20, RF21, RF31; NC17 a NC20 e NC26; RNF02, RNF03 e RNF11 |
 | contas_e_perfis.feature | Conta individual; o nome do arquivo é histórico, não indica perfis vinculados | NC01 a NC04, NC08, NC09, NC19, NC26 e RF02 |
+| revisao_didatica.feature | Previsões, ativação do medidor, exemplos, continuidade e compatibilidade de quizzes | RF44 a RF49, RF54, RF55 e NC24 |
 
 Tags novas estão próximas dos cenários a que se referem. Tags coletivas antigas indicam o escopo de um arquivo e não comprovam cobertura individual. A ausência de um requisito na tabela não prova sua exclusão do escopo.
 

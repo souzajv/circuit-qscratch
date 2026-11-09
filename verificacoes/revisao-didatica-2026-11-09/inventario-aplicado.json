@@ -1,0 +1,396 @@
+{
+  "dataRevisao": "2026-11-09",
+  "revisaoConteudo": 3,
+  "tipo": "Inventário estático do percurso introdutório. Não contém respostas de estudantes.",
+  "paginas": 29,
+  "perguntas": 15,
+  "primeiraAlternativaCorreta": 5,
+  "inventario": [
+    {
+      "bloco": 1,
+      "titulo": "Conheça os qubits",
+      "paginas": [
+        {
+          "pagina": 1,
+          "titulo": "Uma informação de cada vez",
+          "exemplo": "bit",
+          "preparosDisponiveis": null,
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 2,
+          "titulo": "O que muda com um qubit?",
+          "exemplo": "qubit",
+          "preparosDisponiveis": [
+            "zero",
+            "one",
+            "hadamard"
+          ],
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 3,
+          "titulo": "Duas linhas, dois qubits",
+          "exemplo": "lines",
+          "preparosDisponiveis": null,
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 4,
+          "titulo": "Como ler o começo do circuito",
+          "exemplo": "preparation",
+          "preparosDisponiveis": null,
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 5,
+          "titulo": "Um circuito é uma sequência de ações",
+          "exemplo": "order",
+          "preparosDisponiveis": null,
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 6,
+          "titulo": "Sua primeira montagem",
+          "exemplo": "lines",
+          "preparosDisponiveis": null,
+          "pedeCompararUmaEDuasH": false
+        }
+      ],
+      "questoes": [
+        {
+          "pergunta": 1,
+          "texto": "Quantos qubits vamos usar?",
+          "posicaoCorreta": 2
+        },
+        {
+          "pergunta": 2,
+          "texto": "O que significa começar com os dois qubits em 0?",
+          "posicaoCorreta": 3
+        },
+        {
+          "pergunta": 3,
+          "texto": "Em que sentido lemos as ações do circuito?",
+          "posicaoCorreta": 1
+        }
+      ]
+    },
+    {
+      "bloco": 2,
+      "titulo": "Observe uma medição",
+      "paginas": [
+        {
+          "pagina": 1,
+          "titulo": "Medir transforma a informação em um resultado",
+          "exemplo": "measurement",
+          "preparosDisponiveis": [
+            "zero",
+            "one"
+          ],
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 2,
+          "titulo": "Compare duas preparações",
+          "exemplo": "measurement",
+          "preparosDisponiveis": [
+            "zero",
+            "one"
+          ],
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 3,
+          "titulo": "Uma rodada e várias rodadas",
+          "exemplo": "measurement",
+          "preparosDisponiveis": [
+            "zero",
+            "one"
+          ],
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 4,
+          "titulo": "Medir pode mudar o estado",
+          "exemplo": "measurement",
+          "preparosDisponiveis": [
+            "zero",
+            "one"
+          ],
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 5,
+          "titulo": "Prever, experimentar e explicar",
+          "exemplo": "measurement",
+          "preparosDisponiveis": [
+            "zero",
+            "one"
+          ],
+          "pedeCompararUmaEDuasH": false
+        }
+      ],
+      "questoes": [
+        {
+          "pergunta": 1,
+          "texto": "Se o qubit está preparado em 0, o que aparece neste treino?",
+          "posicaoCorreta": 1
+        },
+        {
+          "pergunta": 2,
+          "texto": "E se o qubit do treino estivesse preparado em 1?",
+          "posicaoCorreta": 2
+        },
+        {
+          "pergunta": 3,
+          "texto": "Como o laboratório faz várias rodadas?",
+          "posicaoCorreta": 3
+        }
+      ]
+    },
+    {
+      "bloco": 3,
+      "titulo": "Experimente a porta H",
+      "paginas": [
+        {
+          "pagina": 1,
+          "titulo": "Uma porta muda a preparação",
+          "exemplo": "hadamard",
+          "preparosDisponiveis": [
+            "zero",
+            "hadamard"
+          ],
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 2,
+          "titulo": "Chance não é uma promessa de alternância",
+          "exemplo": "hadamard",
+          "preparosDisponiveis": [
+            "zero",
+            "hadamard"
+          ],
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 3,
+          "titulo": "Uma moeda ajuda a falar de chance",
+          "exemplo": "double-h",
+          "preparosDisponiveis": [
+            "zero",
+            "hadamard",
+            "doubleH"
+          ],
+          "pedeCompararUmaEDuasH": true
+        },
+        {
+          "pagina": 4,
+          "titulo": "Duas portas H: de volta ao início",
+          "exemplo": "double-h",
+          "preparosDisponiveis": [
+            "zero",
+            "hadamard",
+            "doubleH"
+          ],
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 5,
+          "titulo": "H entra somente na linha de cima",
+          "exemplo": "hadamard",
+          "preparosDisponiveis": [
+            "zero",
+            "hadamard"
+          ],
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 6,
+          "titulo": "O que sua próxima peça faz",
+          "exemplo": "double-h",
+          "preparosDisponiveis": [
+            "zero",
+            "hadamard",
+            "doubleH"
+          ],
+          "pedeCompararUmaEDuasH": true
+        }
+      ],
+      "questoes": [
+        {
+          "pergunta": 1,
+          "texto": "Depois de H em um qubit preparado em 0, o que pode aparecer?",
+          "posicaoCorreta": 3
+        },
+        {
+          "pergunta": 2,
+          "texto": "Em 20 rodadas com H, precisam sair dez resultados 0 e dez resultados 1?",
+          "posicaoCorreta": 1
+        },
+        {
+          "pergunta": 3,
+          "texto": "Começando em 0, o que acontece com H duas vezes, sem medir entre elas?",
+          "posicaoCorreta": 2
+        }
+      ]
+    },
+    {
+      "bloco": 4,
+      "titulo": "Conecte com CNOT",
+      "paginas": [
+        {
+          "pagina": 1,
+          "titulo": "Controle e alvo têm papéis diferentes",
+          "exemplo": "cnot",
+          "preparosDisponiveis": null,
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 2,
+          "titulo": "Teste as quatro entradas",
+          "exemplo": "cnot",
+          "preparosDisponiveis": null,
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 3,
+          "titulo": "No desenho, um ponto e um alvo",
+          "exemplo": "cnot",
+          "preparosDisponiveis": null,
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 4,
+          "titulo": "Depois de H, as possibilidades se conectam",
+          "exemplo": "branches",
+          "preparosDisponiveis": null,
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 5,
+          "titulo": "Trocar a ordem muda o resultado",
+          "exemplo": "order-compare",
+          "preparosDisponiveis": [
+            "bell",
+            "reverse"
+          ],
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 6,
+          "titulo": "Sua conexão no circuito",
+          "exemplo": "branches",
+          "preparosDisponiveis": null,
+          "pedeCompararUmaEDuasH": false
+        }
+      ],
+      "questoes": [
+        {
+          "pergunta": 1,
+          "texto": "No treino, controle 1 e alvo 0: qual é a saída?",
+          "posicaoCorreta": 2
+        },
+        {
+          "pergunta": 2,
+          "texto": "Se a entrada do treino for 11, o que a CNOT produz?",
+          "posicaoCorreta": 3
+        },
+        {
+          "pergunta": 3,
+          "texto": "Começando em 00, podemos trocar H e CNOT e esperar o mesmo estado?",
+          "posicaoCorreta": 1
+        }
+      ]
+    },
+    {
+      "bloco": 5,
+      "titulo": "Descubra o estado de Bell",
+      "paginas": [
+        {
+          "pagina": 1,
+          "titulo": "Seu circuito de Bell está pronto",
+          "exemplo": "bell",
+          "preparosDisponiveis": [
+            "bell"
+          ],
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 2,
+          "titulo": "O que a CNOT mudou?",
+          "exemplo": "bell-compare",
+          "preparosDisponiveis": [
+            "hadamard",
+            "bell"
+          ],
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 3,
+          "titulo": "Resultados ligados, sem mensagens",
+          "exemplo": "correlation",
+          "preparosDisponiveis": [
+            "bell"
+          ],
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 4,
+          "titulo": "Uma igualdade não prova tudo",
+          "exemplo": "correlation",
+          "preparosDisponiveis": [
+            "bell"
+          ],
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 5,
+          "titulo": "Repita e compare com a previsão",
+          "exemplo": "bell",
+          "preparosDisponiveis": [
+            "bell"
+          ],
+          "pedeCompararUmaEDuasH": false
+        },
+        {
+          "pagina": 6,
+          "titulo": "Explique o caminho que você construiu",
+          "exemplo": "recap",
+          "preparosDisponiveis": null,
+          "pedeCompararUmaEDuasH": false
+        }
+      ],
+      "questoes": [
+        {
+          "pergunta": 1,
+          "texto": "Quais pares podem aparecer nesta simulação ideal?",
+          "posicaoCorreta": 1
+        },
+        {
+          "pergunta": 2,
+          "texto": "Em poucas rodadas, saiu 00 várias vezes. Isso significa que o circuito está errado?",
+          "posicaoCorreta": 2
+        },
+        {
+          "pergunta": 3,
+          "texto": "Só observar pares 00 e 11 já prova emaranhamento?",
+          "posicaoCorreta": 3
+        }
+      ]
+    }
+  ],
+  "sha256": {
+    "src/learning/content.js": "93186fb66b2aa2b8533199dbdf17a8ba0d3e40615fbba788bb9a4dac0d50b829",
+    "src/learning/lessonContent.js": "84af7f28ee1c9a262b187bf3974260eeb1f82606612bb77a9646641ca058bce3",
+    "src/learning/LearningExample.jsx": "926b64987968ee1da25d55859d361415fbef2e8583af1f1ba9bc7c044dcce5a7",
+    "src/learning/ExperimentPanel.jsx": "64b940aac92e3f1981216f06b95277d5402586f35e7c50b04edf98b92fc89a28",
+    "src/learning/MiniCircuit.jsx": "0f2dc964ac8d75c8e95fc7eeffbfd33304d234108fd5c74580c72e1eaa9cb764",
+    "src/learning/Lesson.jsx": "508f4eeabda1121c5cce7d85ad49852131921514d60972c1c8e0d0c4a8cd83fa",
+    "src/circuit/practice.cjs": "94ea4acee2235d333d8c2bd4948ee30eaf52d18ee91268138f81646ce7817194",
+    "src/circuit/model.cjs": "d2e9e8bb476e96bcf175b2c691b7cfd72959ffe42164aade0cd49c0ad674811c",
+    "src/learning/quizRevision.js": "c1af1ec5be91d14a9b384980ade14867b61bfdc249731b91b9ee7a1a74a2c9e8",
+    "src/learning/practiceReflections.js": "72d076f478c7f717c85bf07b81d67f767aad9fd9ee82797d54b7c4348b4e4155",
+    "src/learning/PracticeReflection.jsx": "faa6362293ef53c6e85667d1420baa656f90266c7a3685daab52f3334f2a2a67",
+    "src/learning/ExplorationTabs.jsx": "00b4b41a0bc01bb2a148c930800f0e8d35d922c70d1ad4bb3373df76d356844e"
+  }
+}

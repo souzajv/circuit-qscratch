@@ -6,6 +6,7 @@ import {blocks,getQuestions,CONTENT_REVISION} from '../../src/learning/content';
 jest.mock('../../src/shared/ui/Mascot',()=>()=> <div data-testid="mascot"/>);
 const props = index=>({block:blocks[index],index,level:'Fundamental Anos Finais',name:'Sol',motion:false,transition:action=>action(),onComplete:jest.fn(),onBack:jest.fn(),onCertificate:jest.fn(),play:jest.fn()});
 const click = name=>{if(String(name).includes('Próxima pergunta')||String(name).includes('Experimentar no circuito'))act(()=>jest.advanceTimersByTime(QUIZ_SUCCESS_DELAY_MS));fireEvent.click(screen.getByRole('button',{name}));};
+const predict = index=>{click(['01','1','00 e 10','10','00 e 10'][index]);click('Conferir previsão');};
 function finishQuestions(index, firstAnswered=false){
  getQuestions(blocks[index],'Fundamental Anos Finais').forEach((question,i)=>{
   if(!firstAnswered || i>0){fireEvent.click(screen.getByRole('radio',{name:question.options[question.answer],exact:true}));click('Conferir resposta');}
@@ -17,7 +18,7 @@ beforeEach(()=>jest.useFakeTimers());
 afterEach(()=>{cleanup();jest.useRealTimers();});
 test.each([0,1,2,3,4])('bloco %s exige quiz e sua própria ação prática',index=>{
  const p=props(index);render(<Lesson {...p}/>);
- expect(screen.queryByRole('radio')).toBeNull();quiz(index);expect(p.onComplete).not.toHaveBeenCalled();click(/Experimentar no circuito/);
+ expect(screen.queryByRole('radio')).toBeNull();quiz(index);expect(p.onComplete).not.toHaveBeenCalled();click(/Experimentar no circuito/);predict(index);
  if(index===0){click(/Qubit/);click('Encaixe do primeiro qubit');expect(p.onComplete).not.toHaveBeenCalled();click(/Qubit/);click('Encaixe do segundo qubit');fireEvent.click(screen.getByRole('button',{name:'Encaixe do segundo qubit'}));}
  if(index===2){click(/H · Hadamard/);click('Primeira posição do qubit de cima');expect(screen.queryByRole('button',{name:/baixo/})).toBeNull();}
  if(index===3){const dataTransfer={getData:()=> 'H',dropEffect:''};const target=screen.getByRole('button',{name:/CNOT depois/});fireEvent.dragOver(target,{dataTransfer});fireEvent.drop(target,{dataTransfer});expect(p.onComplete).not.toHaveBeenCalled();click(/CNOT$/);fireEvent.drop(target,{dataTransfer:{getData:()=> 'CNOT'}});}
@@ -29,14 +30,14 @@ test('erro encerra a pergunta, preserva descontos e permite continuar',()=>{
  const p=props(0);render(<Lesson {...p} name=""/>);click(/Próximo/);click(/Anterior/);click(/Voltar à trilha/);expect(p.onBack).toHaveBeenCalled();
  while(screen.queryByRole('button',{name:/Próximo/}))click(/Próximo/);click(/Iniciar teste/);
  expect(screen.getByRole('button',{name:'Conferir resposta'})).toBeDisabled();click(/Ver dica/);fireEvent.click(screen.getByRole('radio',{name:'Um qubit',exact:true}));click('Conferir resposta');expect(screen.getByLabelText('Resposta incorreta')).toBeVisible();
- expect(screen.getByRole('radio',{name:/^Dois qubits/})).toBeDisabled();finishQuestions(0,true);click(/Experimentar no circuito/);
+ expect(screen.getByRole('radio',{name:/^Dois qubits/})).toBeDisabled();finishQuestions(0,true);click(/Experimentar no circuito/);predict(0);
  click('Encaixe do primeiro qubit');expect(screen.getByText(/Selecione uma peça/)).toBeVisible();
  const piece=screen.getByRole('button',{name:/Qubit/});const setData=jest.fn();fireEvent.dragStart(piece,{dataTransfer:{setData}});expect(setData).toHaveBeenCalledWith('text/plain','qubit');
  const target=screen.getByRole('button',{name:'Encaixe do primeiro qubit'});fireEvent.drop(target,{dataTransfer:{getData:()=> 'qubit'}});fireEvent.drop(target,{dataTransfer:{getData:()=> 'qubit'}});
  click(/Qubit/);click('Encaixe do segundo qubit');expect(p.onComplete).toHaveBeenCalledWith(6);
 });
 test.each([2,3])('arrastar porta e rejeitar peça estranha no bloco %s',index=>{
- const p=props(index);render(<Lesson {...p} level="Ensino Médio" motion/>);quiz(index);click(/Experimentar no circuito/);
+ const p=props(index);render(<Lesson {...p} level="Ensino Médio" motion/>);quiz(index);click(/Experimentar no circuito/);predict(index);
  const piece=screen.getByRole('button',{name:index===2?/Hadamard/:/CNOT$/});const setData=jest.fn();fireEvent.dragStart(piece,{dataTransfer:{setData}});
  const target=screen.getByRole('button',{name:index===2?'Primeira posição do qubit de cima':/CNOT depois/});fireEvent.drop(target,{dataTransfer:{getData:()=> 'invasor'}});expect(p.onComplete).not.toHaveBeenCalled();
  fireEvent.drop(target,{dataTransfer:{getData:()=>index===2?'H':'CNOT'}});expect(p.onComplete).toHaveBeenCalledWith(10);
@@ -47,7 +48,7 @@ test.each([false,true])('rolagem da confirmação respeita movimento %s',motion=
  jest.useFakeTimers();const p=props(2);render(<Lesson {...p} motion={motion}/>);quiz(2);
  act(()=>jest.advanceTimersByTime(30));
  expect(screen.queryByLabelText('Resultado do teste')).toBeNull();
- click(/Experimentar no circuito/);const target=screen.getByRole('button',{name:'Primeira posição do qubit de cima'});
+ click(/Experimentar no circuito/);predict(2);const target=screen.getByRole('button',{name:'Primeira posição do qubit de cima'});
  fireEvent.drop(target,{dataTransfer:{getData:()=> 'H'}});act(()=>jest.advanceTimersByTime(30));
  fireEvent.drop(target,{dataTransfer:{getData:()=> 'H'}});expect(p.onComplete).toHaveBeenCalledTimes(1);
  jest.useRealTimers();
@@ -61,10 +62,10 @@ test('retoma fase, descontos e montagem sem repetir a medição concluída',()=>
  const onCheckpoint=jest.fn();
  const saved={phase:'practice',page:1,choice:0,correct:true,errors:2,hint:true,slots:[],measured:'00',finished:true};
  render(<Lesson {...props(4)} saved={saved} onCheckpoint={onCheckpoint}/>);
- expect(onCheckpoint).toHaveBeenCalledWith({...saved,quizIndex:0,questionHint:false,answered:true,contentRevision:CONTENT_REVISION});
+ expect(onCheckpoint).toHaveBeenCalledWith({...saved,quizIndex:0,questionHint:false,answered:true,contentRevision:CONTENT_REVISION,reflection:{choice:null,confirmed:false}});
 });
 
-test('revisão mantém erros, dica e pergunta atual; prática só aparece após três acertos',()=>{
+test('revisão mantém erros, dica e pergunta atual; prática só aparece após três respostas',()=>{
  const p=props(0);render(<Lesson {...p}/>);
  while(screen.queryByRole('button',{name:/Próximo/}))click(/Próximo/);click(/Iniciar teste/);
  click(/Ver dica/);click('Rever explicação sem apagar esta tentativa');
@@ -75,7 +76,7 @@ test('revisão mantém erros, dica e pergunta atual; prática só aparece após 
  expect(screen.getByText('Pergunta 2 de 3')).toBeVisible();expect(screen.getByRole('button',{name:/Ver dica/})).toHaveTextContent('sem novo desconto');
 });
 test('checkpoint retoma segunda pergunta e retorno específico depois do acerto',()=>{
- render(<Lesson {...props(0)} saved={{phase:'quiz',quizIndex:1,correct:true,choice:0,errors:1,hint:true,questionHint:true}}/>);
+ render(<Lesson {...props(0)} saved={{phase:'quiz',quizIndex:1,correct:true,choice:2,errors:1,hint:true,questionHint:true}}/>);
  expect(screen.getByText('Pergunta 2 de 3')).toBeVisible();expect(screen.getByText(/As duas preparações em 0/)).toBeVisible();click('Próxima pergunta');
  expect(screen.getByText('Pergunta 3 de 3')).toBeVisible();
 });
@@ -106,7 +107,7 @@ test('três erros encerram suas perguntas e permitem a prática com nota reduzid
   expect(screen.getByRole('button',{name:'Resposta incorreta'})).toBeDisabled();expect(screen.getByLabelText('Resposta incorreta')).toBeVisible();
   if(i<2)click('Próxima pergunta');
  });
- click(/Experimentar no circuito/);click(/Qubit/);click('Encaixe do primeiro qubit');click(/Qubit/);click('Encaixe do segundo qubit');expect(p.onComplete).toHaveBeenCalledWith(4);
+ click(/Experimentar no circuito/);predict(0);click(/Qubit/);click('Encaixe do primeiro qubit');click(/Qubit/);click('Encaixe do segundo qubit');expect(p.onComplete).toHaveBeenCalledWith(4);
 });
 test('erro confirmado permanece encerrado ao retomar a conta',()=>{
  render(<Lesson {...props(0)} saved={{phase:'quiz',choice:0,answered:true,correct:false,errors:1}}/>);

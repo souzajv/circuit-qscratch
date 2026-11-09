@@ -3,7 +3,7 @@ const OUTCOMES = ['00','01','10','11'];
 const LAB = {batchSize:20,historyLimit:20,percentageScale:100};
 const EXPERIMENTS = {
  cnot:{label:'Somente CNOT',start:'00',gates:['CNOT']},
- zero:{label:'Sem H: começar em 0',start:'00',gates:[]},
+ zero:{label:'Preparar em 0',start:'00',gates:[]},
  one:{label:'Preparar em 1',start:'10',gates:[]},
  hadamard:{label:'H uma vez',start:'00',gates:['H']},
  doubleH:{label:'H duas vezes',start:'00',gates:['H','H']},

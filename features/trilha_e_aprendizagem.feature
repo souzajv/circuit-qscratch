@@ -39,13 +39,15 @@ Funcionalidade: Percorrer e compreender a trilha
     Dado que o estudante está respondendo uma pergunta
     Quando escolhe uma alternativa incorreta
     Então recebe uma orientação relacionada ao conteúdo
-    E pode tentar novamente sem perder o progresso confirmado
+    E vê a resposta correta e a explicação
+    E pode avançar sem confirmar outra resposta nessa pergunta
+    E mantém o progresso anterior e os descontos da tentativa
 
   Cenário: Avançar depois do acerto
     Dado que o estudante está respondendo uma pergunta obrigatória
     Quando escolhe a alternativa correta
     Então recebe uma explicação do motivo do acerto
-    E pode abrir a prática do mesmo bloco
+    E pode abrir a previsão prática após confirmar as três perguntas
     E o bloco só será concluído depois da ação prática obrigatória
 
   @planejado
@@ -55,17 +57,12 @@ Funcionalidade: Percorrer e compreender a trilha
     Então pode reler o conteúdo sem apagar as peças confirmadas
     E não recebe novos pontos apenas pela revisão
 
-  Esquema do Cenário: Adaptar a explicação mantendo o conceito
-    Dado que o estudante selecionou <escolaridade>
+  Cenário: Explicação comum para quem começa
+    Dado que o estudante informou escolaridade no questionário de pesquisa
     Quando abre a explicação de H aplicada ao qubit preparado em zero
-    Então recebe o texto correspondente a <escolaridade>
+    Então recebe o texto introdutório comum
     E aprende que zero ou um podem aparecer na medição deste exemplo
     E a resposta correta da atividade permanece a mesma
-
-    Exemplos:
-      | escolaridade       |
-      | anos finais        |
-      | ensino médio       |
 
   @planejado
   Cenário: Oferecer ajuda sem substituir a explicação

@@ -89,7 +89,7 @@ export default function App({initial = {}, onProgress, saveStatus, onRetry, onSi
     });
   };
   return <div className={screen === 'lesson' ? 'platform lesson-mode' : screen === 'map' ? 'platform map-mode' : 'platform'} data-motion={motion}>
-        <div className={`curtain ${curtain || ''}`} aria-hidden="true"><div /><div /></div>{countdown !== null && <div className="curtain-countdown" role="status" aria-live="polite"><div><p>Hora de testar sua descoberta!</p><strong key={countdown}>{countdown}</strong><p>Sem pressa. Você pode tentar de novo.</p></div></div>}<a className="skip" href="#main">Ir para o conteúdo</a>
+        <div className={`curtain ${curtain || ''}`} aria-hidden="true"><div /><div /></div>{countdown !== null && <div className="curtain-countdown" role="status" aria-live="polite"><div><p>Hora de testar sua descoberta!</p><strong key={countdown}>{countdown}</strong><p>Uma confirmação por pergunta. Sem pressa: depois você pode refazer o bloco completo.</p></div></div>}<a className="skip" href="#main">Ir para o conteúdo</a>
         {screen !== 'lesson' && <aside className="sidebar">
             <a className="brand" href="#" onClick={e => {
         e.preventDefault();

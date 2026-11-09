@@ -1,7 +1,7 @@
 import {blocks,getLessons,getQuestions} from '../../src/learning/content';
 import {SCHOOL_LEVELS} from '../../src/shared/config/experience.cjs';
 const {runExperiment,truthRow,EXPERIMENTS}=require('../../src/learning/experiments.cjs');
-test('cinco blocos têm páginas próprias para os dois públicos, exemplos e três perguntas',()=>{
+test('cinco blocos têm introdução ativa, referências históricas, exemplos e três perguntas',()=>{
  expect(blocks).toHaveLength(5);
  for(const block of blocks){
   const basic=getLessons(block,SCHOOL_LEVELS[0]),advanced=getLessons(block,SCHOOL_LEVELS[1]);

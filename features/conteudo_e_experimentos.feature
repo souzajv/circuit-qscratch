@@ -5,17 +5,13 @@ Funcionalidade: Compreender circuitos por explicações e comparações
   Sem confundir simulação, probabilidade e resultado observado
 
   @RF44 @UC06
-  Esquema do Cenário: Texto conectado ao exemplo da escolaridade
-    Dado que a escolaridade é "<escolaridade>"
+  Cenário: Texto introdutório conectado ao exemplo disponível
+    Dado que o estudante começa sem conhecimento prévio
     Quando o estudante abre uma página de explicação
-    Então lê a versão prevista para essa escolaridade
+    Então lê a versão introdutória comum
     E encontra o exemplo referido pelo texto ao lado ou abaixo, conforme a largura disponível
     E pode usar os controles por teclado
     E não precisa acompanhar uma animação para compreender a informação
-    Exemplos:
-      | escolaridade            |
-      | Fundamental Anos Finais |
-      | Ensino Médio            |
 
   @RF45 @RF46
   Cenário: Comparar uma H com duas H
@@ -60,16 +56,17 @@ Funcionalidade: Compreender circuitos por explicações e comparações
     E trocar o preparo limpa as contagens do laboratório
 
   @RF47 @RF36 @UC06
-  Cenário: Três acertos antes da prática
+  Cenário: Três respostas antes da prática
     Dado que o quiz de um bloco contém três perguntas
     Quando o estudante acerta a primeira
     Então vê retorno específico dentro do balão
     E o botão de conferência mostra Resposta correta! por 2 segundos
     E depois esse mesmo botão mostra Próxima pergunta
     E a prática ainda está fechada
-    Quando acerta a segunda e a terceira
+    Quando confirma a segunda e a terceira, mesmo com erros
     Então pode escolher Experimentar no circuito
     E a conclusão do bloco ainda depende da montagem ou medição da missão
+    E a bancada só é liberada após conferir uma previsão sem pontos
 
   @RF47 @RF48
   Cenário: Rever conteúdo sem apagar a tentativa

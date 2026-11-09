@@ -70,11 +70,11 @@ export default function LearningPreview({motion = true}) {
         </div>
         <div className="preview-content" id="preview-slide" ref={contentRef} aria-live={playing ? 'off' : 'polite'} aria-atomic="true">
             <h3>{steps[index].title}</h3>
-            {step === 'learn' && <><span className="preview-gate" aria-hidden="true">H</span><p>{block.basic.split('. ')[0]}.</p><p>Depois da explicação, você testa a ideia antes de colocar a peça no circuito.</p></>}
+            {step === 'learn' && <><span className="preview-gate" aria-hidden="true">H</span><p>{block.basic}</p><p>Depois da explicação, você testa a ideia antes de colocar a peça no circuito.</p></>}
             {step === 'quiz' && <><p>{block.question}</p><div className="preview-answers">{block.options.map((option, optionIndex) => <button key={option} onClick={() => setAnswer(optionIndex)} aria-pressed={answer === optionIndex}>{option}{answer === optionIndex && optionIndex === block.answer && <Icon name="check"/>}</button>)}</div>{answer !== null && <p className="preview-feedback">{answer === block.answer ? block.feedback : 'Tente outra vez: nesse exemplo, os dois resultados são possíveis.'}</p>}</>}
             {step === 'practice' && <><Circuit completed={[0,2]}/><p>Uma peça de cada vez. A porta H entra no primeiro qubit; depois, você descobre a CNOT.</p><a className="lp-text-link" href="#/trilha">Experimentar a trilha completa <Icon name="arrow"/></a></>}
         </div>
         <div className="preview-controls"><span>Etapa {index + 1} de {steps.length}</span>{!motion && <span>Explore as etapas acima</span>}</div>
-        <span className="preview-caption">Uma prévia da atividade de Hadamard na trilha de Bell.</span>
+        <span className="preview-caption">Prévia livre, sem pontos. Na trilha, cada pergunta do quiz aceita uma confirmação, seguida de explicação.</span>
     </div>;
 }

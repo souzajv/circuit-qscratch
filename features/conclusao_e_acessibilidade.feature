@@ -12,15 +12,15 @@ Funcionalidade: Conclusão acessível da experiência
 
   @planejado
   Cenário: Exibir certificado da primeira conclusão
-    Dado que "Sol" concluiu a trilha pela primeira vez com escolaridade "anos finais"
+    Dado que "Sol" concluiu o percurso introdutório pela primeira vez
     Quando o servidor confirma a conclusão em 6 de novembro de 2026
-    Então o certificado mostra "Sol", a trilha, "anos finais" e 6 de novembro de 2026
+    Então o comprovante mostra "Sol", Percurso introdutório e a data da primeira conclusão
 
   @planejado
   Cenário: Preservar dados da primeira conclusão
-    Dado que o certificado registra "Sol" e "anos finais" na primeira conclusão
-    Quando o perfil muda de nome ou escolaridade e conclui a trilha novamente
-    Então o certificado mantém o nome, a escolaridade e a data registrados na primeira conclusão
+    Dado que o comprovante registra "Sol" na primeira conclusão
+    Quando o nome muda e o estudante conclui a trilha novamente
+    Então o comprovante mantém o snapshot da primeira conclusão
 
   @planejado
   Cenário: Não emitir certificado sem confirmação

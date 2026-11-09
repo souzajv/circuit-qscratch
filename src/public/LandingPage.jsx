@@ -44,7 +44,7 @@ export default function LandingPage() {
                     <div className="method-guide" data-reveal><Mascot chess motion={motion}/></div>
                     <div className="method-dialogue" data-reveal>
                         <p>Aprender, testar e montar.</p>
-                        <p>Primeiro, eu explico uma parte do circuito. Depois, você responde a uma pergunta para reforçar o que aprendeu. Acertou? É hora de encaixar a peça! Assim, você monta o circuito aos poucos, entendendo cada passo.</p>
+                        <p>Primeiro, eu explico uma parte do circuito com exemplos que você pode explorar. Depois, você responde às perguntas e vê a explicação de cada resposta. Na prática, fazemos uma previsão sem valer pontos antes de encaixar a peça ou medir. Assim, você acompanha o que cada parte faz, passo a passo.</p>
                         <a className="lp-text-link" href="#/trilha">Quero montar meu circuito <Icon name="arrow"/></a>
                     </div>
                 </div>

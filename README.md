@@ -2,6 +2,8 @@
 
 # Circuit QScratch
 
+Atualização didática de 09/11/2026: percurso introdutório comum com 29 páginas, 15 perguntas de confirmação única e uma previsão guiada sem pontos antes de cada prática. Conferir a previsão libera a bancada; montar ou medir conclui o bloco. Foco e hover não medem. Novas tentativas usam conteúdo revisão 3; quizzes em andamento na revisão 2 mantêm as perguntas e escolhas anteriores. Explicações, exemplos, critérios e fontes: [Conteúdo e experimentos](CONTEUDO_E_EXPERIMENTOS.md).
+
 Plataforma web educacional que apresenta computação quântica a quem está começando. O usuário aprende uma ideia, responde a perguntas e usa o que descobriu para montar, aos poucos, um circuito de Bell com as portas Hadamard e CNOT.
 
 O projeto foi criado para uma optativa de computação quântica, inspirado no [QScratch](https://github.com/marcosrv-ULL/QScratch). A proposta combina uma trilha gamificada, um mascote animado e atividades curtas para despertar curiosidade e interesse pela área. A experiência atual oferece uma única versão introdutória para quem está começando, sem seleção de escolaridade.

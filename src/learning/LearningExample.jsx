@@ -40,15 +40,15 @@ function SequenceExample({advanced}){
  return <div><div className="lab-steps" role="group" aria-label="Etapas do circuito">{sequence.map((item,i)=><button key={item.title} aria-pressed={i===step} onClick={()=>setStep(i)}>{i+1}. {item.title}</button>)}</div><MiniCircuit experiment={sequence[step].experiment}/><p className="lab-result" role="status">{sequence[step][advanced?'advanced':'basic']}</p></div>;
 }
 const variants={qubit:['zero','one','hadamard'],measurement:['zero','one'],hadamard:['zero','hadamard'], 'double-h':['zero','hadamard','doubleH'],'order-compare':['bell','reverse'],bell:['bell'],'bell-compare':['hadamard','bell'],correlation:['bell']};
-const exampleTitles = {bit:'Do interruptor ao bit',qubit:'Preparo e chances de medição',lines:'Encontre cada qubit',preparation:'Leia o par 00',order:'Percorra as operações',measurement:'Compare 0 e 1',hadamard:'O que muda com H?', 'double-h':'Uma H ou duas?',cnot:'Troque controle e alvo',branches:'Acompanhe o par inteiro','order-compare':'Qual porta vem primeiro?',bell:'Prepare e meça Bell','bell-compare':'Antes e depois da CNOT',correlation:'Igualdade e emaranhamento',recap:'Reconstrua a sequência'};
-export default function LearningExample({visual,title,motion,level}){
+const exampleTitles = {bit:'Do interruptor ao bit',qubit:'Preparo e chances de medição',lines:'Encontre cada qubit',preparation:'Leia o par 00',order:'Percorra as operações',measurement:'Compare 0 e 1',hadamard:'O que muda com H?', 'double-h':'Uma H ou duas?',cnot:'Mude os valores de entrada',branches:'Acompanhe o par inteiro','order-compare':'Qual porta vem primeiro?',bell:'Prepare e meça Bell','bell-compare':'Antes e depois da CNOT',correlation:'Igualdade e emaranhamento',recap:'Reconstrua a sequência'};
+export default function LearningExample({visual,title,motion,level,active=true}){
  const root=useRef(null);
  const advanced=level===SCHOOL_LEVELS[1];
  useEffect(()=>{
-  if(!motion || window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  if(!active || !motion || window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   const context=gsap.context(()=>gsap.fromTo(root.current,{autoAlpha:0,y:timing.slideDistance},{autoAlpha:1,y:0,duration:timing.slideDuration,ease:'power2.out',clearProps:'all'}),root);
   return ()=>context.revert();
- },[visual,motion]);
+ },[visual,motion,active]);
  let content;
  if(visual==='bit')content=<BitExample/>;
  else if(visual==='lines'||visual==='preparation')content=<LinesExample preparation={visual==='preparation'}/>;
@@ -57,7 +57,7 @@ export default function LearningExample({visual,title,motion,level}){
  else if(visual==='branches')content=<BranchesExample advanced={advanced}/>;
  else {
   const comparison=visual==='correlation'?<div className="lab-classical"><strong>Compare com cartões comuns</strong><div className="lab-branches"><span>Par de cartões: 00</span><span>Par de cartões: 11</span></div><p>Podemos preparar cartões iguais antes de abri-los. Essa igualdade é clássica. O mesmo gráfico de resultados, sozinho, não distingue esses cartões de um estado emaranhado.</p></div>:undefined;
-  content=<ExperimentPanel cases={variants[visual]} pairs={!['qubit','measurement'].includes(visual)} showCircuit={visual!=='qubit'} motion={motion} comparison={comparison}/>;
+  content=<ExperimentPanel cases={variants[visual]} pairs={!['qubit','measurement'].includes(visual)} showCircuit={visual!=='qubit'} introductory={visual==='qubit'} motion={motion && active} comparison={comparison}/>;
  }
  return <section ref={root} className="learning-example" aria-label={`Exemplo: ${title}`} data-example={visual}><header><span className="lab-eyebrow">Explore no seu ritmo</span><h2>{exampleTitles[visual]}</h2><p>Use os botões para comparar. Você pode repetir e revisar sem perder pontos.</p></header>{content}</section>;
 }

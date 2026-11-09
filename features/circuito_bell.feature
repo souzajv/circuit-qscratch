@@ -86,7 +86,7 @@ Funcionalidade: Construir e medir o circuito de Bell
     E permite cancelar sem perder progresso
 
   Cenário: Não confundir correlação com prova de emaranhamento
-    Dado que o estudante escolheu ensino médio e acessa o aprofundamento
+    Dado que o estudante acessa a explicação introdutória do estado de Bell
     Quando revê a explicação dos resultados 00 e 11
     Então é informado que essa distribuição sozinha não comprova emaranhamento
 

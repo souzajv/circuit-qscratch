@@ -3,9 +3,11 @@ import {gsap} from 'gsap';
 import {LANDING_MOTION as timing} from '../public/motionConfig';
 
 // Os painéis permanecem montados: navegar nunca reinicia um experimento.
-export default function ExplorationTabs({tabs,motion=false}){
+export default function ExplorationTabs({tabs,motion=false,activeIndex,onSelect}){
  const id=useId();
- const [active,setActive]=useState(0);
+ const [selected,setSelected]=useState(0);
+ const active=activeIndex ?? selected;
+ const select=index=>{setSelected(index);onSelect?.(index);};
  const root=useRef(null);
  useEffect(()=>{
   if(!motion || window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
@@ -20,7 +22,7 @@ export default function ExplorationTabs({tabs,motion=false}){
   root.current.querySelectorAll('[role="tab"]')[next].focus();
  };
  return <div ref={root} className="exploration-tabs">
-  <div className="lab-tabs" role="tablist" aria-label="Partes da exploração">{tabs.map((tab,index)=><button key={tab.id} type="button" role="tab" id={`${id}-tab-${tab.id}`} aria-controls={`${id}-panel-${tab.id}`} aria-selected={active===index} tabIndex={active===index?0:-1} onKeyDown={event=>navigate(event,index)} onClick={()=>setActive(index)}>{tab.label}</button>)}</div>
+  <div className="lab-tabs" role="tablist" aria-label="Partes da exploração">{tabs.map((tab,index)=><button key={tab.id} type="button" role="tab" id={`${id}-tab-${tab.id}`} aria-controls={`${id}-panel-${tab.id}`} aria-selected={active===index} tabIndex={active===index?0:-1} onKeyDown={event=>navigate(event,index)} onClick={()=>select(index)}>{tab.label}</button>)}</div>
   {tabs.map((tab,index)=><div key={tab.id} id={`${id}-panel-${tab.id}`} role="tabpanel" aria-labelledby={`${id}-tab-${tab.id}`} hidden={active!==index} tabIndex={0} className="lab-tab-panel">{tab.content}</div>)}
  </div>;
 }

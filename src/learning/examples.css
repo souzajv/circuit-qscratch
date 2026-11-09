@@ -7,7 +7,24 @@
     --lab-bit-size: 56px;
     --lab-line-height: 1.6;
     --lab-panel-min-height: 280px;
+    --prediction-line-height: 1.5;
 }
+/* O exemplo continua montado ao reler uma fala; só o painel atual ocupa a grade. */
+.lesson-example-slot {display:contents;}
+.lesson-example-slot[hidden] {display:none;}
+.practice-workspace[hidden] {display:none;}
+.practice-prediction {margin-block:var(--space-16);padding:var(--space-16);border:var(--border);border-radius:var(--radius-12);background:var(--warm);line-height:var(--prediction-line-height);}
+.practice-prediction h3 {display:flex;align-items:center;gap:var(--space-8);font-size:var(--font-18);margin:0 0 var(--space-8);}
+.practice-prediction h3 svg {width:var(--space-20);height:var(--space-20);flex-shrink:0;}
+.practice-prediction p {margin:var(--space-8) 0;font-size:var(--font-14);}
+.practice-prediction .prediction-question {font-size:var(--font-16);font-weight:700;}
+.prediction-options {display:flex;flex-wrap:wrap;gap:var(--space-8);margin-block:var(--space-12);}
+.prediction-options .secondary {padding:var(--space-10) var(--space-14);min-height:var(--space-44);white-space:normal;}
+.prediction-options [aria-pressed=true] {background:var(--accent);}
+.practice-prediction .secondary:focus-visible {outline:var(--space-3) solid var(--ink);outline-offset:var(--space-4);}
+.lab-see-results {display:inline-flex;align-items:center;justify-content:center;gap:var(--space-8);}
+.lab-see-results svg {width:var(--space-20);height:var(--space-20);}
+.measurement:hover:not(:disabled),.measurement:focus-visible {background:var(--peach);}
 .lab-tabs {display:flex;gap:var(--space-8);margin-bottom:var(--space-20);padding-bottom:var(--space-6);overflow-x:auto;}
 .lab-tabs [role=tab] {flex:1;white-space:nowrap;font-size:var(--font-14);}
 .lab-tabs [aria-selected=true] {background:var(--accent);transform:translateY(var(--space-2));box-shadow:0 var(--space-2) 0 var(--ink);}
@@ -76,8 +93,8 @@
 .practice-exploration[open]>.learning-example {margin-top:var(--space-16);}
 .practice-reflection {max-width:62ch;line-height:var(--lab-line-height);margin:var(--space-8) auto;text-align:center;}
 @keyframes lab-piece-in {from{opacity:.4;transform:translateY(var(--lab-enter-distance)) scale(.94)}to{opacity:1;transform:translateY(0) scale(1)}}
-@media(max-width:800px){.learning-example{grid-column:1 / -1}.conversation:has(.learning-example){grid-template-columns:140px minmax(0,1fr)}.practice-exploration{grid-column:1 / -1}}
-@media(max-width:560px){.learning-example{padding:var(--space-16)}.conversation:has(.learning-example){display:flex}.speech-topic{font-size:var(--font-22)}.phase-learn .speech-copy{font-size:var(--font-18)}.lab-choices button,.lab-controls button{flex:1 1 auto}.lab-bar-row{grid-template-columns:1fr 1.6fr;gap:var(--space-10)}.lab-branches{flex-direction:column}.lab-table td,.lab-table th{padding:var(--space-6)}.lab-steps button{flex:1 1 40%}}
+@media(max-width:800px){.learning-example{grid-column:1 / -1}.phase-learn .conversation:has(.learning-example){grid-template-columns:140px minmax(0,1fr)}.practice-exploration{grid-column:1 / -1}}
+@media(max-width:560px){.learning-example{padding:var(--space-16)}.phase-learn .conversation:has(.learning-example){display:flex}.speech-topic{font-size:var(--font-22)}.phase-learn .speech-copy{font-size:var(--font-18)}.lab-choices button,.lab-controls button{flex:1 1 auto}.lab-bar-row{grid-template-columns:1fr 1.6fr;gap:var(--space-10)}.lab-branches{flex-direction:column}.lab-table td,.lab-table th{padding:var(--space-6)}.lab-steps button{flex:1 1 40%}}
 @media(prefers-reduced-motion:reduce){.learning-example *{animation:none!important;transition:none!important;}}
 .speech-topic[tabindex="-1"]:focus,.speech legend[tabindex="-1"]:focus {outline:none;}
 

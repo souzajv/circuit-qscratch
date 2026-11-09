@@ -1,0 +1,50 @@
+[
+  {
+    "solicitado": 1440,
+    "conteudoCSS": 1309,
+    "larguraCSS": 1309,
+    "paineis": [
+      {
+        "direita": 380,
+        "esquerda": 40
+      },
+      {
+        "direita": 1269,
+        "esquerda": 416
+      }
+    ],
+    "viewportCSS": 1309
+  },
+  {
+    "solicitado": 768,
+    "conteudoCSS": 685,
+    "larguraCSS": 698,
+    "paineis": [
+      {
+        "direita": 667,
+        "esquerda": 144
+      },
+      {
+        "direita": 667,
+        "esquerda": 18
+      }
+    ],
+    "viewportCSS": 685
+  },
+  {
+    "solicitado": 390,
+    "conteudoCSS": 341,
+    "larguraCSS": 355,
+    "paineis": [
+      {
+        "direita": 323,
+        "esquerda": 144
+      },
+      {
+        "direita": 323,
+        "esquerda": 18
+      }
+    ],
+    "viewportCSS": 341
+  }
+]
