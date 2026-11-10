@@ -1,10 +1,12 @@
 import {initializeApp, getApps, getApp} from 'firebase/app';
-import {getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, onAuthStateChanged, signOut} from 'firebase/auth';
+import {getAuth, connectAuthEmulator,createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, sendPasswordResetEmail, onAuthStateChanged, signOut} from 'firebase/auth';
 import {firebaseConfig} from './config';
+let emulatorConnected=false;
 
 export function auth() {
     if (!firebaseConfig.apiKey) throw new Error('O acesso está sendo configurado. Tente novamente em breve.');
-    const instance = getAuth(getApps().length ? getApp() : initializeApp(firebaseConfig));
+    const instance = getAuth(getApps().length ? getApp() : initializeApp(process.env.FIREBASE_EMULATORS==='true'?{...firebaseConfig,projectId:'demo-circuit-qscratch'}:firebaseConfig));
+    if(process.env.FIREBASE_EMULATORS==='true'&&!emulatorConnected){connectAuthEmulator(instance,'http://127.0.0.1:9099',{disableWarnings:true});emulatorConnected=true;}
     instance.languageCode = 'pt-BR';
     return instance;
 }

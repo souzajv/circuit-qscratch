@@ -10,6 +10,10 @@ jest.mock('../../src/app/App', () => () => <main>Trilha interna</main>);
 beforeEach(() => {window.history.replaceState(null, '', '/');});
 afterEach(cleanup);
 
+test('rota de convite reconhece identificador e segredo válidos',()=>{
+ window.history.replaceState(null,'','/#/convite/linked_abc/'+ 'a'.repeat(64));render(<PublicRouter/>);expect(screen.getByRole('button',{name:'Entrar pelo meu link'})).toBeVisible();
+});
+
 const navigate = hash => act(() => {
     window.history.replaceState(null, '', hash);
     window.dispatchEvent(new Event('hashchange'));

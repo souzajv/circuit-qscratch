@@ -58,3 +58,6 @@ Sem grupo de comparação, não atribuir mudanças à gamificação nem demonstr
 - CDC, avaliação de perguntas: https://www.cdc.gov/nchs/ccqder/question-evaluation/index.html
 - U.S. Census Bureau, teste de questionários: https://www.census.gov/about/policies/quality/standards/appendixa2.html
 - CDC, alinhamento entre objetivos, medidas e evidências: https://www.cdc.gov/mmwr/volumes/73/rr/rr7306a1.htm
+# Exceção para alunos criados por professores, 10/11/2026
+
+Contas comuns mantêm o instrumento abaixo: pré obrigatório e pós opcional. Para aluno criado por link, o professor pode ativar ou desativar pré e pós separadamente. Desativação não equivale a resposta Não, recusa ou dado faltante de quem viu o convite: é uma condição de coleta diferente e deve ser separada na análise. O painel permite ver o vínculo ao professor e as respostas coletadas. Não misturar automaticamente contas de professores, testes técnicos e alunos participantes nos resultados do artigo. Histórico anterior sem respostas detalhadas de quiz não é reconstruído.

@@ -1,14 +1,19 @@
 import React from 'react';
 import {render, screen, fireEvent, act, cleanup} from '@testing-library/react';
 import AppComponent from '../../src/app/App';
+jest.mock('../../src/classroom/ClassroomPanel',()=>({role})=><div>Painel {role}</div>);
 const settled={before:{status:'completed',version:3,answers:{education:'Ensino Médio'}},after:{status:'skipped'}};
 const App=props=><AppComponent {...props} initial={{...props.initial,surveys:settled}}/>;
 // A composição é testada com uma atividade controlada; Lesson tem sua própria suíte.
-jest.mock('../../src/learning/Lesson',()=> props => <section><span>Atividade {props.index}</span><button onClick={()=>props.onCheckpoint?.({phase:'quiz',errors:2,hint:true})}>Registrar passo</button><button onClick={()=>props.onComplete(8)}>Concluir prática controlada</button><button onClick={()=>props.onComplete(4)}>Repetir sem melhora</button><button onClick={()=>props.transition(()=>{}, {countdown:true})}>Preparar teste controlado</button><button onClick={props.onBack}>Retornar ao mapa</button><button onClick={props.onCertificate}>Abrir conclusão</button></section>);
+jest.mock('../../src/learning/Lesson',()=> props => <section><span>Atividade {props.index}</span><button onClick={()=>props.onAnswer({id:'a',correct:false})}>Registrar resposta</button><button onClick={()=>props.onCheckpoint?.({phase:'quiz',errors:2,hint:true})}>Registrar passo</button><button onClick={()=>props.onComplete(8)}>Concluir prática controlada</button><button onClick={()=>props.onComplete(4)}>Repetir sem melhora</button><button onClick={()=>props.transition(()=>{}, {countdown:true})}>Preparar teste controlado</button><button onClick={props.onBack}>Retornar ao mapa</button><button onClick={props.onCertificate}>Abrir conclusão</button></section>);
 const click=name=>fireEvent.click(screen.getByRole('button',{name}));
 const flush=()=>act(()=>jest.advanceTimersByTime(2000));
 beforeEach(()=>{jest.useFakeTimers();window.matchMedia.mockReturnValue({matches:false});});
 afterEach(()=>{cleanup();jest.useRealTimers();});
+
+test.each(['teacher','admin'])('navegação oferece painel apenas ao papel permitido: %s',role=>{
+ const progress=jest.fn();render(<App role={role} onProgress={progress} initial={{motion:false}}/>);click(role==='teacher'?'Meus alunos':'Administração');expect(screen.getByText('Painel '+role)).toBeVisible();expect(screen.getByRole('button',{name:role==='teacher'?'Meus alunos':'Administração'})).toHaveAttribute('aria-current','page');click('Trilhas');click('Vamos começar');click('Registrar resposta');expect(progress).toHaveBeenLastCalledWith(expect.objectContaining({answerHistory:{a:{id:'a',correct:false,block:0}}}));
+});
 test('preferências e ajuda mantêm navegação e estado ativo',()=>{
  render(<App/>);click('Como funciona');flush();expect(screen.getByRole('button',{name:'Como funciona'})).toHaveAttribute('aria-current','page');
  click('Ir para a trilha');flush();click('Preferências');flush();

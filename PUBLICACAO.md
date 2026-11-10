@@ -38,11 +38,17 @@ Importe o repositório na Vercel. Se o repositório contiver somente esta pasta,
 | Build Command | npm run build |
 | Output Directory | dist |
 
-Esses valores já estão em `vercel.json` e `package.json`. Não use `npm start` como comando de produção: ele é o servidor de desenvolvimento. Não há servidor Node ou API hospedada pela Vercel nesta versão.
+Esses valores já estão em `vercel.json` e `package.json`. Não use `npm start` como comando de produção: ele é o servidor de desenvolvimento. A pasta `api` agora publica a função Node `/api/classroom`, que autentica e autoriza a gestão de alunos no servidor.
 
 As rotas usam fragmentos (`/#/entrar`, `/#/trilha`, `/#/demo`), portanto não precisam de rewrite genérico. O Webpack gera JavaScript com hash no nome para atualizar assets sem reaproveitar uma versão antiga.
 
 ## Firebase e domínio publicado
+
+Para os painéis, cadastrar `FIREBASE_SERVICE_ACCOUNT_JSON` como **Secret** no projeto `circuit-qscratch` da Vercel, somente em Production. O valor é o JSON completo da conta de serviço autorizada; não publicar em código, capturas, logs ou variáveis com prefixos públicos. Webpack só injeta a configuração web pública e a opção explícita dos emuladores. Depois de salvar a variável, publicar as regras testadas e fazer um novo deploy: deployments antigos não recebem variáveis retroativamente.
+
+Conceder administrador à conta existente somente em ambiente confiável: definir `ADMIN_EMAIL` com o endereço aprovado e executar `node --env-file-if-exists=.env.local scripts/provision-admin.cjs` com a credencial administrativa. O script não altera senhas. Não criar rota pública para conceder administrador.
+
+As regras de `firebase/firestore.rules` precisam ser publicadas no projeto real antes de liberar links. Não considerar essa etapa concluída somente porque o emulador passou. Em 10/11/2026, o SDK oficial publicou e conferiu as regras, o proprietário configurou a credencial como Secret em Production e a conta aprovada recebeu o papel administrador. A CLI tinha sido impedida de consultar a API Service Usage; não foram ampliadas permissões para contornar essa consulta. O comando `node scripts/publish-rules.cjs`, com a credencial privada disponível no processo, usa diretamente o serviço oficial Security Rules e verifica a versão ativa.
 
 O ambiente usa o projeto Firebase `circuit-qscratch`. `src/infrastructure/firebase/config.js` contém a configuração pública do SDK web. Esses identificadores e a API key web fazem parte do bundle do navegador; não são credenciais administrativas. Não incluir chaves de service account, tokens de CLI ou segredos no frontend.
 

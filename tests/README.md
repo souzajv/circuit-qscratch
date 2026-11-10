@@ -1,5 +1,7 @@
 # Testes unitários e cobertura
 
+Atualização de 10/11/2026: as novas suítes do painel cobrem criação/gestão de alunos, links, consultas, permissões visuais, erros e adaptador HTTP. Testes Node em `tests/server` verificam domínio e autorização da API com dependências injetadas; `test:rules` verifica Firestore no emulador. A bateria Playwright em `tests/e2e` agora exercita três jornadas com frontend, API e emuladores oficiais. As referências abaixo a E2E ainda futuro são históricas. O limiar de 100% continua aplicado ao JavaScript de `src`; não representa cobertura medida de 100% do servidor, CSS ou serviços externos.
+
 A suíte usa Jest, Testing Library e jsdom. Execute `npm test` ou `npm run test:coverage` na raiz. O relatório navegável fica em `coverage/index.html`; o resumo legível por ferramentas fica em `coverage/coverage-summary.json`. O comando de cobertura exige 100% de instruções, ramificações, funções e linhas para todo JavaScript, JSX e CJS em src/, inclusive a entrada. Não há exclusões de arquivos de aplicação nem comentários para ignorar cobertura.
 
 Em 05/11/2026, após os ajustes da landing page, 57 testes em treze suítes passaram com as quatro métricas em 100%. A compilação de produção também passou, com aviso de tamanho do pacote JavaScript, de aproximadamente 765 KiB antes da compressão HTTP. Os relatórios são gerados localmente e ignorados no Git.

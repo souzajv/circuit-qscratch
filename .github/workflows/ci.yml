@@ -16,3 +16,11 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run check
+      - run: npm run test:server
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+      - run: npx playwright install --with-deps chromium
+      - name: Verificar regras e jornadas com emuladores
+        run: npx firebase emulators:exec --only auth,firestore --project demo-circuit-qscratch "npm run test:rules && npm run test:e2e"

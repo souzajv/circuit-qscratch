@@ -1,9 +1,31 @@
 rules_version = '2';
 service cloud.firestore {
  match /databases/{database}/documents {
+  function linked() { return request.auth.token.get('linkedStudent', false); }
+  function studentRecord() { return get(/databases/$(database)/documents/students/$(request.auth.uid)).data; }
+  function ownProgress(uid) {
+   return request.auth != null && request.auth.uid == uid
+    && ((!uid.matches('linked_.*') && !linked()) || (linked()
+      && exists(/databases/$(database)/documents/students/$(uid))
+      && studentRecord().active == true
+      && studentRecord().get('deleting',false) == false
+      && studentRecord().accessVersion == request.auth.token.accessVersion));
+  }
+  function surveyUnchanged(kind) {
+   return request.resource.data.state.get('surveys',{}).get(kind,null)
+    == (resource == null ? null : resource.data.state.get('surveys',{}).get(kind,null));
+  }
+  function surveyPolicy() {
+   return !linked() || ((studentRecord().surveys.before || surveyUnchanged('before'))
+    && (studentRecord().surveys.after || surveyUnchanged('after')));
+  }
+  // Papéis e convites só são escritos pela API administrativa autenticada.
+  match /profiles/{uid} { allow read: if request.auth != null && request.auth.uid == uid; allow write: if false; }
+  match /students/{uid} { allow read,write: if false; }
   match /progress/{uid} {
-   allow read, delete: if request.auth != null && request.auth.uid == uid;
-   allow create, update: if request.auth != null && request.auth.uid == uid
+   allow read: if ownProgress(uid);
+   allow delete: if ownProgress(uid) && !linked();
+   allow create, update: if ownProgress(uid) && surveyPolicy()
     && request.resource.data.keys().hasOnly(['version','state','updatedAt'])
     && request.resource.data.version == 1
     && request.resource.data.updatedAt == request.time

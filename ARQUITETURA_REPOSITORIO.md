@@ -1,5 +1,11 @@
 # Arquitetura atual
 
+## Atualização vigente de 10/11/2026
+
+Firebase Auth e Firestore estão integrados. A aplicação agora também possui uma API Node na Vercel: `api/classroom.js` verifica sessão e papel; `server/classroom` contém permissões e casos de uso com dependências injetadas; `server/firebase.cjs` implementa os contratos de dados/autenticação. O frontend usa `src/infrastructure/firebase/classroom.js`, e `src/classroom` apresenta painel, confirmação de exclusão e entrada por convite. A configuração administrativa é privada, fora do bundle do Webpack. Consulte PAINEIS_E_ACESSOS.md. Descrições abaixo de fronteiras reservadas, API inexistente e E2E futuro são registros anteriores a essa implementação.
+
+O fluxo existente de aprendizagem continua em seus módulos. Respostas confirmadas entram em `answerHistory`; o adaptador transacional preserva registros já salvos. Papéis são protegidos em `profiles`, vínculos em `students`, progresso no caminho existente. Revogação usa uma versão de acesso conferida em cada operação pelas regras. A implementação local possui testes de navegador com API e emuladores; ativação de produção precisa de validação separada.
+
 Atualizada em 03/11/2026 após a limpeza solicitada pelo usuário. O Circuit QScratch é uma aplicação React com Webpack, sem npm workspaces. O editor QScratch completo foi arquivado em ../arquivo-repositorio-2026-11-03/. Não há importações de pacotes Scratch no código ativo.
 
 A aplicação parte de src/app/index.jsx. Conteúdo e componentes da trilha ficam em src/learning; regras de pontuação em src/progress; os encaixes e o modelo matemático em src/circuit. Componentes reutilizados ficam em src/shared/ui. Account, settings, completion e infrastructure são fronteiras reservadas, ainda sem implementação separada.

@@ -1,0 +1,87 @@
+.classroom {
+  --classroom-max-width: 1100px;
+  --classroom-dialog-width: 520px;
+  max-width: var(--classroom-max-width);
+  min-width: 0;
+  overflow-wrap: anywhere;
+  margin: auto;
+  padding-bottom: var(--space-32);
+  line-height: 1.6;
+}
+.classroom form,
+.classroom article,
+.classroom-detail,
+.classroom-link {
+  border: var(--border);
+  border-radius: var(--radius-12);
+  padding: var(--space-20);
+  margin-block: var(--space-16);
+  background: var(--warm);
+  box-shadow: var(--space-4) var(--space-4) 0 var(--ink);
+}
+.classroom fieldset {
+  border: 0;
+  padding: 0;
+  min-width: 0;
+}
+.classroom label {
+  display: block;
+  margin-block: var(--space-12);
+}
+.classroom input:not([type="checkbox"]) {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  padding: var(--space-12);
+  border: var(--border);
+  border-radius: var(--radius-8);
+  font: inherit;
+}
+.classroom button {
+  min-height: var(--space-44);
+  font: inherit;
+  border: var(--border);
+  border-radius: var(--radius-8);
+  padding: var(--space-8) var(--space-12);
+  background: var(--paper);
+  color: var(--ink);
+  cursor: pointer;
+}
+.classroom button:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+.classroom button:focus-visible {
+  outline: var(--space-3) solid var(--ink);
+  outline-offset: var(--space-4);
+}
+.classroom-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}
+.classroom details {
+  padding: var(--space-12);
+  border-bottom: var(--space-2) solid var(--ink);
+  overflow-wrap: anywhere;
+}
+.classroom-confirm {
+  position: fixed;
+  inset: 20% var(--space-24) auto;
+  z-index: 30;
+  margin: auto;
+  max-width: var(--classroom-dialog-width);
+  max-height: calc(80dvh - var(--space-24));
+  overflow-y: auto;
+  padding: var(--space-24);
+  background: var(--paper);
+  border: var(--border);
+  border-radius: var(--radius-16);
+  box-shadow: 0 0 0 100vmax #4b483fcc;
+}
+.classroom h1 {
+  font-size: var(--font-32);
+}
+.classroom .primary {
+  background: var(--accent);
+}

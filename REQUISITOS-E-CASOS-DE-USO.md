@@ -6,7 +6,7 @@
 
 # Requisitos e casos de uso da plataforma
 
-Atualização de 09/11/2026: conta individual e percurso introdutório comum para adolescentes e adultos iniciantes. Escolaridade é autodeclarada no pré obrigatório em quatro categorias e não altera o conteúdo. O objetivo é compreender a função de cada peça. Condições institucionais para dados reais de menores permanecem pendentes.
+Atualização de 10/11/2026: contas individuais podem ser de aluno ou professor. Professores criam alunos por link, sem gestão familiar nem senha de responsável. Administrador consulta contas de toda a plataforma. O percurso introdutório continua comum; escolaridade é autodeclarada no pré e não altera o conteúdo. Para alunos vinculados, o professor pode desligar pré e pós separadamente. Condições institucionais para dados reais de menores permanecem pendentes. A implementação local dos painéis não equivale à ativação em produção; conferir [Painéis e acessos](PAINEIS_E_ACESSOS.md).
 
 Decisão de 05/11/2026: Firebase Authentication passa a cuidar de cadastro individual, login e recuperação de senha. O projeto `circuit-qscratch` foi criado no plano Spark e o provedor de e-mail/senha está habilitado. O rascunho Supabase permanece histórico, sem integração nem migração automática; o progresso usa o Firestore conforme a atualização de integração registrada neste documento. Os requisitos abaixo são comportamentos desejados, não funcionalidades prontas. A trilha usa Bell: |00⟩, H no primeiro qubit, CNOT com controle no primeiro e alvo no segundo, medição ideal com 00 ou 11 e 50% para cada. A experiência é simulação clássica. O usuário escolheu pontuação de até 10 por bloco, menos 2 por erro e 2 pela primeira dica, piso 2; ao refazer uma atividade só se acrescenta a melhora da melhor pontuação. A escolaridade não altera o conteúdo ou o gabarito.
 
@@ -59,6 +59,41 @@ As fases, os encaixes, a pontuação em memória e os mascotes estão no código
 RNF11 permanece um critério alvo: a rolagem já considera movimento reduzido do dispositivo; a aplicação automática dessa preferência a todas as animações decorativas ainda deve ser ajustada e verificada. Os controles manuais existem. A documentação não declara acessibilidade validada ou aprendizagem comprovada.
 
 ## Requisitos funcionais
+
+### Professores, alunos por link e administração
+
+Estas regras prevalecem sobre referências anteriores que tratam todas as contas como individuais por e-mail ou o pré como obrigatório sem exceção. Não reintroduzem os perfis familiares antigos.
+
+| ID | Comportamento esperado |
+|---|---|
+| RF56 | Oferecer Aluno e Professor no cadastro, explicar a diferença e concluir o papel no servidor antes da entrada. Falha permite reenvio sem duplicar a conta criada. Não permitir autocadastro como administrador. |
+| RF57 | Mostrar Meus alunos somente para professor e Administração para administrador, sem retirar a trilha de aprendizagem desses papéis. |
+| RF58 | Professor cria aluno com nome/apelido e opções independentes de pré/pós. Retornar link de segredo forte uma única vez; informar que qualquer portador pode usá-lo em outros aparelhos até revogação. |
+| RF59 | Entrar pelo link sem e-mail/senha, avisar da substituição da sessão atual e usar sempre o mesmo UID/progresso. Remover segredo do endereço após autenticação. Link inválido/revogado informa falha sem abrir a trilha. |
+| RF60 | Professor lista e consulta somente os próprios alunos. Mostrar blocos concluídos, bloco atual, melhor pontuação e respostas erradas separadas por bloco, com pergunta, escolha, correta e revisão. Não inventar histórico para tentativas antigas. |
+| RF61 | Consultar respostas pré/pós e distinguir não respondido, rascunho, enviado e recusa no pós. Desativar coleta não apaga respostas nem registra recusa. Contas comuns mantêm pré obrigatório e pós opcional. |
+| RF62 | Gerar novo link invalida segredo e sessões anteriores, preservando aluno e progresso. Revogar impede novo acesso e operações de progresso por sessões antigas, mantendo os dados para consulta. |
+| RF63 | Excluir aluno somente após confirmação com aviso de perda de perfil/progresso/respostas. Bloquear acesso antes da remoção; falha deixa exclusão pendente e permite nova tentativa sem reativá-lo. |
+| RF64 | Administrador consulta todos os alunos vinculados, seus professores proprietários e contas comuns, incluindo o progresso e questionários individuais. Listas paginadas não omitem registros como se a primeira página fosse o total. |
+| RF65 | Registrar cada confirmação do quiz com identificador, bloco, revisão, texto da pergunta, escolha e resultado. Preservar registros anteriores ao repetir um bloco e ao salvar de outra sessão. |
+
+| ID | Requisito não funcional adicional |
+|---|---|
+| RNF22 | Autenticar e autorizar no servidor cada operação administrativa; impedir leitura entre professores mesmo por chamada direta. Aluno e link não podem elevar seu papel. |
+| RNF23 | Usar SDK Admin somente no servidor, credencial privada em Secret, hash do segredo no banco e respostas não armazenáveis em cache. Não registrar segredo ou token em logs. |
+| RNF24 | Firestore impede leitura direta de alunos/convites e escrita de papéis pelo cliente; acesso ao progresso vinculado verifica situação e versão atuais do acesso. |
+| RNF25 | Painéis permitem teclado, foco visível, confirmação acessível de exclusão e uso a 390px sem rolagem horizontal. Erros permitem nova tentativa sem afirmar sucesso. |
+| RNF26 | Tratar dados do aluno como entrada não confiável ao exibir o painel. Ausência ou formato inválido não deve derrubar a tela nem virar conclusão pedagógica. |
+
+| Caso de uso | Fluxo e exceções |
+|---|---|
+| UC21 | Professor cria aluno, escolhe pré/pós e copia o link. Falha mantém os campos; segredo antigo não pode ser recuperado pela lista. |
+| UC22 | Aluno abre link e confirma entrada. Acesso válido restaura o mesmo progresso; acesso revogado impede leitura/gravação, inclusive em sessão anterior. |
+| UC23 | Professor consulta progresso, erros por bloco e formulários. Dados antigos sem histórico são identificados; chamadas para alunos alheios são negadas. |
+| UC24 | Professor altera pré/pós, revoga ou substitui link sem apagar progresso; exclusão usa confirmação explícita e pode ser retomada após falha. |
+| UC25 | Administrador consulta as contas e alunos de todos os professores. Papel concedido por operação administrativa confiável, nunca pela escolha de cadastro. |
+
+Aceitação: `features/painel_professor_admin.feature`. Validação executável: `tests/e2e/classroom.spec.cjs`, `tests/server/classroom.test.cjs`, `tests/integration/classroom-rules.mjs` e suítes unitárias do painel. Gherkin continua especificação, não é executado como se fosse o teste Playwright.
 
 | ID | Comportamento esperado |
 |---|---|

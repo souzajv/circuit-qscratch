@@ -3,7 +3,11 @@ import {login,register,resetPassword,accessError,watchAccount,logout} from '../.
 import {getApps,initializeApp,getApp} from 'firebase/app';
 import {signInWithEmailAndPassword,createUserWithEmailAndPassword,updateProfile,sendPasswordResetEmail} from 'firebase/auth';
 jest.mock('firebase/app',()=>({getApps:jest.fn(()=>[]),initializeApp:jest.fn(()=>({})),getApp:jest.fn(()=>({}))}));
-jest.mock('firebase/auth',()=>({getAuth:()=> ({languageCode:''}),signInWithEmailAndPassword:jest.fn(),createUserWithEmailAndPassword:jest.fn(),updateProfile:jest.fn(),sendPasswordResetEmail:jest.fn(),onAuthStateChanged:jest.fn(),signOut:jest.fn()}));
+jest.mock('firebase/auth',()=>({getAuth:()=> ({languageCode:''}),connectAuthEmulator:jest.fn(),signInWithEmailAndPassword:jest.fn(),createUserWithEmailAndPassword:jest.fn(),updateProfile:jest.fn(),sendPasswordResetEmail:jest.fn(),onAuthStateChanged:jest.fn(),signOut:jest.fn()}));
+
+test('emulador é habilitado explicitamente e conecta uma única vez',()=>{
+ process.env.FIREBASE_EMULATORS='true';getApps.mockReturnValue([]);firebaseConfig.apiKey='test';const {auth}=require('../../src/infrastructure/firebase/auth');const {connectAuthEmulator}=require('firebase/auth');auth();auth();expect(connectAuthEmulator).toHaveBeenCalledTimes(1);expect(initializeApp).toHaveBeenCalledWith(expect.objectContaining({projectId:'demo-circuit-qscratch'}));delete process.env.FIREBASE_EMULATORS;
+});
 test('adaptador exige configuração, reutiliza app e delega ao SDK sem guardar senha',async()=>{
  delete firebaseConfig.apiKey;await expect(login('x','y')).rejects.toThrow(/configurado/);firebaseConfig.apiKey='test';
  watchAccount(jest.fn());await logout();

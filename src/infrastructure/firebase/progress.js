@@ -1,6 +1,7 @@
-import {getFirestore,doc,getDocFromServer,runTransaction,serverTimestamp} from 'firebase/firestore';
+import {getFirestore,connectFirestoreEmulator,doc,getDocFromServer,runTransaction,serverTimestamp} from 'firebase/firestore';
 import {auth} from './auth';
-const reference = uid => doc(getFirestore(auth().app),'progress',uid);
+let emulatorConnected=false;
+const reference = uid => {const db=getFirestore(auth().app);if(process.env.FIREBASE_EMULATORS==='true'&&!emulatorConnected){connectFirestoreEmulator(db,'127.0.0.1',8080);emulatorConnected=true;}return doc(db,'progress',uid);};
 export async function loadProgress(uid) {
  const result=await getDocFromServer(reference(uid));
  return result.exists() ? result.data().state : {};
@@ -21,6 +22,8 @@ export async function saveProgress(uid,state) {
     else surveyArchive[`${kind}_v${record.version || 1}`]=record;
    }
   });
-  transaction.set(ref,{version:1,state:{...state,best,completed,surveys,surveyArchive,first:previous.first || state.first},updatedAt:serverTimestamp()});
+  // Duas sessões do mesmo link não devem apagar respostas já registradas.
+  const answerHistory={...state.answerHistory,...previous.answerHistory};
+  transaction.set(ref,{version:1,state:{...state,best,completed,surveys,surveyArchive,answerHistory,first:previous.first || state.first},updatedAt:serverTimestamp()});
  });
 }

@@ -11,12 +11,13 @@ import { improve } from '../progress/rules.cjs';
 import Icon from '../shared/ui/Icon';
 import Lesson from '../learning/Lesson';
 import SurveyDialog from '../learning/SurveyDialog';
+import ClassroomPanel from '../classroom/ClassroomPanel';
 import {EDUCATION_OPTIONS,SURVEY_VERSION} from '../learning/surveys';
 import './tokens.css';
 import './platform.css';
 import './experience.css';
 import './responsive.css';
-export default function App({initial = {}, onProgress, saveStatus, onRetry, onSignOut,onSurveySave}) {
+export default function App({initial = {}, onProgress, saveStatus, onRetry, onSignOut,onSurveySave,role='student',surveyPolicy={before:true,after:true}}) {
   const [screen, setScreen] = useState('map');
   const level = SCHOOL_LEVELS[0];
   const [surveys,setSurveys]=useState(initial.surveys || {});
@@ -30,7 +31,8 @@ export default function App({initial = {}, onProgress, saveStatus, onRetry, onSi
   const [motion, setMotion] = useState(initial.motion ?? true);
   const [sound, setSound] = useState(initial.sound ?? true);
   const [attempt, setAttempt] = useState(initial.attempt ?? {});
-  useEffect(() => {onProgress?.({level,current,completed,best,name,first,motion,sound,attempt,surveys});}, [level,current,completed,best,name,first,motion,sound,attempt,surveys,onProgress]);
+  const [answerHistory,setAnswerHistory]=useState(initial.answerHistory??{});
+  useEffect(() => {onProgress?.({level,current,completed,best,name,first,motion,sound,attempt,surveys,answerHistory});}, [level,current,completed,best,name,first,motion,sound,attempt,surveys,answerHistory,onProgress]);
   const heading = useRef();
   const trailRef = useRef();
   const nextBlockToReveal = useRef(null);
@@ -66,7 +68,7 @@ export default function App({initial = {}, onProgress, saveStatus, onRetry, onSi
     setCurrent(index);
     setScreen('lesson');
   });
-  const settled = kind => kind==='before' ? surveys.before?.status==='completed' && surveys.before.version===SURVEY_VERSION && EDUCATION_OPTIONS.includes(surveys.before.answers?.education) : ['completed','skipped'].includes(surveys[kind]?.status);
+  const settled = kind => surveyPolicy[kind]===false || (kind==='before' ? surveys.before?.status==='completed' && surveys.before.version===SURVEY_VERSION && EDUCATION_OPTIONS.includes(surveys.before.answers?.education) : ['completed','skipped'].includes(surveys[kind]?.status));
   const open = index => {
     if(index===0 && completed.length===0 && !settled('before')){surveyNext.current=()=>openLesson(index);setSurveyKind('before');}
     else openLesson(index);
@@ -97,6 +99,7 @@ export default function App({initial = {}, onProgress, saveStatus, onRetry, onSi
       }}><span className="brand-mark">q<span>+</span></span><span>Circuit<br />QScratch</span></a>
             <p className="side-caption">Uma peça. Uma descoberta.</p>
             <nav aria-label="Navegação principal">
+                {['teacher','admin'].includes(role)&&<button className={screen==='classroom'?'nav-active':''} aria-current={screen==='classroom'?'page':undefined} onClick={()=>transition(()=>setScreen('classroom'))}>{role==='admin'?'Administração':'Meus alunos'} <Icon name="qubit"/></button>}
                 <button className={screen === 'map' || screen === 'certificate' ? 'nav-active' : ''} aria-current={screen === 'map' || screen === 'certificate' ? 'page' : undefined} onClick={backToMap}>Trilhas <Icon name="qubit" /></button>
                 <button className={screen === 'help' ? 'nav-active' : ''} aria-current={screen === 'help' ? 'page' : undefined} onClick={() => transition(() => setScreen('help'))}>Como funciona <Icon name="help" /></button>
                 <button className={screen === 'settings' ? 'nav-active' : ''} aria-current={screen === 'settings' ? 'page' : undefined} onClick={() => transition(() => setScreen('settings'))}>Preferências <Icon name="settings" /></button>
@@ -108,7 +111,8 @@ export default function App({initial = {}, onProgress, saveStatus, onRetry, onSi
 
             <main id="main" tabIndex="-1">
                 {screen === 'map' && <MapScreen heading={heading} completed={completed} total={total} trailRef={trailRef} motion={motion} allDone={allDone} open={open} />}
-                {screen === 'lesson' && <Lesson saved={attempt[current]} onCheckpoint={onProgress ? data => setAttempt(previous => JSON.stringify(previous[current]) === JSON.stringify(data) ? previous : {...previous,[current]:data}) : undefined} key={current} block={block} index={current} level={level} name={name} motion={motion} transition={transition} onComplete={finish} onBack={backToMap} onCertificate={conclude} play={play} />}
+                {screen === 'lesson' && <Lesson onAnswer={record=>setAnswerHistory(previous=>({...previous,[record.id]:{...record,block:current}}))} saved={attempt[current]} onCheckpoint={onProgress ? data => setAttempt(previous => JSON.stringify(previous[current]) === JSON.stringify(data) ? previous : {...previous,[current]:data}) : undefined} key={current} block={block} index={current} level={level} name={name} motion={motion} transition={transition} onComplete={finish} onBack={backToMap} onCertificate={conclude} play={play} />}
+                {screen==='classroom'&&['teacher','admin'].includes(role)&&<ClassroomPanel role={role}/>}
                 {screen === 'settings' && <SettingsScreen persistent={Boolean(onProgress)} heading={heading} name={name} setName={setName} sound={sound} setSound={setSound} motion={motion} setMotion={setMotion} />}
                 {screen === 'help' && <HelpScreen heading={heading} backToMap={backToMap} />}
                 {screen === 'certificate' && first && <CertificateScreen heading={heading} first={first} backToMap={backToMap} />}

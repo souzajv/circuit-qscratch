@@ -1,4 +1,5 @@
 import React from 'react';
+jest.mock('../../src/infrastructure/firebase/classroom',()=>({classroom:jest.fn().mockResolvedValue({role:'student'})}));
 import {render,screen,fireEvent,act,waitFor,cleanup} from '@testing-library/react';
 import AccountTrail from '../../src/public/AccountTrail';
 import {watchAccount,logout} from '../../src/infrastructure/firebase/auth';

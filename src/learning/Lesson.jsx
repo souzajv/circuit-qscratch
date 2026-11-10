@@ -14,6 +14,7 @@ const explorationVisuals = ['preparation','measurement','double-h','order-compar
 export default function Lesson({
   saved = {},
   onCheckpoint,
+  onAnswer,
   block,
   index,
   level,
@@ -142,6 +143,7 @@ export default function Lesson({
                 }} />{option}{answered && (choice===i || i===question.answer) && <span className="correct-mark" aria-label={i===question.answer?"Resposta correta":"Resposta incorreta"}><Icon name={i===question.answer?"check":"close"} /></span>}</label>)}</fieldset><div className="lesson-actions"><button className="text-button" disabled={answered || questionHint} onClick={() => {setHint(true);setQuestionHint(true);}}>Ver dica {questionHint ? '' : hint ? '(sem novo desconto)' : '(−2 pontos no bloco)'}</button><button className={`primary quiz-confirm ${answered && !advanceReady ? correct ? 'answer-jump' : 'answer-shake' : ''}`} disabled={choice === null || (answered && !advanceReady)} onClick={() => {
                 if(answered){advance();return;}
                 setAnswered(true);
+                onAnswer?.({id:crypto.randomUUID(),questionIndex,revision:questionRevision,question:question.question,selected:question.options[choice],expected:question.options[question.answer],correct:choice===question.answer,answeredAtClient:new Date().toISOString()});
                 if (choice === question.answer) {
                   setCorrect(true);
                   setMessage(question.feedback);

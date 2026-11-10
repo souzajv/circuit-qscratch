@@ -4,12 +4,15 @@ import {LANDING_MOTION as timing} from './motionConfig';
 import Mascot from '../shared/ui/Mascot';
 import LoadingScreen from './LoadingScreen';
 import Icon from '../shared/ui/Icon';
+import {classroom} from '../infrastructure/firebase/classroom';
 import {login, register, resetPassword, accessError} from '../infrastructure/firebase/auth';
 import './landing.css';
 import './access.css';
 
 export default function AccessPage() {
     const [signup, setSignup] = useState(false);
+    const [role,setRole]=useState('student');
+    const createdAccount=useRef(false);
     const rootRef = useRef(null);
     const panelRef = useRef(null);
     const previousHeight = useRef(null);
@@ -49,7 +52,7 @@ export default function AccessPage() {
         if (signup && password !== confirm) {setMessage('As senhas precisam ser iguais.'); return;}
         setBusy(true); setMessage('');
         try {
-            if (signup) await register(name, email, password);
+            if (signup) {if(createdAccount.current!==email.trim()){await register(name, email, password);createdAccount.current=email.trim();}await classroom('profile',{role});}
             else await login(email, password);
             setPassword(''); setConfirm('');
             window.location.hash = '/trilha';
@@ -74,7 +77,7 @@ export default function AccessPage() {
                 <p>{signup ? 'Crie sua conta para acessar a trilha.' : 'Use seu e-mail e sua senha para entrar.'}</p>
                 <form onSubmit={submit}>
                     <fieldset disabled={busy}>
-                        {signup && <label>Nome ou apelido<input required maxLength={60} value={name} onChange={e => setName(e.target.value)} autoComplete="nickname"/></label>}
+                        {signup && <><div role="group" aria-label="Perfil da conta" className="auth-tabs"><button type="button" aria-pressed={role==='student'} onClick={()=>setRole('student')}>Sou aluno</button><button type="button" aria-pressed={role==='teacher'} onClick={()=>setRole('teacher')}>Sou professor</button></div><p>{role==='teacher'?'Professor: acompanhe sua trilha e crie acessos por link para seus alunos.':'Aluno: acesse a trilha e salve suas descobertas na sua conta.'}</p><label>Nome ou apelido<input required maxLength={60} value={name} onChange={e => setName(e.target.value)} autoComplete="nickname"/></label></>}
                         <label>E-mail<input required type="email" value={email} onChange={e => setEmail(e.target.value)} autoComplete="email"/></label>
                         <label>Senha<input required type={showPassword ? 'text' : 'password'} minLength={signup ? 8 : 1} value={password} onChange={e => setPassword(e.target.value)} autoComplete={signup ? 'new-password' : 'current-password'} aria-describedby={signup ? 'password-help' : undefined}/></label>
                         {signup && <><p id="password-help" className="auth-hint">Use pelo menos 8 caracteres.</p><label>Confirmar senha<input required type={showPassword ? 'text' : 'password'} value={confirm} onChange={e => setConfirm(e.target.value)} autoComplete="new-password"/></label></>}
