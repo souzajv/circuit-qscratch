@@ -42,7 +42,7 @@ function createClassroomHandler(backend) {
         return res.json({
           role: "linkedStudent",
           name: student.name,
-          surveys: student.surveys,
+          surveys: {before:student.surveys.before!==false&&student.surveys.after!==false,after:student.surveys.before!==false&&student.surveys.after!==false},
         });
       }
       let profile = await repo.get("profiles", identity.uid);

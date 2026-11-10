@@ -28,13 +28,19 @@ test("professor cria acesso, aluno entra sem senha, progresso é consultado e re
   await page
     .getByLabel("E-mail", { exact: true })
     .fill(`prof-${Date.now()}@example.test`);
+  await expect.poll(()=>page.locator(".auth-body form").evaluate(el=>getComputedStyle(el).opacity)).toBe("1");
+  await page.screenshot({path:"test-results/cadastro-dados.png",fullPage:true});
+  await page.setViewportSize({width:390,height:844});await page.screenshot({path:"test-results/cadastro-dados-mobile.png",fullPage:true});await page.setViewportSize({width:1280,height:720});
+  await page.getByRole("button",{name:"Avançar",exact:true}).click();
+  await expect.poll(()=>page.locator(".auth-body form").evaluate(el=>getComputedStyle(el).opacity)).toBe("1");
+  await page.screenshot({path:"test-results/cadastro-senha.png",fullPage:true});
+  await page.setViewportSize({width:390,height:844});await page.screenshot({path:"test-results/cadastro-senha-mobile.png",fullPage:true});await page.setViewportSize({width:1280,height:720});
   await page.getByLabel("Senha", { exact: true }).fill("Teste-Seguro-2026");
   await page.getByLabel("Confirmar senha").fill("Teste-Seguro-2026");
   await page.getByRole("button", { name: "Criar minha conta" }).click();
   await page.getByRole("button", { name: "Meus alunos", exact: true }).click();
   await page.getByLabel("Nome ou apelido").fill("Aluno por link");
-  await page.getByLabel("Mostrar formulário antes").uncheck();
-  await page.getByLabel("Mostrar formulário depois").uncheck();
+  await page.getByLabel("Aplicar questionários pré e pós-trilha").uncheck();
   await page.getByRole("button", { name: "Criar acesso" }).click();
   const input = page.getByLabel("Link do aluno");
   await expect(input).toBeVisible();
@@ -42,6 +48,7 @@ test("professor cria acesso, aluno entra sem senha, progresso é consultado e re
   const student = await browser.newContext();
   const pupil = await student.newPage();
   await pupil.goto(link);
+  if(process.env.CHECK_ANIMATIONS==="true")await expect.poll(()=>pupil.locator("dotlottie-wc").evaluate(el=>Boolean(el.dotLottie?.isLoaded)),{timeout:20000}).toBe(true);
   await pupil.screenshot({
     path: "test-results/convite-desktop.png",
     fullPage: true,
@@ -112,6 +119,9 @@ test("professor cria acesso, aluno entra sem senha, progresso é consultado e re
   await expect(
     page.getByRole("heading", { name: "Aluno por link" }),
   ).toBeVisible();
+  await expect(page.getByLabel("Link do aluno")).toHaveValue(link);
+  await page.context().grantPermissions(["clipboard-read","clipboard-write"],{origin:"http://127.0.0.1:8620"});
+  await page.bringToFront();const copy=page.getByRole("button",{name:"Copiar link",exact:true});const copyWidth=await copy.evaluate(el=>el.getBoundingClientRect().width);await copy.click();await expect(page.getByRole("button",{name:"Copiado!",exact:true})).toBeVisible();expect(await page.locator(".copy-link").evaluate(el=>el.getBoundingClientRect().width)).toBe(copyWidth);await expect(copy).toBeVisible({timeout:5000});
   await page
     .locator("summary")
     .filter({ hasText: "Conheça os qubits" })
@@ -251,7 +261,7 @@ test("formulário habilitado é obrigatório, fica salvo na conta do link e cheg
     data: {
       action: "create",
       name: "Aluno com pesquisa",
-      surveys: { before: true, after: false },
+      surveys: { before: true, after: true },
     },
   });
   const invitation = await response.json();

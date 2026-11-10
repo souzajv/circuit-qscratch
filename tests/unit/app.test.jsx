@@ -1,6 +1,8 @@
 import React from 'react';
 import {render, screen, fireEvent, act, cleanup} from '@testing-library/react';
 import AppComponent from '../../src/app/App';
+import SettingsScreen from '../../src/app/screens/SettingsScreen';
+test('preferências permitem editar o nome por padrão fora do acesso vinculado',()=>{render(<SettingsScreen name="Sol" heading={{current:null}}/>);expect(screen.getByLabelText('Como posso te chamar?')).toHaveValue('Sol');});
 jest.mock('../../src/classroom/ClassroomPanel',()=>({role})=><div>Painel {role}</div>);
 const settled={before:{status:'completed',version:3,answers:{education:'Ensino Médio'}},after:{status:'skipped'}};
 const App=props=><AppComponent {...props} initial={{...props.initial,surveys:settled}}/>;
@@ -10,6 +12,9 @@ const click=name=>fireEvent.click(screen.getByRole('button',{name}));
 const flush=()=>act(()=>jest.advanceTimersByTime(2000));
 beforeEach(()=>{jest.useFakeTimers();window.matchMedia.mockReturnValue({matches:false});});
 afterEach(()=>{cleanup();jest.useRealTimers();});
+test('acesso por link não oferece saída nem edição do apelido',()=>{
+ render(<App role="linkedStudent" onSignOut={jest.fn()} initial={{motion:false}}/>);expect(screen.queryByRole('button',{name:/Sair da conta/})).toBeNull();click('Preferências');expect(screen.queryByLabelText('Como posso te chamar?')).toBeNull();expect(screen.getByLabelText('Animações do mascote')).toBeVisible();
+});
 
 test.each(['teacher','admin'])('navegação oferece painel apenas ao papel permitido: %s',role=>{
  const progress=jest.fn();render(<App role={role} onProgress={progress} initial={{motion:false}}/>);click(role==='teacher'?'Meus alunos':'Administração');expect(screen.getByText('Painel '+role)).toBeVisible();expect(screen.getByRole('button',{name:role==='teacher'?'Meus alunos':'Administração'})).toHaveAttribute('aria-current','page');click('Trilhas');click('Vamos começar');click('Registrar resposta');expect(progress).toHaveBeenLastCalledWith(expect.objectContaining({answerHistory:{a:{id:'a',correct:false,block:0}}}));

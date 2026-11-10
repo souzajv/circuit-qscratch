@@ -8,9 +8,11 @@ afterEach(cleanup);
 
 test('perfil professor é escolhido no cadastro e falha da API permite concluir sem duplicar conta',async()=>{
  const {classroom}=require('../../src/infrastructure/firebase/classroom');classroom.mockRejectedValueOnce(Error('Indisponível')).mockResolvedValue({role:'teacher'});register.mockClear();register.mockResolvedValue({});
- render(<AccessPage/>);fireEvent.click(screen.getByRole('button',{name:'Criar conta',exact:true}));fireEvent.click(screen.getByRole('button',{name:'Sou professor'}));fireEvent.click(screen.getByRole('button',{name:'Sou aluno'}));fireEvent.click(screen.getByRole('button',{name:'Sou professor'}));fill();fireEvent.change(screen.getByLabelText('Nome ou apelido'),{target:{value:'Professora'}});fireEvent.change(screen.getByLabelText('Confirmar senha'),{target:{value:'senha1234'}});
+ render(<AccessPage/>);fireEvent.click(screen.getByRole('button',{name:'Criar conta',exact:true}));fireEvent.click(screen.getByRole('button',{name:'Sou professor'}));fireEvent.click(screen.getByRole('button',{name:'Sou aluno'}));fireEvent.click(screen.getByRole('button',{name:'Sou professor'}));fillIdentity('Professora');fillPassword();fireEvent.change(screen.getByLabelText('Confirmar senha'),{target:{value:'senha1234'}});
  fireEvent.click(screen.getByRole('button',{name:'Criar minha conta'}));await screen.findByText('Falha no acesso');fireEvent.click(screen.getByRole('button',{name:'Criar minha conta'}));await waitFor(()=>expect(classroom).toHaveBeenLastCalledWith('profile',{role:'teacher'}));await waitFor(()=>expect(screen.getByLabelText('Senha',{exact:true})).toHaveValue(''));expect(register).toHaveBeenCalledTimes(1);
 });
+const fillIdentity=name=>{fireEvent.change(screen.getByLabelText('Nome ou apelido'),{target:{value:name}});fireEvent.change(screen.getByLabelText('E-mail'),{target:{value:'teste@example.com'}});fireEvent.click(screen.getByRole('button',{name:'Avançar'}));};
+const fillPassword=()=>fireEvent.change(screen.getByLabelText('Senha',{exact:true}),{target:{value:'senha1234'}});
 const fill = () => {fireEvent.change(screen.getByLabelText('E-mail'),{target:{value:'teste@example.com'}});fireEvent.change(screen.getByLabelText('Senha',{exact:true}),{target:{value:'senha1234'}});};
 test('login aguarda confirmação do provedor, trata erro e permite nova tentativa',async()=>{
  let finish;login.mockImplementationOnce(()=>new Promise(resolve=>{finish=resolve;}));
@@ -19,7 +21,7 @@ test('login aguarda confirmação do provedor, trata erro e permite nova tentati
  login.mockRejectedValueOnce(Error());fill();fireEvent.submit(form);await screen.findByText('Falha no acesso');
 });
 test('cadastro verifica confirmação e alternância limpa senhas',async()=>{
- render(<AccessPage/>);fireEvent.click(screen.getByRole('button',{name:'Entrar',exact:true}));fireEvent.click(screen.getByRole('button',{name:'Criar conta',exact:true}));fireEvent.click(screen.getByRole('button',{name:'Criar conta',exact:true}));fill();fireEvent.change(screen.getByLabelText('Nome ou apelido'),{target:{value:'João'}});
+ render(<AccessPage/>);fireEvent.click(screen.getByRole('button',{name:'Entrar',exact:true}));fireEvent.click(screen.getByRole('button',{name:'Criar conta',exact:true}));fireEvent.click(screen.getByRole('button',{name:'Criar conta',exact:true}));fillIdentity('João');fillPassword();
  const form=screen.getByRole('button',{name:'Criar minha conta'}).closest('form');fireEvent.submit(form);expect(screen.getByText('As senhas precisam ser iguais.')).toBeVisible();
  fireEvent.change(screen.getByLabelText('Confirmar senha'),{target:{value:'senha1234'}});register.mockResolvedValueOnce({});fireEvent.submit(form);await waitFor(()=>expect(register).toHaveBeenCalledWith('João','teste@example.com','senha1234'));
  await waitFor(()=>expect(screen.getByLabelText('Senha',{exact:true})).toHaveValue(''));
@@ -41,7 +43,7 @@ test('permite conferir a senha e volta a ocultá-la ao trocar de modo',()=>{
  expect(screen.getByLabelText('Senha',{exact:true})).toHaveAttribute('type','password');
  fireEvent.click(screen.getByRole('button',{name:'Mostrar senha'}));
  fireEvent.click(screen.getByRole('button',{name:'Criar conta',exact:true}));
- expect(screen.getByLabelText('Senha',{exact:true})).toHaveAttribute('type','password');
+ fillIdentity('João');expect(screen.getByLabelText('Senha',{exact:true})).toHaveAttribute('type','password');
  fireEvent.click(screen.getByRole('button',{name:'Mostrar senha'}));
  expect(screen.getByLabelText('Confirmar senha')).toHaveAttribute('type','text');
 });
@@ -55,6 +57,8 @@ test('apelido aceita til e composição de acentos; espaços são validados some
  fireEvent.compositionStart(input);fireEvent.change(input,{target:{value:'João ~ Ã õ'}});fireEvent.compositionEnd(input,{data:'õ'});
  expect(input).toHaveValue('João ~ Ã õ');
  fireEvent.change(input,{target:{value:'   '}});
- fireEvent.submit(screen.getByRole('button',{name:'Criar minha conta'}).closest('form'));
+ fireEvent.submit(screen.getByRole('button',{name:'Avançar'}).closest('form'));
  expect(screen.getByText('Informe seu nome ou apelido.')).toBeVisible();
 });
+
+test('cadastro valida primeira etapa e preserva dados ao voltar',()=>{render(<AccessPage/>);fireEvent.click(screen.getByRole('button',{name:'Criar conta',exact:true}));fireEvent.change(screen.getByLabelText('Nome ou apelido'),{target:{value:'Sol'}});fireEvent.submit(screen.getByRole('button',{name:'Avançar'}).closest('form'));expect(screen.getByText('Preencha um e-mail válido.')).toBeVisible();fillIdentity('Sol');expect(screen.queryByLabelText('E-mail')).toBeNull();fireEvent.click(screen.getByRole('button',{name:'Voltar aos seus dados'}));expect(screen.getByLabelText('Nome ou apelido')).toHaveValue('Sol');expect(screen.getByLabelText('E-mail')).toHaveValue('teste@example.com');});

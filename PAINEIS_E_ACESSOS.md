@@ -44,3 +44,11 @@ Local com serviço real: configurar `.env.local` privado e executar `npm run sta
 - `npm run test:e2e`: Chromium, aplicação, API e Auth/Firestore emulados. Faz cadastro, link, resposta errada, consulta, revogação, exclusão, autorização administrativa e formulário inicial. Não grava participantes em produção.
 
 Esses testes verificam software e permissões, não a aprendizagem ou a validade do instrumento de pesquisa. A ativação remota e a conferência no domínio publicado devem ser registradas separadamente.
+
+## Ajuste de questionários e acesso por link
+A interface oferece uma única opção para aplicar os questionários pré e pós juntos. Novos acessos e alterações enviam o mesmo valor nos dois campos do contrato existente. Registros históricos não são apagados. Aluno por link não tem controle de saída nem edição de apelido; sons e animações continuam disponíveis. Copiar link confirma com Copiado! por três segundos e mantém a largura do botão. O painel usa a tela de loading existente durante consultas, e accordions nativos têm transição progressiva com respeito a movimento reduzido.
+
+## Consulta protegida do link
+Novos links guardam, além do hash de validação, uma cópia cifrada com AES-256-GCM e associação ao UID. A chave é derivada da credencial privada do servidor, nunca do código web. O segredo só é retornado por detail/account após autorização, para acesso ativo; listagens não retornam hash nem cifra. Trocar a credencial privada pode impedir recuperar cifras antigas, mas não invalida o hash de acesso; gerar outro link resolve a consulta com invalidação explícita do anterior. Links antigos sem cifra não são reconstruídos. O painel permite gerar outro mantendo o progresso. Nenhuma credencial administrativa é enviada ao navegador.
+
+Na retomada de links legados com opções diferentes, a interface trata a coleta como desligada para os dois momentos. Ao salvar a opção conjunta, ambos os campos passam a ter o mesmo valor. Respostas antigas continuam preservadas.

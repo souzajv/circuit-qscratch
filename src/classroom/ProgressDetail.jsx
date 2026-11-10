@@ -1,4 +1,5 @@
 import React from "react";
+import Icon from "../shared/ui/Icon";
 import { blocks } from "../learning/content";
 import { surveyQuestions } from "../learning/surveys";
 const surveyStatuses = {
@@ -22,6 +23,7 @@ export default function ProgressDetail({ detail }) {
       {blocks.map((block, index) => (
         <details key={block.title}>
           <summary>
+            <Icon name={["qubit", "measure", "gate", "cnot", "bell"][index]} />
             {block.title} · {state.best?.[index] || 0} pontos
           </summary>
           {history.filter((a) => a.block === index && !a.correct).length ? (
@@ -44,7 +46,9 @@ export default function ProgressDetail({ detail }) {
           )}
         </details>
       ))}
-      <h3>Questionários</h3>
+      <h3>
+        <Icon name="help" /> Questionários
+      </h3>
       {["before", "after"].map((kind) => (
         <details key={kind}>
           <summary>

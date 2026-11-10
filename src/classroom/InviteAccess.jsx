@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { signInWithCustomToken } from "firebase/auth";
 import { auth } from "../infrastructure/firebase/auth";
 import { classroom } from "../infrastructure/firebase/classroom";
@@ -7,13 +7,6 @@ import Icon from "../shared/ui/Icon";
 import "../app/tokens.css";
 import "./classroom.css";
 export default function InviteAccess({ id, secret }) {
-  const host=useRef(null),[ready,setReady]=useState(false);
-  useEffect(()=>{
-    const player=host.current.querySelector('dotlottie-wc');
-    const loaded=()=>setReady(true);
-    player.addEventListener('load',loaded);
-    return ()=>player.removeEventListener('load',loaded);
-  },[]);
   const [busy, setBusy] = useState(false),
     [error, setError] = useState("");
   return (
@@ -32,10 +25,8 @@ export default function InviteAccess({ id, secret }) {
         <a href="#/">Voltar ao início</a>
       </header>
       <main className="classroom invite-layout">
-        <div className="invite-host" ref={host} data-ready={ready}>
-          {!ready&&<img className="invite-poster" src="/favicon.svg" alt="" aria-hidden="true"/>}
+        <div className="invite-host">
           <Mascot
-            access
             motion={
               !window.matchMedia("(prefers-reduced-motion: reduce)").matches
             }
@@ -77,6 +68,8 @@ export default function InviteAccess({ id, secret }) {
         </section>
       </main>
       <footer className="invite-footer">
+        <span>Feito por João Campos</span>
+        <br />
         Mascote por{" "}
         <a href="https://lottiefiles.com/user/a29ccdc8-ab0a-49fc-b263-32073008b985">
           Christine Somkunwar

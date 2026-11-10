@@ -44,7 +44,7 @@ Funcionalidade: Professores, alunos por link e administração
 
   Cenário: Criar acesso sem e-mail e senha
     Dado que sou professor autenticado
-    Quando crio um aluno com apelido e opções independentes de pré e pós
+    Quando crio um aluno com apelido e opção conjunta de questionários
     Então recebo um link exclusivo para aquele aluno
     E sou avisado de que qualquer portador pode usá-lo até revogação
     E a lista não expõe o segredo nem seu hash
@@ -107,3 +107,15 @@ Funcionalidade: Professores, alunos por link e administração
     Dado que acesso o painel em largura de 390 pixels ou pelo teclado
     Então os controles permanecem acessíveis sem corte horizontal
     E o diálogo de exclusão mantém foco e permite cancelar antes da confirmação
+
+  Cenário: Consultar o link salvo com retorno de cópia
+    Dado que um aluno por link pertence ao professor autenticado
+    Quando o professor ou administrador consulta a conta
+    Então o endereço recuperável aparece apenas após autorização do servidor
+    E copiar mostra Copiado! por três segundos sem mudar a largura do botão
+    E links antigos sem segredo recuperável oferecem gerar outro com aviso de invalidação
+
+  Cenário: Acesso vinculado preserva o apelido definido pelo professor
+    Dado que entrei pelo link de um aluno
+    Então não vejo Sair da conta nem edição do apelido
+    E continuo podendo ajustar sons e animações

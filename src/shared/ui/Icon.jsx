@@ -4,6 +4,7 @@ export default function Icon({
   ...props
 }) {
   const drawings = {
+    admin: <><path d="M12 3 3 7v6c0 5 9 8 9 8s9-3 9-8V7Z" fill="var(--peach)"/><circle cx="12" cy="10" r="2.5"/><path d="M7 16c2-3 8-3 10 0"/></>,
     linkedin: <><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M7 10v7m4 0v-7m0 3c0-4 6-4 6 0v4" /><circle cx="7" cy="7" r=".8" fill="currentColor" stroke="none" /></>,
     arrow: <><path d="M4 12h15m-6-6 6 6-6 6" /></>,
     close: <path d="M6 6l12 12M18 6 6 18" />,

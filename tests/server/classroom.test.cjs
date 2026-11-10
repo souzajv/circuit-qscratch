@@ -22,7 +22,7 @@ repo.mutate = async (id, update) =>
   repo.set("students", id, update(await repo.get("students", id)));
 const service = createClassroomService({
   repo,
-  tokens: {
+  tokens: {seal:(id,s)=>s,open:(id,s)=>s,
     create: async (uid, claims) => ({ uid, claims }),
     deleteUser: async () => {},
   },
@@ -149,3 +149,5 @@ test("painel trata progresso malformado como dados ausentes, sem renderizar obje
   assert.equal(result.surveys.before.answers.bad, undefined);
   assert.equal(result.surveys.before.answers.heardBefore, false);
 });
+
+test('segredo cifrado só abre com a chave e o aluno correspondentes',()=>{const {createLinkVault}=require('../../server/classroom/link-vault.cjs');const vault=createLinkVault('teste-unitario'),sealed=vault.seal('linked_a','segredo');assert.notEqual(sealed,'segredo');assert.equal(vault.open('linked_a',sealed),'segredo');assert.equal(vault.open('linked_b',sealed),null);assert.equal(createLinkVault('outra-chave').open('linked_a',sealed),null);assert.equal(vault.open('linked_a','invalido'),null);assert.throws(()=>createLinkVault(null));});

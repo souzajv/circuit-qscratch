@@ -68,7 +68,7 @@ Estas regras prevalecem sobre referências anteriores que tratam todas as contas
 |---|---|
 | RF56 | Oferecer Aluno e Professor no cadastro, explicar a diferença e concluir o papel no servidor antes da entrada. Falha permite reenvio sem duplicar a conta criada. Não permitir autocadastro como administrador. |
 | RF57 | Mostrar Meus alunos somente para professor e Administração para administrador, sem retirar a trilha de aprendizagem desses papéis. |
-| RF58 | Professor cria aluno com nome/apelido e opções independentes de pré/pós. Retornar link de segredo forte uma única vez; informar que qualquer portador pode usá-lo em outros aparelhos até revogação. |
+| RF58 | Professor cria aluno com nome/apelido e opção conjunta de pré/pós. Retornar link de segredo forte uma única vez; informar que qualquer portador pode usá-lo em outros aparelhos até revogação. |
 | RF59 | Entrar pelo link sem e-mail/senha, avisar da substituição da sessão atual e usar sempre o mesmo UID/progresso. Remover segredo do endereço após autenticação. Link inválido/revogado informa falha sem abrir a trilha. |
 | RF60 | Professor lista e consulta somente os próprios alunos. Mostrar blocos concluídos, bloco atual, melhor pontuação e respostas erradas separadas por bloco, com pergunta, escolha, correta e revisão. Não inventar histórico para tentativas antigas. |
 | RF61 | Consultar respostas pré/pós e distinguir não respondido, rascunho, enviado e recusa no pós. Desativar coleta não apaga respostas nem registra recusa. Contas comuns mantêm pré obrigatório e pós opcional. |

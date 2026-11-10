@@ -41,3 +41,10 @@ Funcionalidade: Acesso individual pelo Firebase
     E o provedor confirma o recebimento da solicitação
     Então vejo uma mensagem genérica sobre o envio do link
     E a mensagem não confirma se o e-mail possui uma conta
+
+  Cenário: Criar conta em duas etapas
+    Dado que escolhi Criar conta
+    Quando informo nome, e-mail e perfil válidos e seleciono Avançar
+    Então vejo senha e confirmação em uma segunda etapa
+    E posso voltar sem perder os dados da primeira etapa
+    E a conta só é criada após confirmar a segunda etapa

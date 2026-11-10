@@ -80,10 +80,19 @@ function backend() {
       return { items, cursor: page.pageToken || null };
     },
   };
+  const { createLinkVault } = require("./classroom/link-vault.cjs");
+  const material = process.env.FIREBASE_SERVICE_ACCOUNT_JSON
+    ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_JSON).private_key
+    : process.env.FIREBASE_AUTH_EMULATOR_HOST
+      ? "demo-emulator-only"
+      : null;
+  const vault = createLinkVault(material);
   return {
     repo,
     auth,
     tokens: {
+      seal: vault.seal,
+      open: vault.open,
       create: (uid, claims) => auth.createCustomToken(uid, claims),
       deleteUser: async (uid) => {
         try {

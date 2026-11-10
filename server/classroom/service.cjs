@@ -9,7 +9,7 @@ const hash = (value) => createHash("sha256").update(value).digest("hex");
 const fail = (message, status = 403) => {
   throw Object.assign(new Error(message), { status });
 };
-const publicStudent = ({ linkHash, ...student }) => student;
+const publicStudent = ({ linkHash, encryptedSecret, ...student }) => student;
 const policy = (value) => ({
   before: value?.before !== false,
   after: value?.after !== false,
@@ -22,6 +22,12 @@ function createClassroomService({ repo, tokens }) {
       fail("Sem permissão para este aluno.");
     return student;
   };
+  const linkInfo = (student, id) => ({
+    linkSecret:
+      student.active && !student.deleting && student.encryptedSecret
+        ? tokens.open(id, student.encryptedSecret)
+        : null,
+  });
   const staff = (actor) => {
     if (!["teacher", "admin"].includes(actor.role))
       fail("Sem permissão para gerenciar alunos.");
@@ -69,6 +75,9 @@ function createClassroomService({ repo, tokens }) {
           fail("Sem permissão para consultar contas.");
         return {
           student: await repo.account(data.id),
+          ...((data.id || "").startsWith("linked_")
+            ? linkInfo(await owned(actor, data.id), data.id)
+            : {}),
           progress: readableProgress(
             (await repo.get("progress", data.id))?.state,
           ),
@@ -87,6 +96,7 @@ function createClassroomService({ repo, tokens }) {
           active: true,
           accessVersion: 1,
           linkHash: hash(secret),
+          encryptedSecret: tokens.seal(id, secret),
           createdAt: new Date().toISOString(),
         };
         await repo.set("students", id, student);
@@ -98,6 +108,7 @@ function createClassroomService({ repo, tokens }) {
       if (action === "detail")
         return {
           student: { id: data.id, ...publicStudent(student) },
+          ...linkInfo(student, data.id),
           progress: readableProgress(
             (await repo.get("progress", data.id))?.state,
           ),
@@ -139,6 +150,7 @@ function createClassroomService({ repo, tokens }) {
             active: true,
             accessVersion: current.accessVersion + 1,
             linkHash: hash(secret),
+            encryptedSecret: tokens.seal(data.id, secret),
           };
         });
         return { id: data.id, secret };

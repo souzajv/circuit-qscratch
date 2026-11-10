@@ -17,3 +17,7 @@ Logo da plataforma, gato com prancheta, balão com instruções, ação principa
 ## Validação e limites
 
 Revisão visual por capturas de navegador a 1280px e 390px, além de testes de foco, busca, consulta, retorno, criação de acesso e erros. A skill Impeccable orientou a revisão; seu inicializador não executou por falta de acesso ao cache, e o contexto foi lido diretamente. Não houve substituição de fontes, paleta, mascote, autenticação, pontuação ou instrumentos de pesquisa.
+
+Ajuste posterior: campos usam foco sem contorno externo afastado; cópia tem retorno temporário em largura fixa. Convite usa Professor cat animado, sem o poster vetorial anterior, e crédito Feito por João Campos sem link. Questionários passam a uma opção conjunta. As referências anteriores ao poster e a controles independentes descrevem o estado anterior.
+
+Cadastro em duas etapas: dados/perfil e depois senha/confirmação, com Avançar, seta, retorno e GSAP. Administração usa escudo com usuário como ícone. Consulta do aluno vinculado contém link e botão de cópia reutilizado, com retorno de três segundos. Convite usa Professor cat e crédito textual Feito por João Campos.

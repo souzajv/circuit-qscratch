@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { classroom } from "../infrastructure/firebase/classroom";
 import ProgressDetail from "./ProgressDetail";
+import CopyLinkButton from "./CopyLinkButton";
+import LoadingScreen from "../public/LoadingScreen";
 import Icon from "../shared/ui/Icon";
 
 import DeleteStudentDialog from "./DeleteStudentDialog";
@@ -15,8 +17,7 @@ export default function ClassroomPanel({ role }) {
   const [items, setItems] = useState([]),
     [accounts, setAccounts] = useState([]),
     [name, setName] = useState(""),
-    [before, setBefore] = useState(true),
-    [after, setAfter] = useState(true);
+    [questionnaires, setQuestionnaires] = useState(true);
   const [detail, setDetail] = useState(null),
     [link, setLink] = useState(""),
     [error, setError] = useState(""),
@@ -102,7 +103,7 @@ export default function ClassroomPanel({ role }) {
             )
           }
         >
-          Ver progresso
+          <Icon name="measure" /> Ver progresso
         </button>
         <button
           disabled={busy}
@@ -113,7 +114,7 @@ export default function ClassroomPanel({ role }) {
             })
           }
         >
-          Gerar novo link
+          <Icon name="arrow" /> Gerar novo link
         </button>
         <button
           disabled={busy || !student.active}
@@ -125,47 +126,29 @@ export default function ClassroomPanel({ role }) {
             })
           }
         >
-          Revogar link
+          <Icon name="close" /> Revogar link
         </button>
         <button disabled={busy} onClick={() => setDeleting(student)}>
-          Excluir aluno
+          <Icon name="close" /> Excluir aluno
         </button>
       </div>
       <label>
         <input
           type="checkbox"
           disabled={busy}
-          checked={student.surveys.before}
+          checked={student.surveys.before && student.surveys.after}
           onChange={(e) => {
             const enabled = e.target.checked;
             run(async () => {
               await classroom("settings", {
                 id: student.id,
-                surveys: { ...student.surveys, before: enabled },
+                surveys: { before: enabled, after: enabled },
               });
               await load();
             });
           }}
         />{" "}
-        Formulário pré
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          disabled={busy}
-          checked={student.surveys.after}
-          onChange={(e) => {
-            const enabled = e.target.checked;
-            run(async () => {
-              await classroom("settings", {
-                id: student.id,
-                surveys: { ...student.surveys, after: enabled },
-              });
-              await load();
-            });
-          }}
-        />{" "}
-        Formulário pós
+        Mostrar questionários pré e pós-trilha
       </label>
     </article>
   );
@@ -189,6 +172,63 @@ export default function ClassroomPanel({ role }) {
             </p>
           </div>
         </header>
+        {detail.student.id?.startsWith("linked_") && (
+          <section className="classroom-link">
+            <h2>Link de acesso</h2>
+            {detail.linkSecret ? (
+              <>
+                <p>
+                  Qualquer pessoa com este link pode acessar este perfil.
+                  Compartilhe somente com o aluno.
+                </p>
+                <input
+                  aria-label="Link do aluno"
+                  readOnly
+                  value={
+                    window.location.origin +
+                    "/#/convite/" +
+                    detail.student.id +
+                    "/" +
+                    detail.linkSecret
+                  }
+                />
+                <CopyLinkButton
+                  key={detail.linkSecret}
+                  value={
+                    window.location.origin +
+                    "/#/convite/" +
+                    detail.student.id +
+                    "/" +
+                    detail.linkSecret
+                  }
+                />
+              </>
+            ) : (
+              <>
+                <p>
+                  O link original não está disponível para consulta. Gerar outro
+                  invalida o link e as sessões anteriores e mantém o progresso.
+                </p>
+                <button
+                  disabled={busy}
+                  onClick={() =>
+                    run(async () => {
+                      const result = await classroom("rotate", {
+                        id: detail.student.id,
+                      });
+                      setDetail({ ...detail, linkSecret: result.secret });
+                      await load();
+                    })
+                  }
+                >
+                  <Icon name="arrow" /> Gerar novo link
+                </button>
+              </>
+            )}
+          </section>
+        )}
+        {busy && <LoadingScreen />}
+        {error && <p role="alert">{error}</p>}
         <ProgressDetail detail={detail} />
       </section>
     );
@@ -244,8 +284,8 @@ export default function ClassroomPanel({ role }) {
               <h2>Link de acesso</h2>
               <p>
                 Qualquer pessoa com este link pode acessar o perfil. Ele pode
-                ser reutilizado até ser revogado. Guarde-o agora; depois será
-                necessário gerar outro.
+                ser reutilizado até ser revogado. Você também pode consultá-lo
+                novamente no painel deste aluno.
               </p>
               <input
                 ref={linkField}
@@ -253,12 +293,7 @@ export default function ClassroomPanel({ role }) {
                 readOnly
                 value={link}
               />
-              <button
-                className="secondary"
-                onClick={() => run(() => navigator.clipboard.writeText(link))}
-              >
-                Copiar link
-              </button>
+              <CopyLinkButton key={link} value={link} />
               <button className="text-button" onClick={() => setLink("")}>
                 Ocultar link
               </button>
@@ -272,7 +307,7 @@ export default function ClassroomPanel({ role }) {
               </button>
             </p>
           )}
-          {busy && <p role="status">Aguarde...</p>}
+          {busy && <LoadingScreen />}
           {role === "admin" && (
             <section className="classroom-accounts">
               <h2>Contas da plataforma</h2>
@@ -297,7 +332,7 @@ export default function ClassroomPanel({ role }) {
                         )
                       }
                     >
-                      Consultar conta
+                      <Icon name="help" /> Consultar conta
                     </button>
                   </article>
                 ))}
@@ -361,7 +396,7 @@ export default function ClassroomPanel({ role }) {
                 showLink(
                   await classroom("create", {
                     name,
-                    surveys: { before, after },
+                    surveys: { before: questionnaires, after: questionnaires },
                   }),
                 );
                 setName("");
@@ -383,18 +418,10 @@ export default function ClassroomPanel({ role }) {
               <label>
                 <input
                   type="checkbox"
-                  checked={before}
-                  onChange={(e) => setBefore(e.target.checked)}
+                  checked={questionnaires}
+                  onChange={(e) => setQuestionnaires(e.target.checked)}
                 />{" "}
-                Mostrar formulário antes da trilha
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={after}
-                  onChange={(e) => setAfter(e.target.checked)}
-                />{" "}
-                Mostrar formulário depois da trilha
+                Aplicar questionários pré e pós-trilha
               </label>
               <button className="primary">Criar acesso</button>
             </fieldset>

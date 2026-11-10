@@ -31,7 +31,7 @@ A simulação é clássica e ideal. A plataforma não executa em um computador q
 Em 10/11/2026 foram acrescentados os papéis de aluno e professor, alunos por link e administração. A API exige credencial privada no servidor e as regras de acesso correspondentes no Firestore. Consulte [Painéis e acessos](PAINEIS_E_ACESSOS.md) para contratos, limites e validações.
 
 - No cadastro, o usuário escolhe Aluno ou Professor. O professor também pode percorrer a trilha.
-- Em Meus alunos, o professor cria um acesso por link sem e-mail/senha, define separadamente os formulários pré/pós, consulta progresso e erros por bloco, substitui/revoga o link e exclui o aluno após confirmação.
+- Em Meus alunos, o professor cria um acesso por link sem e-mail/senha, define a exibição conjunta dos formulários pré/pós, consulta progresso e erros por bloco, substitui/revoga o link e exclui o aluno após confirmação.
 - O administrador consulta contas e alunos vinculados de toda a plataforma. Esse papel é concedido somente por operação administrativa.
 
 - Cadastro individual com nome ou apelido, e-mail, senha e confirmação; login, saída e recuperação de senha por e-mail via Firebase Authentication.
