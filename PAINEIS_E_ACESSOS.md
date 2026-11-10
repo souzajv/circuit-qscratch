@@ -1,5 +1,7 @@
 # Painéis e acessos
 
+Refinamento de interface em 10/11/2026: Consultar conta e Ver progresso abrem uma consulta dedicada no lugar da lista, com foco no título e retorno por Fechar detalhes. A busca por nome/e-mail considera os registros já carregados e os mantém ao voltar. Criar acesso ocupa uma área própria; Novo acesso conduz ao campo de nome e um link criado recebe foco. A entrada por convite usa o gato com prancheta e balão responsivo, com alternativa visual local enquanto a animação carrega. Essas mudanças não alteram as permissões nem o armazenamento.
+
 Decisão de 10/11/2026. O cadastro comum permite escolher Aluno ou Professor. Professor tem a mesma trilha e a opção Meus alunos. Administrador tem Administração, com consulta global. Contas antigas recebem o papel de aluno na primeira consulta autenticada, preservando seu progresso. A conta indicada pelo proprietário recebe o papel de administrador por operação confiável, sem senha nova e sem regra por e-mail no frontend.
 
 ## Alunos criados pelo professor

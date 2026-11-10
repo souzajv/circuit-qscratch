@@ -2,6 +2,23 @@
 Funcionalidade: Professores, alunos por link e administração
   O professor acompanha somente seus alunos e o administrador consulta a plataforma.
 
+  Cenário: Abrir uma consulta sem esconder o resultado no final da página
+    Dado que localizei uma conta na listagem
+    Quando seleciono Consultar conta ou Ver progresso
+    Então a consulta substitui a listagem e recebe foco no início
+    E vejo progresso, blocos, erros e questionários dessa conta
+    Quando seleciono Fechar detalhes
+    Então volto à lista com busca e registros carregados preservados
+
+  Cenário: Buscar e criar acessos com retorno visível
+    Dado que a lista carregou uma página de registros
+    Quando busco por nome ou e-mail
+    Então vejo os registros carregados que correspondem à busca
+    E uma busca sem correspondência informa como tentar novamente
+    Quando seleciono Novo acesso
+    Então o campo Nome ou apelido recebe foco
+    E um link criado é revelado com foco no campo para cópia
+
   Esquema do Cenário: Selecionar papel no cadastro
     Dado que preenchi dados válidos de uma nova conta
     Quando escolho "<papel>" e concluo o cadastro

@@ -1,5 +1,7 @@
 # Design system do Circuit QScratch
 
+Atualização de gestão em 10/11/2026: [DESIGN.md](DESIGN.md) registra a composição dos painéis, consulta dedicada com foco, busca entre registros carregados e convite com mascote e balão responsivo. A identidade visual abaixo permanece a referência.
+
 Proposta inicial para a plataforma web desktop, baseada no CSS e nos créditos dos slides em `../apresentacao/`. O escopo atual é conta individual, Fundamental Anos Finais e Ensino Médio; referências a perfis múltiplos devem ser entendidas como conta e preferências individuais. Valores de interface são ponto de partida, sujeitos a revisão visual e testes.
 
 ## Identidade

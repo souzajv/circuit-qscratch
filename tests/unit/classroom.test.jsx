@@ -16,6 +16,14 @@ beforeEach(()=>{
  classroom.mockImplementation(async action=>response[action]);Object.defineProperty(navigator,'clipboard',{configurable:true,value:{writeText:jest.fn().mockResolvedValue()}});
 });
 afterEach(cleanup);
+test('consulta substitui listagem, recebe foco e permite voltar; busca filtra sem perder dados',async()=>{
+ render(<ClassroomPanel role="admin"/>);await screen.findByText('Professora');
+ const search=screen.getByLabelText('Buscar por nome ou e-mail');fireEvent.change(search,{target:{value:'inexistente'}});expect(screen.getByText(/Nenhum resultado para esta busca/)).toBeVisible();
+ fireEvent.change(search,{target:{value:'teacher@example'}});expect(screen.getByText('Professora')).toBeVisible();expect(screen.queryByText('Sol')).toBeNull();
+ click('Consultar conta');await screen.findByRole('heading',{name:'Consulta de conta'});expect(screen.getByRole('heading',{name:'Consulta de conta'})).toHaveFocus();expect(screen.queryByRole('heading',{name:'Contas da plataforma'})).toBeNull();
+ click('Fechar detalhes');expect(screen.getByRole('heading',{name:'Administração'})).toHaveFocus();expect(screen.getByText('Professora')).toBeVisible();
+ fireEvent.change(screen.getByLabelText('Buscar por nome ou e-mail'),{target:{value:'Sol'}});expect(screen.getByText('Sol')).toBeVisible();click('Novo acesso');expect(screen.getByLabelText('Nome ou apelido')).toHaveFocus();
+});
 test('professor cria acesso, copia somente o link retornado e pode ocultá-lo',async()=>{
  render(<ClassroomPanel role="teacher"/>);await screen.findByText('Sol');
  fireEvent.change(screen.getByLabelText('Nome ou apelido'),{target:{value:'Lua'}});fireEvent.click(screen.getByLabelText(/Mostrar formulário antes/));fireEvent.click(screen.getByLabelText(/Mostrar formulário depois/));click('Criar acesso');
@@ -59,6 +67,7 @@ test('cancelamento pelo teclado respeita operação em andamento e restaura foco
 });
 test('convite avisa sobre troca de conta e permite tentar novamente após erro',async()=>{
  render(<InviteAccess id="linked_abc" secret="secret"/>);classroom.mockRejectedValueOnce(Error('Link revogado'));click('Entrar pelo meu link');await screen.findByRole('alert');expect(signInWithCustomToken).not.toHaveBeenCalled();
+ act(()=>document.querySelector('dotlottie-wc').dispatchEvent(new Event('load')));expect(document.querySelector('.invite-poster')).toBeNull();
  signInWithCustomToken.mockRejectedValueOnce(Error('Falha no provedor'));click('Entrar pelo meu link');await screen.findByText('Falha no provedor');
  // JSDOM não navega; a função real de substituição é conferida no E2E.
  const original=window.location;delete window.location;window.location={replace:jest.fn()};click('Entrar pelo meu link');await waitFor(()=>expect(window.location.replace).toHaveBeenCalledWith('/#/trilha'));window.location=original;
