@@ -11,3 +11,5 @@ test('modal anuncia conquista, oferece as ações e restaura scroll ao desmontar
  fireEvent.click(screen.getByRole('button',{name:'Fechar conquista e continuar explorando'}));fireEvent(screen.getByRole('dialog'),new Event('cancel',{bubbles:true}));expect(dismiss).toHaveBeenCalledTimes(2);
  unmount();expect(document.body.style.overflow).toBe('');
 });
+
+test('conclusão da demonstração convida a criar conta sem impedir fechar',()=>{const dismiss=jest.fn(),next=jest.fn();render(<MissionDialog demo motion={false} conclusion="Duas linhas prontas." onDismiss={dismiss} onContinue={next}/>);expect(screen.getByText(/Você concluiu o bloco da demonstração/)).toBeVisible();fireEvent.click(screen.getByRole('button',{name:/Criar minha conta/}));expect(next).toHaveBeenCalled();fireEvent.click(screen.getByRole('button',{name:'Continuar explorando'}));expect(dismiss).toHaveBeenCalled();});

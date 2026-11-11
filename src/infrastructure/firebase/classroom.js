@@ -19,6 +19,6 @@ export async function classroom(action, data = {}) {
       "O serviço de turmas não está disponível. Tente novamente em instantes.",
     );
   }
-  if (!response.ok) throw Error(payload.error || "Não foi possível concluir.");
+  if (!response.ok) { const error=Error(payload.error || "Não foi possível concluir."); error.status=response.status; throw error; }
   return payload;
 }

@@ -716,3 +716,6 @@ h1[tabindex="-1"]:focus {
 
 /* Representação semântica das teclas citadas nas instruções. */
 kbd {display:inline-block;vertical-align:baseline;white-space:nowrap;padding:var(--space-2) var(--space-6);border:var(--space-2) solid var(--ink);border-radius:var(--radius-8);background:var(--paper);box-shadow:0 var(--space-3) 0 var(--ink);font-family:inherit;font-size:.85em;font-weight:700;line-height:1.25;margin-inline:var(--space-2);}
+
+/* Na demonstração, o cadeado abre o convite para criar conta. */
+.trail .locked h2,.trail .locked p {color:var(--ink);opacity:.65;}

@@ -1,3 +1,4 @@
+import InviteAccess from '../classroom/InviteAccess';
 import React,{useState,useEffect,useCallback,useRef} from 'react';
 import App from '../app/App';
 import LoadingScreen from './LoadingScreen';
@@ -13,14 +14,15 @@ export default function AccountTrail(){
  const [account,setAccount]=useState(undefined);
  const [initial,setInitial]=useState(null);
  const [error,setError]=useState(false);
+ const [inactive,setInactive]=useState(false);
  const [profile,setProfile]=useState(null);
  const [status,setStatus]=useState('Carregando progresso...');
  const latest=useRef(null),queue=useRef(Promise.resolve()),revision=useRef(0),timer=useRef(null),active=useRef(null);
- useEffect(()=>watchAccount(user=>{clearTimeout(timer.current);active.current=user?.uid;revision.current++;setInitial(null);latest.current=null;setAccount(user);}),[]);
+ useEffect(()=>watchAccount(user=>{clearTimeout(timer.current);active.current=user?.uid;revision.current++;setInitial(null);setInactive(false);latest.current=null;setAccount(user);}),[]);
  const load=useCallback(async()=>{
   setError(false);
   try {const uid=account.uid;const identity=await classroom('me');const state=await loadProgress(uid);if(active.current!==uid)return;setProfile(identity);setInitial({...state,name:identity.name||state.name || account.displayName || 'Explorador'});setStatus('Progresso salvo na conta');}
-  catch {setError(true);}
+  catch (e) {if(e.status===403)setInactive(true);else setError(true);}
  },[account]);
  useEffect(()=>{if(account) load();},[account,load]);
  const persist=useCallback(state=>{
@@ -51,6 +53,7 @@ export default function AccountTrail(){
   catch(error){if(version===revision.current)setStatus('Não foi possível salvar. Tentar novamente');throw error;}
  },[account]);
  const leave=async()=>{await logout();window.location.hash='/entrar';};
+ if(inactive)return <InviteAccess invalid/>;
  if(account===undefined || (account && !initial && !error))return <LoadingScreen/>;
  if(!account)return <main><h1>Entre para salvar sua trilha</h1><a href="#/entrar">Entrar</a><a href="#/demo">Conhecer a demonstração</a></main>;
  if(error)return <main><p>Não foi possível carregar seu progresso. Seus dados não foram substituídos.</p><button onClick={load}>Tentar novamente</button></main>;

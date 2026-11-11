@@ -20,8 +20,9 @@ export default function PublicRouter() {
     }, []);
     const invite=route.match(/^#\/convite\/(linked_[a-z0-9-]+)\/([a-f0-9]{64})$/);
     if(invite)return <InviteAccess id={invite[1]} secret={invite[2]}/>;
+    if(route.startsWith('#/convite/'))return <InviteAccess invalid/>;
     if (route === '#/trilha') return <AccountTrail/>;
-    if (route === '#/demo') return <App/>;
+    if (route === '#/demo') return <App demo/>;
     if (route === '#/entrar' || route === '#/criar-conta') return <AccessPage/>;
     return <LandingPage/>;
 }

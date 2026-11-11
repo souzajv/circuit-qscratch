@@ -73,7 +73,7 @@ test('cancelamento pelo teclado respeita operação em andamento e restaura foco
 test('convite avisa sobre troca de conta e permite tentar novamente após erro',async()=>{
  render(<InviteAccess id="linked_abc" secret="secret"/>);classroom.mockRejectedValueOnce(Error('Link revogado'));click('Entrar pelo meu link');await screen.findByRole('alert');expect(signInWithCustomToken).not.toHaveBeenCalled();
  act(()=>document.querySelector('dotlottie-wc').dispatchEvent(new Event('load')));expect(document.querySelector('.invite-poster')).toBeNull();
- signInWithCustomToken.mockRejectedValueOnce(Error('Falha no provedor'));click('Entrar pelo meu link');await screen.findByText('Falha no provedor');
+ click('Tentar o link novamente');signInWithCustomToken.mockRejectedValueOnce(Error('Falha no provedor'));click('Entrar pelo meu link');await screen.findByRole('alert');click('Tentar o link novamente');
  // JSDOM não navega; a função real de substituição é conferida no E2E.
  const original=window.location;delete window.location;window.location={replace:jest.fn()};click('Entrar pelo meu link');await waitFor(()=>expect(window.location.replace).toHaveBeenCalledWith('/#/trilha'));window.location=original;
 });

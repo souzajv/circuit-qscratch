@@ -6,7 +6,7 @@ import Mascot from "../shared/ui/Mascot";
 import Icon from "../shared/ui/Icon";
 import "../app/tokens.css";
 import "./classroom.css";
-export default function InviteAccess({ id, secret }) {
+export default function InviteAccess({ id, secret, invalid=false }) {
   const [busy, setBusy] = useState(false),
     [error, setError] = useState("");
   return (
@@ -27,13 +27,15 @@ export default function InviteAccess({ id, secret }) {
       <main className="classroom invite-layout">
         <div className="invite-host">
           <Mascot
+            failed={invalid || Boolean(error)}
             motion={
               !window.matchMedia("(prefers-reduced-motion: reduce)").matches
             }
           />
         </div>
         <section className="invite-speech">
-          <h1>Seu professor preparou um acesso para você!</h1>
+          <h1 role={invalid || error ? "alert" : undefined}>{invalid || error ? "Este link não está mais ativo" : "Seu professor preparou um acesso para você!"}</h1>
+          {invalid || error ? <><p>Não foi possível entrar por este link. Ele pode ter sido desativado ou apagado. Peça um novo acesso ao seu professor.</p><a className="primary" href="#/entrar">Entrar com minha conta <Icon name="arrow"/></a>{!invalid && <button className="secondary" onClick={()=>setError("")}>Tentar o link novamente</button>}</> : <>
           <p>
             Este é um acesso criado pelo seu professor. Você não precisa
             informar e-mail ou senha. Não compartilhe seu link.
@@ -61,7 +63,7 @@ export default function InviteAccess({ id, secret }) {
             {busy ? "Preparando seu acesso..." : "Entrar pelo meu link"}{" "}
             <Icon name="arrow" />
           </button>
-          {error && <p role="alert">{error}</p>}
+          </>}
           <p>
             <a href="#/">Voltar ao início</a>
           </p>

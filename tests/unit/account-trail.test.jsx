@@ -64,3 +64,5 @@ test.each([false,true])('resposta de pesquisa antiga não substitui status mais 
  fireEvent.click(screen.getByText('Avançar'));await act(async()=>fail?reject(Error()):resolve());
  expect(screen.getByText('Salvando progresso...')).toBeVisible();act(()=>jest.advanceTimersByTime(300));await screen.findByText('Progresso salvo na conta');
 });
+
+test('sessão vinculada revogada mostra página de link inativo sem abrir trilha',async()=>{const {classroom}=require('../../src/infrastructure/firebase/classroom');classroom.mockRejectedValueOnce(Object.assign(Error('Revogado'),{status:403}));watchAccount.mockImplementation(cb=>{cb({uid:'linked_old'});return jest.fn();});render(<AccountTrail/>);await screen.findByText('Este link não está mais ativo');expect(screen.queryByText('Carregando sua conta...')).toBeNull();expect(screen.queryByRole('button',{name:'Avançar'})).toBeNull();});

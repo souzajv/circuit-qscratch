@@ -15,7 +15,7 @@ import "./landing.css";
 import "./access.css";
 
 export default function AccessPage() {
-  const [signup, setSignup] = useState(false);
+  const [signup, setSignup] = useState(window.location.hash === "#/criar-conta");
   const [step, setStep] = useState(0);
   const [role, setRole] = useState("student");
   const createdAccount = useRef(false);

@@ -12,6 +12,7 @@ import PracticeReflection from './PracticeReflection';
 import {reflectionIsReady} from './practiceReflections';
 const explorationVisuals = ['preparation','measurement','double-h','order-compare','bell-compare'];
 export default function Lesson({
+  demo = false,
   saved = {},
   onCheckpoint,
   onAnswer,
@@ -176,7 +177,7 @@ export default function Lesson({
                 <small>Simulação clássica de um circuito quântico ideal.</small>
                 </div>
             </section>}
-                {missionOpen && <MissionDialog motion={motion} conclusion={conclusion} last={index===4} onContinue={()=>{setMissionOpen(false);if(index===4)onCertificate();else onBack();}} onDismiss={()=>setMissionOpen(false)} onRepeat={isMeasurement?()=>{setMissionOpen(false);measuredRef.current=null;setMeasured(null);setMessage('Nova preparação pronta. Clique no medidor ou use Enter ou Espaço para medir.');}:undefined}/>}
+                {missionOpen && <MissionDialog demo={demo} motion={motion} conclusion={conclusion} last={index===4} onContinue={()=>{if(demo){window.location.hash='/criar-conta';return;}setMissionOpen(false);if(index===4)onCertificate();else onBack();}} onDismiss={()=>setMissionOpen(false)} onRepeat={isMeasurement?()=>{setMissionOpen(false);measuredRef.current=null;setMeasured(null);setMessage('Nova preparação pronta. Clique no medidor ou use Enter ou Espaço para medir.');}:undefined}/>}
                 {phase === 'practice' && <details className={`practice-exploration ${finished?'':'exploration-locked'}`}><summary>Compare e experimente mais, sem alterar sua montagem</summary>{finished && <><LearningExample visual={explorationVisuals[index]} title="O que muda em outro preparo?" motion={motion} level={level}/><button className="secondary" onClick={()=>setMissionOpen(true)}>Ver missão concluída</button></>}</details>}
         </div>
     </div>;

@@ -1,3 +1,4 @@
+import MissionDialog from '../learning/MissionDialog';
 import { SCHOOL_LEVELS } from '../shared/config/experience.cjs';
 import useCurtain from './hooks/useCurtain';
 import playFeedback from '../infrastructure/audio/playFeedback';
@@ -17,7 +18,8 @@ import './tokens.css';
 import './platform.css';
 import './experience.css';
 import './responsive.css';
-export default function App({initial = {}, onProgress, saveStatus, onRetry, onSignOut,onSurveySave,role='student',surveyPolicy={before:true,after:true}}) {
+export default function App({initial = {}, onProgress, saveStatus, onRetry, onSignOut,onSurveySave,role='student',demo=false,surveyPolicy={before:true,after:true}}) {
+  const [demoNotice,setDemoNotice]=useState(null);
   const [screen, setScreen] = useState('map');
   const level = SCHOOL_LEVELS[0];
   const [surveys,setSurveys]=useState(initial.surveys || {});
@@ -70,6 +72,7 @@ export default function App({initial = {}, onProgress, saveStatus, onRetry, onSi
   });
   const settled = kind => surveyPolicy[kind]===false || (kind==='before' ? surveys.before?.status==='completed' && surveys.before.version===SURVEY_VERSION && EDUCATION_OPTIONS.includes(surveys.before.answers?.education) : ['completed','skipped'].includes(surveys[kind]?.status));
   const open = index => {
+    if(demo){setDemoNotice(index===0?'intro':'locked');return;}
     if(index===0 && completed.length===0 && !settled('before')){surveyNext.current=()=>openLesson(index);setSurveyKind('before');}
     else openLesson(index);
   };
@@ -106,12 +109,13 @@ export default function App({initial = {}, onProgress, saveStatus, onRetry, onSi
             </nav>
             <div className="side-bottom"><div className="avatar">{name.slice(0, 1).toUpperCase()}</div><div className="account-details"><strong>{name}</strong><small role="status" aria-live="polite">{saveStatus || 'Modo demonstração'}</small></div>{onSignOut && role!=='linkedStudent' && <button disabled={saveStatus !== 'Progresso salvo na conta'} onClick={onSignOut}>Sair da conta <Icon name="back" /></button>}{saveStatus?.startsWith('Não foi possível') && <button onClick={onRetry}>Tentar salvar novamente</button>}</div>
         </aside>}
+        {demoNotice && <MissionDialog motion={motion} demo introduction locked={demoNotice==='locked'} onContinue={()=>{if(demoNotice==='intro'){setDemoNotice(null);openLesson(0);}else window.location.hash='/criar-conta';}} onDismiss={()=>setDemoNotice(null)}/>}
         {surveyKind && <SurveyDialog key={surveyKind} kind={surveyKind} saved={surveys[surveyKind]} motion={motion} persistent={Boolean(onProgress)} onDraft={draft=>setSurveys(previous=>({...previous,[surveyKind]:draft}))} onSubmit={async record=>{await onSurveySave?.(surveyKind,record);setSurveys(previous=>({...previous,[surveyKind]:record}));setSurveyKind(null);surveyNext.current();}}/>}
         <div className="workspace">
 
             <main id="main" tabIndex="-1">
-                {screen === 'map' && <MapScreen heading={heading} completed={completed} total={total} trailRef={trailRef} motion={motion} allDone={allDone} open={open} />}
-                {screen === 'lesson' && <Lesson onAnswer={record=>setAnswerHistory(previous=>({...previous,[record.id]:{...record,block:current}}))} saved={attempt[current]} onCheckpoint={onProgress ? data => setAttempt(previous => JSON.stringify(previous[current]) === JSON.stringify(data) ? previous : {...previous,[current]:data}) : undefined} key={current} block={block} index={current} level={level} name={name} motion={motion} transition={transition} onComplete={finish} onBack={backToMap} onCertificate={conclude} play={play} />}
+                {screen === 'map' && <MapScreen heading={heading} completed={completed} total={total} trailRef={trailRef} motion={motion} allDone={allDone} demo={demo} open={open} />}
+                {screen === 'lesson' && <Lesson demo={demo} onAnswer={record=>setAnswerHistory(previous=>({...previous,[record.id]:{...record,block:current}}))} saved={attempt[current]} onCheckpoint={onProgress ? data => setAttempt(previous => JSON.stringify(previous[current]) === JSON.stringify(data) ? previous : {...previous,[current]:data}) : undefined} key={current} block={block} index={current} level={level} name={name} motion={motion} transition={transition} onComplete={finish} onBack={backToMap} onCertificate={conclude} play={play} />}
                 {screen==='classroom'&&['teacher','admin'].includes(role)&&<ClassroomPanel role={role}/>}
                 {screen === 'settings' && <SettingsScreen canEditName={role!=='linkedStudent'} persistent={Boolean(onProgress)} heading={heading} name={name} setName={setName} sound={sound} setSound={setSound} motion={motion} setMotion={setMotion} />}
                 {screen === 'help' && <HelpScreen heading={heading} backToMap={backToMap} />}

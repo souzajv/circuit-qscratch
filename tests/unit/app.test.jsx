@@ -82,3 +82,7 @@ test('estado carregado restaura conta e envia checkpoints sem duplicação',()=>
  expect(changed).toHaveBeenLastCalledWith(expect.objectContaining({attempt:{1:{phase:'quiz',errors:2,hint:true}}}));
  click('Retornar ao mapa');click('Conheça os qubits: concluído, refazer');
 });
+
+test('demonstração mantém demais blocos bloqueados após concluir o primeiro',()=>{
+ render(<App demo initial={{motion:false}}/>);click('Vamos começar');expect(screen.getByText(/Esta é uma demonstração/)).toBeVisible();expect(screen.queryByText('Atividade 0')).toBeNull();click('Experimentar primeiro bloco');expect(screen.getByText('Atividade 0')).toBeVisible();click('Concluir prática controlada');click('Retornar ao mapa');const locked=screen.getByRole('button',{name:/Observe uma medição.*bloqueado/});fireEvent.click(locked);expect(screen.getByRole('button',{name:/Criar minha conta/})).toBeVisible();expect(screen.queryByText('Atividade 1')).toBeNull();click('Continuar explorando');click('Continuar a trilha');click('Experimentar primeiro bloco');expect(screen.getByText('Atividade 0')).toBeVisible();
+});

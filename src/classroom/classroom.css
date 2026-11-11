@@ -460,3 +460,7 @@
     transform: none;
   }
 }
+
+.invite-speech h1[role='alert'] {border:0;padding:0;background:transparent;}
+.invite-speech > a.primary {display:inline-flex;align-items:center;gap:var(--space-8);margin-bottom:var(--space-12);max-width:100%;}
+.invite-speech > a.primary + button {margin-left:var(--space-8);}

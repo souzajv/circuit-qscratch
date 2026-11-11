@@ -65,3 +65,5 @@ test('rotas de acesso informam a integração pendente e oferecem a demonstraç�
     navigate('#/');
     expect(screen.getByRole('heading', {level:1})).toBeVisible();
 });
+
+test('convite malformado não abre demonstração nem trilha',()=>{window.history.replaceState(null,'','/#/convite/apagado');render(<PublicRouter/>);expect(screen.getByText('Este link não está mais ativo')).toBeVisible();expect(screen.queryByText('Trilha interna')).toBeNull();});

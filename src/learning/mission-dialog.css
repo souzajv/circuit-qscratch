@@ -20,3 +20,6 @@
 .mission-close:active {transform:translateY(var(--space-2));box-shadow:none;}
 .mission-close:focus-visible {outline:var(--space-3) solid var(--ink);outline-offset:var(--space-4);}
 @media(prefers-reduced-motion:reduce){.mission-close,.mission-close svg{transition:none}.mission-close:hover,.mission-close:hover svg{transform:none}}
+
+.demo-speech {position:relative;border:var(--border);border-radius:var(--radius-12);padding:var(--space-18);background:var(--white);box-shadow:0 var(--space-3) 0 var(--ink);}
+.demo-speech::before {content:"";position:absolute;top:calc(-1 * var(--space-10));left:calc(50% - var(--space-8));width:var(--space-16);height:var(--space-16);background:var(--white);border-top:var(--border);border-left:var(--border);transform:rotate(45deg);}

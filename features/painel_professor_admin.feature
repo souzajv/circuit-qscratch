@@ -119,3 +119,18 @@ Funcionalidade: Professores, alunos por link e administração
     Dado que entrei pelo link de um aluno
     Então não vejo Sair da conta nem edição do apelido
     E continuo podendo ajustar sons e animações
+
+  Cenário: Link inválido não libera a trilha
+    Dado que o acesso por link não está mais ativo
+    Quando o aluno tenta entrar
+    Então vê uma página informando que o link não está mais ativo
+    E não acessa a trilha por esse link
+
+  Cenário: Demonstração limitada ao primeiro bloco
+    Dado que estou no modo explorador sem uma conta
+    Quando concluo o bloco Conheça os qubits
+    Então recebo um convite para criar conta
+    E os demais blocos continuam cinza com cadeado
+    Quando fecho o convite
+    Então posso refazer o primeiro bloco
+    E clicar em outro bloco solicita criar conta
