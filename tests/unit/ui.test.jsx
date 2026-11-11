@@ -1,3 +1,4 @@
+import MapScreen from '../../src/app/screens/MapScreen';
 import React from 'react';
 import {render, screen, fireEvent, act, cleanup} from '@testing-library/react';
 import Points from '../../src/shared/ui/Points';
@@ -75,3 +76,5 @@ test('medição padrão de um estado de base não depende da amostra',()=>{
  expect(canPlace(1,'H','q1-first')).toBe(false);
  expect(canPlace(4,'CNOT','pair-second')).toBe(false);
 });
+
+test('mapa sem modo demo preserva bloqueio sequencial da conta',()=>{render(<MapScreen heading={{current:null}} trailRef={{current:null}} completed={[]} total={0} motion={false} allDone={false} open={jest.fn()}/>);expect(screen.getByRole('button',{name:'Observe uma medição: bloqueado'})).toBeDisabled();});

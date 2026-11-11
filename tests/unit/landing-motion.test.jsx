@@ -90,3 +90,5 @@ test('barra preenche, pausa junto com a leitura e reinicia ao trocar a etapa', (
     active('Ensinar');
     expect(bar().style.transform).toBe('scaleX(0)');
 });
+
+test('carrossel móvel desativa ações e reage a mudança de largura',()=>{const media={matches:true,addEventListener:jest.fn(),removeEventListener:jest.fn()};window.matchMedia.mockReturnValue(media);const {unmount}=render(<LearningPreview/>);expect(screen.getByRole('button',{name:'Ensinar',exact:true})).toBeDisabled();fireEvent.mouseEnter(screen.getByRole('region'));advance();expect(screen.getByRole('button',{name:'Perguntar',exact:true})).toHaveAttribute('aria-pressed','true');act(()=>{media.matches=false;media.addEventListener.mock.calls.find(c=>c[0]==='change')[1]();});expect(screen.getByRole('button',{name:'Ensinar',exact:true})).not.toBeDisabled();unmount();expect(media.removeEventListener).toHaveBeenCalled();window.matchMedia.mockReturnValue({matches:false,addEventListener:jest.fn(),removeEventListener:jest.fn()});});

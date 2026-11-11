@@ -56,6 +56,6 @@ export default function AccountTrail(){
  if(inactive)return <InviteAccess invalid/>;
  if(account===undefined || (account && !initial && !error))return <LoadingScreen/>;
  if(!account)return <main><h1>Entre para salvar sua trilha</h1><a href="#/entrar">Entrar</a><a href="#/demo">Conhecer a demonstração</a></main>;
- if(error)return <main><p>Não foi possível carregar seu progresso. Seus dados não foram substituídos.</p><button onClick={load}>Tentar novamente</button></main>;
+ if(error)return <InviteAccess loadError onRetry={load}/>;
  return <div ref={entrance}><App key={account.uid} role={profile.role} surveyPolicy={profile.surveys} initial={initial} onProgress={persist} saveStatus={status} onRetry={()=>persist(latest.current)} onSignOut={leave} onSurveySave={commitSurvey}/></div>;
 }

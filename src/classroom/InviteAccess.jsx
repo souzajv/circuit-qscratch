@@ -6,7 +6,7 @@ import Mascot from "../shared/ui/Mascot";
 import Icon from "../shared/ui/Icon";
 import "../app/tokens.css";
 import "./classroom.css";
-export default function InviteAccess({ id, secret, invalid=false }) {
+export default function InviteAccess({ id, secret, invalid=false, loadError=false, onRetry }) {
   const [busy, setBusy] = useState(false),
     [error, setError] = useState("");
   return (
@@ -27,15 +27,15 @@ export default function InviteAccess({ id, secret, invalid=false }) {
       <main className="classroom invite-layout">
         <div className="invite-host">
           <Mascot
-            failed={invalid || Boolean(error)}
+            failed={invalid || loadError || Boolean(error)}
             motion={
               !window.matchMedia("(prefers-reduced-motion: reduce)").matches
             }
           />
         </div>
         <section className="invite-speech">
-          <h1 role={invalid || error ? "alert" : undefined}>{invalid || error ? "Este link não está mais ativo" : "Seu professor preparou um acesso para você!"}</h1>
-          {invalid || error ? <><p>Não foi possível entrar por este link. Ele pode ter sido desativado ou apagado. Peça um novo acesso ao seu professor.</p><a className="primary" href="#/entrar">Entrar com minha conta <Icon name="arrow"/></a>{!invalid && <button className="secondary" onClick={()=>setError("")}>Tentar o link novamente</button>}</> : <>
+          <h1 role={invalid || loadError || error ? "alert" : undefined}>{loadError ? "Vamos tentar carregar de novo?" : invalid || error ? "Este link não está mais ativo" : "Seu professor preparou um acesso para você!"}</h1>
+          {loadError ? <><p>Não foi possível carregar seu progresso. Seus dados não foram substituídos.</p><p>Confira sua conexão e tente novamente.</p><button className="primary" onClick={onRetry}>Tentar novamente <Icon name="arrow"/></button></> : invalid || error ? <><p>Não foi possível entrar por este link. Ele pode ter sido desativado ou apagado. Peça um novo acesso ao seu professor.</p><a className="primary" href="#/entrar">Entrar com minha conta <Icon name="arrow"/></a>{!invalid && <button className="secondary" onClick={()=>setError("")}>Tentar o link novamente</button>}</> : <>
           <p>
             Este é um acesso criado pelo seu professor. Você não precisa
             informar e-mail ou senha. Não compartilhe seu link.

@@ -88,3 +88,5 @@ test('demonstração mantém demais blocos bloqueados após concluir o primeiro'
 });
 
 test('menu móvel abre conta e fecha por Escape',()=>{render(<App initial={{motion:false}}/>);const toggle=screen.getByRole('button',{name:'Abrir menu'});fireEvent.click(toggle);expect(screen.getByRole('button',{name:'Fechar menu'})).toHaveAttribute('aria-expanded','true');fireEvent.keyDown(screen.getByRole('button',{name:'Fechar menu'}),{key:'Escape'});expect(screen.getByRole('button',{name:'Abrir menu'})).toHaveAttribute('aria-expanded','false');});
+
+test('menu fecha ao escolher navegação e bloqueio da demo encaminha cadastro',()=>{render(<App demo initial={{motion:false}}/>);fireEvent.keyDown(screen.getByRole('button',{name:'Abrir menu'}),{key:'Tab'});click('Abrir menu');click('Preferências');expect(screen.getByRole('button',{name:'Abrir menu'})).toHaveAttribute('aria-expanded','false');click('Trilhas');click('Observe uma medição: bloqueado');click('Criar minha conta');expect(window.location.hash).toBe('#/criar-conta');window.location.hash='';});

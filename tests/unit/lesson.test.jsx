@@ -114,3 +114,5 @@ test('erro confirmado permanece encerrado ao retomar a conta',()=>{
  expect(screen.getByRole('button',{name:'Próxima pergunta'})).toBeEnabled();expect(screen.getByText(/A resposta correta é/)).toBeVisible();
  expect(screen.getByRole('radio',{name:/^Dois qubits/})).toBeDisabled();
 });
+
+test('conclusão da demo encaminha cadastro em vez de liberar outro bloco',()=>{const p=props(0);render(<Lesson {...p} demo saved={{phase:'practice',finished:true}}/>);click('Criar minha conta');expect(window.location.hash).toBe('#/criar-conta');expect(p.onBack).not.toHaveBeenCalled();window.location.hash='';});
