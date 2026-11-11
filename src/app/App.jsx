@@ -20,7 +20,9 @@ import './experience.css';
 import './responsive.css';
 export default function App({initial = {}, onProgress, saveStatus, onRetry, onSignOut,onSurveySave,role='student',demo=false,surveyPolicy={before:true,after:true}}) {
   const [demoNotice,setDemoNotice]=useState(null);
+  const [menuOpen,setMenuOpen]=useState(false);
   const [screen, setScreen] = useState('map');
+  useEffect(()=>{setMenuOpen(false);},[screen]);
   const level = SCHOOL_LEVELS[0];
   const [surveys,setSurveys]=useState(initial.surveys || {});
   const [surveyKind,setSurveyKind]=useState(null);
@@ -95,13 +97,14 @@ export default function App({initial = {}, onProgress, saveStatus, onRetry, onSi
   };
   return <div className={screen === 'lesson' ? 'platform lesson-mode' : screen === 'map' ? 'platform map-mode' : 'platform'} data-motion={motion}>
         <div className={`curtain ${curtain || ''}`} aria-hidden="true"><div /><div /></div>{countdown !== null && <div className="curtain-countdown" role="status" aria-live="polite"><div><p>Hora de testar sua descoberta!</p><strong key={countdown}>{countdown}</strong><p>Uma confirmação por pergunta. Sem pressa: depois você pode refazer o bloco completo.</p></div></div>}<a className="skip" href="#main">Ir para o conteúdo</a>
-        {screen !== 'lesson' && <aside className="sidebar">
+        {screen !== 'lesson' && <aside className="sidebar" data-menu-open={menuOpen} onKeyDown={e=>{if(e.key==='Escape'){setMenuOpen(false);e.currentTarget.querySelector('.mobile-menu-toggle').focus();}}}>
             <a className="brand" href="#" onClick={e => {
         e.preventDefault();
         backToMap();
       }}><span className="brand-mark">q<span>+</span></span><span>Circuit<br />QScratch</span></a>
+            <button className="mobile-menu-toggle" aria-expanded={menuOpen} aria-controls="platform-navigation" onClick={()=>setMenuOpen(!menuOpen)} aria-label={menuOpen?"Fechar menu":"Abrir menu"}><Icon name={menuOpen?"close":"menu"}/> Menu</button>
             <p className="side-caption">Uma peça. Uma descoberta.</p>
-            <nav aria-label="Navegação principal">
+            <nav id="platform-navigation" aria-label="Navegação principal" onClick={()=>setMenuOpen(false)}>
                 {['teacher','admin'].includes(role)&&<button className={screen==='classroom'?'nav-active':''} aria-current={screen==='classroom'?'page':undefined} onClick={()=>transition(()=>setScreen('classroom'))}>{role==='admin'?'Administração':'Meus alunos'} <Icon name={role==='admin'?'admin':'qubit'}/></button>}
                 <button className={screen === 'map' || screen === 'certificate' ? 'nav-active' : ''} aria-current={screen === 'map' || screen === 'certificate' ? 'page' : undefined} onClick={backToMap}>Trilhas <Icon name="qubit" /></button>
                 <button className={screen === 'help' ? 'nav-active' : ''} aria-current={screen === 'help' ? 'page' : undefined} onClick={() => transition(() => setScreen('help'))}>Como funciona <Icon name="help" /></button>

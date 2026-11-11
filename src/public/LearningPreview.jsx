@@ -12,6 +12,8 @@ const steps = [
 ];
 
 export default function LearningPreview({motion = true}) {
+    const [mobile,setMobile]=useState(()=>window.matchMedia('(max-width:760px)').matches);
+    useEffect(()=>{const media=window.matchMedia('(max-width:760px)');const update=()=>setMobile(media.matches);media.addEventListener('change',update);return()=>media.removeEventListener('change',update);},[]);
     const [index, setIndex] = useState(0);
     const [answer, setAnswer] = useState(null);
     const [hovered, setHovered] = useState(false);
@@ -21,7 +23,7 @@ export default function LearningPreview({motion = true}) {
     const elapsed = useRef(0);
     const [progress, setProgress] = useState(0);
     const step = steps[index].id;
-    const playing = motion && visible && !hovered && !focused;
+    const playing = motion && visible && (mobile || (!hovered && !focused));
     const block = blocks[2];
 
     useEffect(() => {
@@ -66,7 +68,7 @@ export default function LearningPreview({motion = true}) {
         }}>
         <div className="preview-timer" aria-hidden="true"><span style={{transform:`scaleX(${progress})`}}/></div>
         <div className="preview-tabs" role="group" aria-label="Conheça as fases da atividade">
-            {steps.map((item, next) => <button key={item.id} type="button" aria-pressed={step === item.id} aria-controls="preview-slide" onClick={() => select(next)}>{item.action}</button>)}
+            {steps.map((item, next) => <button disabled={mobile} key={item.id} type="button" aria-pressed={step === item.id} aria-controls="preview-slide" onClick={() => select(next)}>{item.action}</button>)}
         </div>
         <div className="preview-content" id="preview-slide" ref={contentRef} aria-live={playing ? 'off' : 'polite'} aria-atomic="true">
             <h3>{steps[index].title}</h3>

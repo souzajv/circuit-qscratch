@@ -153,3 +153,7 @@
 .lp-method>.method-heading h2 {max-width:15ch;margin:0;}
 .lp-method>.method-heading p {max-width:38ch;margin:0;}
 @media(max-width:760px){.lp-method>.method-heading{grid-template-columns:1fr;gap:22px}}
+
+@media(max-width:760px){.public-header nav>a[href="#como-aprendemos"]{display:none}.learning-preview{pointer-events:none;}}
+
+@media(max-width:760px){.learning-preview button:disabled{opacity:1;cursor:default;}}

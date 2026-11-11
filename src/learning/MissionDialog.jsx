@@ -15,10 +15,12 @@ export default function MissionDialog({motion,conclusion,last,onContinue,onDismi
   },dialog);
   return ()=>{context.revert();node.close();document.body.style.overflow=previousOverflow;};
  },[motion]);
+ const title = (<h2 id="mission-title" ref={heading} tabIndex="-1">{introduction?'Experimente o primeiro bloco':'Missão concluída!'}</h2>);
  return <dialog ref={dialog} className="mission-dialog" aria-labelledby="mission-title" aria-describedby="mission-conclusion" onCancel={onDismiss}>
   <button className="mission-close" aria-label="Fechar conquista e continuar explorando" onClick={onDismiss}><Icon name="close"/></button>
+  {introduction && title}
   <Mascot motion={motion} rating={!introduction}/>
-  <h2 id="mission-title" ref={heading} tabIndex="-1">{introduction?'Experimente o primeiro bloco':'Missão concluída!'}</h2>
+  {!introduction && title}
   <p id="mission-conclusion" className={introduction?"demo-speech":undefined}>{introduction?'Esta é uma demonstração. Você pode aprender, responder e praticar no primeiro bloco quantas vezes quiser. Para continuar nos outros blocos e salvar seu progresso, crie uma conta.':conclusion}{demo && !introduction && ' Você concluiu o bloco da demonstração! Crie uma conta para continuar a trilha e salvar seu progresso.'}</p>
   <div className="mission-actions"><button className="primary" onClick={onContinue}>{introduction&&!locked?'Experimentar primeiro bloco':demo?'Criar minha conta':last?'Ver minha conclusão':'Voltar à trilha'} <Icon name="arrow"/></button>
   {onRepeat && <button className="secondary" onClick={onRepeat}>Preparar outra rodada</button>}
