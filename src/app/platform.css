@@ -719,3 +719,6 @@ kbd {display:inline-block;vertical-align:baseline;white-space:nowrap;padding:var
 
 /* Na demonstração, o cadeado abre o convite para criar conta. */
 .trail .locked h2,.trail .locked p {color:var(--ink);opacity:.65;}
+
+.side-bottom .demo-exit {position:relative;justify-content:center;padding-inline:var(--space-34);}
+.side-bottom .demo-exit svg {position:absolute;right:var(--space-8);}
